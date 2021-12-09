@@ -25,8 +25,7 @@ function top_header_1()
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
+                            <li class="nav-item" ><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
                         </ul>
                     </div>
                 </div>
