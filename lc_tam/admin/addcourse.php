@@ -90,7 +90,7 @@
                     <input id="Course_Name" type="text" name="Course_Name">
                 </div>
                 <div>
-                    <select class="" id="professorID">
+                    <select class="" id="professorID"> 
 
                 </div>
                 <div>
