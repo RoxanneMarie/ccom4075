@@ -29,17 +29,17 @@
     <style>
         /*----------------------- CSS HOME PAGE*/
 
-        .cards{
+        .mcourses{
         text-align: center;
-        margin: auto;
-        display: flex;
-        flex-wrap: wrap;
+        margin: 0 auto;
+        width: 1100px;
+        flex-wrap: none;
         align-items: stretch; 
         justify-content:center;
 
         }
-        .card {
-        flex: 0 0 200px;
+        .mcourse {
+        flex: 0 0 500px;
         margin: 10px;
         border: 1px solid #ccc;
         box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
@@ -58,57 +58,49 @@
         padding: 10px;
         width: 100%;
         }
+
+        .tCourses {
+        background: rgb(196, 127, 0);
+        table-layout: auto;
+        width: 100%;
+        }
+
+        .trCourses {
+        background: white;
+        }
     </style>
 
     </head>
     <body>
+        <?php 
+            top_header_2(); 
+            ?>
+    <input type="hidden" value="student_btn" name="action">
+        <main class="mcourses" style="justify-content:center;">
+            <article class="mcourse">
+            <div class="text">
+                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Course</h3>
+            <form>
+                <div>
+                    <label for="Course_ID">Course ID:</label>
+                    <input id="Course_ID" type="text" name="Course_ID">
+                </div>
+                <div>
+                    <label for="Course_Name">Course Name:</label>
+                    <input id="Course_Name" type="text" name="Course_Name">
+                </div>
+                <div>
+                    <select class="" id="professorID">
 
-        <?php 
-            top_header_2();
-            echo'
-           <input type="hidden" value="student_btn" name="action">
-           <main class="cards" style="justify-content:center;">
-               <article class="card">
-               <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Account</h3>
-                   <input type="submit"  name="btn_student" value="Change Password"><br><br>
-                   <input type="submit"  name="btn_student" value="View All Tutorings">
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Tutor</h3>
-                   <input type="submit"  name="btn_addTutor" value="Add Tutor"><br><br>
-                   <input type="submit"  name="btn_editTutor" value="Edit Tutor">
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professor</h3>
-                   <input type="submit"  name="btn_addProf" value="Add Professor"><br><br>
-                   <input type="submit"  name="btn_editProf" value="Edit Professor">
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Department</h3>
-                   <input type="submit"  name="btn_AddDepartment" value="Add Department"><br><br>
-                   <input type="submit"  name="btn_EditDepartment" value="Edit Department"><br><br>
-                   <input type="submit"  name="btn_AddCourse" value="Add Course"><br><br>
-                   <input type="submit"  name="btn_EditCourse" value="Edit Course">
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3>
-                   <input type="submit" name="btn_student" value="My Courses"><br><br>
-                   <input type="submit"  name="btn_student" value="View Courses">
-               </div>
-               </article>
-           </main>
-           ';
-        ?> 
-        <?php 
+                </div>
+                <div>
+                    <select class="" id="departmentID">
+                </div>
+            </form>
+            </div>
+            </article>
+        </main>
+        <?php
             bottom_footer();
             credit_mobirise_1();
         ?>

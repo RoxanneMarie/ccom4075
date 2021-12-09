@@ -29,17 +29,17 @@
     <style>
         /*----------------------- CSS HOME PAGE*/
 
-        .cards{
+        .mcourses{
         text-align: center;
-        margin: auto;
-        display: flex;
-        flex-wrap: wrap;
+        margin: 0 auto;
+        width: 1100px;
+        flex-wrap: none;
         align-items: stretch; 
         justify-content:center;
 
         }
-        .card {
-        flex: 0 0 200px;
+        .mcourse {
+        flex: 0 0 500px;
         margin: 10px;
         border: 1px solid #ccc;
         box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
@@ -58,57 +58,56 @@
         padding: 10px;
         width: 100%;
         }
+
+        .tCourses {
+        background: rgb(196, 127, 0);
+        table-layout: auto;
+        width: 100%;
+        }
+
+        .trCourses {
+        background: white;
+        }
     </style>
 
     </head>
     <body>
-
         <?php 
             top_header_2();
-            echo'
-           <input type="hidden" value="student_btn" name="action">
-           <main class="cards" style="justify-content:center;">
-               <article class="card">
-               <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Account</h3>
-                   <input type="submit"  name="btn_student" value="Change Password"><br><br>
-                   <input type="submit"  name="btn_student" value="View All Tutorings">
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Tutor</h3>
-                   <input type="submit"  name="btn_addTutor" value="Add Tutor"><br><br>
-                   <input type="submit"  name="btn_editTutor" value="Edit Tutor">
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professor</h3>
-                   <input type="submit"  name="btn_addProf" value="Add Professor"><br><br>
-                   <input type="submit"  name="btn_editProf" value="Edit Professor">
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Department</h3>
-                   <input type="submit"  name="btn_AddDepartment" value="Add Department"><br><br>
-                   <input type="submit"  name="btn_EditDepartment" value="Edit Department"><br><br>
-                   <input type="submit"  name="btn_AddCourse" value="Add Course"><br><br>
-                   <input type="submit"  name="btn_EditCourse" value="Edit Course">
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3>
-                   <input type="submit" name="btn_student" value="My Courses"><br><br>
-                   <input type="submit"  name="btn_student" value="View Courses">
-               </div>
-               </article>
-           </main>
-           ';
-        ?> 
-        <?php 
+    echo '<input type="hidden" value="student_btn" name="action">
+    <main class="mcourses" style="justify-content:center;">
+        <article class="mcourse">
+        <div class="text">
+            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3>
+            <input type="submit"  name="btn_addCourse" value="Add Course">
+                <table class="tCourses">
+            <tr>
+                <td>Course ID</td>
+                <td>Course Name</td>
+                <td>Course Professor</td>
+                <td>Department</td>
+            </tr>';
+    $query = query("SELECT * FROM lc_courses");
+    confirm($query);
+    while($row = fetch_array($query)) {
+        $query2 = query("SELECT * FROM lc_professors WHERE course_id = '" . $row['course_id'] ." ' ");
+        confirm($query2);
+        $row2 = fetch_array($query2);
+        $query3 = query("SELECT * FROM lc_departments WHERE dept_id = '" . $row['dept_id'] ." ' ");
+        confirm($query3); 
+        $row3 = fetch_array($query3);
+        echo '    
+                <tr class="trCourses">
+                    <td>'. $row['course_id'] .'</td>
+                    <td>'. $row['course_name'] .'</td>
+                    <td>'. $row2['professor_name'] .'</td>
+                    <td>'. $row3['dept_name'] .'</td>
+                    </tr>
+    '; } echo '
+                </table><br><br>
+                </div>
+                </article>
+            </main>';
             bottom_footer();
             credit_mobirise_1();
         ?>
