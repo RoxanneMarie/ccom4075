@@ -71,16 +71,16 @@
                <article class="card">
                <div class="text">
                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Account</h3>
-                   <input type="submit"  name="btn_student" value="Change Password"><br><br>
-                   <input type="submit"  name="btn_student" value="View All Tutorings">
+                   <input type="submit"  name="btn_student" value="view All Account"><br><br>
+                   <input type="submit"  name="btn_student" value="Edit Account">
                </div>
                </article>
                <article class="card">
                <div class="text">
                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3>
-                   <input type="submit" name="btn_student" value="My Courses"><br><br>
-                   <input type="submit"  name="btn_student" value="View Courses">
-                   <input type="submit"  name="btn_student" value="View All Tutorings">
+                   <input type="submit" name="btn_student" value="Create Course"><br><br>
+                   <input type="submit"  name="btn_student" value="Create Schedule">
+                   <input type="submit"  name="btn_student" value="">
                </div>
                </article>
            </main>
