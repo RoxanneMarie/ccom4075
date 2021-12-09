@@ -500,8 +500,6 @@ function student_select_tutor()
 
     $query = query("SELECT student_name, student_initial, student_first_lastname, student_second_lastname FROM lc_test_students WHERE student_id = '" . $row["student_id"] . "'");
     confirm($query);
-
-    $row = fetch_array($query);
     
     echo '
         <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
