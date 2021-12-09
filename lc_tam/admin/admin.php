@@ -1,5 +1,5 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php")
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +34,7 @@
         margin: auto;
         display: flex;
         flex-wrap: wrap;
-        align-items: stretch; 
+        align-items: stretch;
         justify-content:center;
 
         }
@@ -44,7 +44,7 @@
         border: 1px solid #ccc;
         box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
         background-color: white;
-        } 
+        }
         .card img {
         max-width: 100%;
         }
@@ -63,7 +63,7 @@
     </head>
     <body>
 
-        <?php 
+        <?php
             top_header_2();
             echo'
            <input type="hidden" value="student_btn" name="action">
@@ -71,8 +71,8 @@
                <article class="card">
                <div class="text">
                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Account</h3>
-                   <input type="submit"  name="btn_student" value="Change Password"><br><br>
-                   <input type="submit"  name="btn_student" value="View All Tutorings">
+                   <input type="submit"  name="btn_student" value="view All Account"><br><br>
+                   <input type="submit"  name="btn_student" value="Edit Account">
                </div>
                </article>
                <article class="card">
@@ -107,8 +107,8 @@
                </article>
            </main>
            ';
-        ?> 
-        <?php 
+        ?>
+        <?php
             bottom_footer();
             credit_mobirise_1();
         ?>
