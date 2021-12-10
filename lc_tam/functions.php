@@ -251,6 +251,13 @@ function fetch_array($result)
     return mysqli_fetch_assoc($result);
 }
 
+function last_id()
+{
+    global $connection;
+    
+    return $connection->insert_id;
+}
+
 function close()
 {
     global $connection;
@@ -311,7 +318,7 @@ function login()
                 $_SESSION['type'] = "Student";
                 $_SESSION['email'] = $row['student_email'];
                 $_SESSION["current_date"] = date("Y-m-d");
-                $_SESSION["current_day_of_the_week"] = date("l");
+                $_SESSION["current_day_of_the_week"] = "Monday";//date("l");
                 //set_message("Login Successful!");
                 redirect("student/index.php");
             }
@@ -607,15 +614,56 @@ function student_select_time()
     $query = query("SELECT DISTINCT(DAY) FROM lc_tutor_schedule  WHERE tutor_id = " . $_SESSION['selected_tutor'] . " ORDER BY (CASE DAY WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 END) ASC");
     confirm($query);
     
+    $week = array("NULL", "NULL", "NULL", "NULL", "NULL");
+    
+    if($_SESSION["current_day_of_the_week"] == "Monday")
+    {
+        $week[0] = date("Y-m-d", strtotime("now"));
+        $week[1] = date("Y-m-d", strtotime("+1 day"));
+        $week[2] = date("Y-m-d", strtotime("+2 day"));
+        $week[3] = date("Y-m-d", strtotime("+3 day"));
+        $week[4] = date("Y-m-d", strtotime("+4 day"));
+    }
+    else if($_SESSION["current_day_of_the_week"] == "Tuesday")
+    {
+        $week[1] = date("Y-m-d", strtotime("+1 day"));
+        $week[2] = date("Y-m-d", strtotime("+2 day"));
+        $week[3] = date("Y-m-d", strtotime("+3 day"));
+        $week[4] = date("Y-m-d", strtotime("+4 day"));
+    }
+    else if($_SESSION["current_day_of_the_week"] == "Wednesday")
+    {
+        $week[2] = date("Y-m-d", strtotime("+2 day"));
+        $week[3] = date("Y-m-d", strtotime("+3 day"));
+        $week[4] = date("Y-m-d", strtotime("+4 day"));
+    }
+    else if($_SESSION["current_day_of_the_week"] == "Thursday")
+    {
+        $week[3] = date("Y-m-d", strtotime("+3 day"));
+        $week[4] = date("Y-m-d", strtotime("+4 day"));
+    }
+    else if($_SESSION["current_day_of_the_week"] == "Friday")
+    {
+        $week[4] = date("Y-m-d", strtotime("+4 day"));
+    }
+    
+    
     for ($x = 1; $x <= $num; $x++)
     {
+        echo $_SESSION["current_day_of_the_week"];
+        /*if($week[$x-1] == "NULL")
+        {
+            continue;
+        }
+        */
+        echo $_SESSION["current_day_of_the_week"];
         $row = fetch_array($query);
         
          echo '
                     <div class="card mb-3">
                         <div class="card-header" role="tab" id="headingOne">
                             <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse' . $x . '_17" aria-expanded="false" aria-controls="collapse' . $x . '">
-                                <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>' . $row["DAY"] . '</strong></h6>
+                                <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>' . $row["DAY"] . ' ' . $week[$x-1] . '</strong></h6>
                                 <span class="sign mbr-iconfont mbri-arrow-down"></span>
                             </a>
                         </div>
@@ -636,10 +684,12 @@ function student_select_time()
             
             echo '<button type="submit" form="form' . $x . '" formmethod="POST" formaction="session.php" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '">' . $start . ' - ' . $end . '</button>';
             echo '<input type="hidden" name="end_time_' . $i . '" value="' . $row2["end_time"] . '">';
+            
             $i++;
         }
         
         echo '
+                                    <input type="hidden" name="session_date" value="' . $week[$x-1] . '">
                                         <form id="form' . $x . '">
                                             <input type="hidden" name="time_ready_' . $x . '" value="' . $row["DAY"] . '">
                                         </form>
@@ -682,8 +732,48 @@ function create_session()
 
             }while($_POST["start_time_{$i}"] == NULL);
             
-            $query = query('INSERT INTO lc_sessions (tutor_id, course_id, session_date, start_time, end_time)
-            VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION['selected_course'] . '",  ,"' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '")');
+            $query = query("SELECT session_id FROM lc_sessions WHERE session_date = '" . $_SESSION["selected_date"] . "' AND start_time = '" . $_SESSION['selected_start_time'] . "' AND tutor_id = " . $_SESSION['selected_tutor']);
+            confirm($query);
+            
+            if(mysqli_num_rows($query) == 0)
+            {
+                $query = query('INSERT INTO lc_sessions (tutor_id, course_id, session_date, start_time, end_time) VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION['selected_course'] . '","' . $_SESSION["selected_date"] . '","' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '")');
+                confirm($query);
+                
+                $id = last_id();
+                
+                $query = query("SELECT student_id FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
+                confirm($query);
+                $row = fetch_array($query);
+                
+                $query = query('INSERT INTO lc_appointments (student_id, session_id) VALUES(' . $row["student_id"] . ', ' . $id . ')');
+                confirm($query);
+            }
+            else
+            {
+                $row = fetch_array($query);
+                
+                $query = query("SELECT * FROM lc_sessions WHERE session_id = " . $row["session_id"] . " WHERE capacity >= 5");
+                confirm($query);
+                
+                if(mysqli_num_rows($query) == 0)
+                {
+                    $query = query('UPDATE lc_sessions SET capacity = capacity + 1 WHERE session_id = ' . $row["session_id"]);
+                    confirm($query);
+                    
+                    $query = query("SELECT student_id FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
+                    confirm($query);
+                    $row = fetch_array($query);
+                    
+                    $query = query('INSERT INTO lc_appointments (student_id, session_id) VALUES(' . $row["student_id"] . ', ' . $row["session_id"] . ')');
+                    confirm($query);
+                }
+                else
+                {
+                    echo "Sorry! Appointment spaces ran out seconds ago. Please try another section that your chosen tutor has available!";
+                    redirect("select_time.php");
+                }
+            }
         }
         
     }while(!isset($_POST["time_ready_" . $x]));
