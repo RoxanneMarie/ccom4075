@@ -233,6 +233,8 @@ function query($sql)
 {
     global $connection;
     
+    //echo $sql;
+    
     return mysqli_query($connection, $sql);
 }
 
@@ -308,6 +310,8 @@ function login()
             {
                 $_SESSION['type'] = "Student";
                 $_SESSION['email'] = $row['student_email'];
+                $_SESSION["current_date"] = date("Y-m-d");
+                $_SESSION["current_day_of_the_week"] = date("l");
                 //set_message("Login Successful!");
                 redirect("student/index.php");
             }
@@ -691,9 +695,16 @@ function create_session()
 
 function student_view_appointment()
 {
-    $query2 = query("SELECT tutor_id, course_id, session_date, FROM lc_tutor_schedule  WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND DAY = '" . $row["DAY"] . "' ORDER BY session_date ASC, start_hour ASC");
+    $query = query("SELECT student_id FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
+    confirm($query);
+    $row = fetch_array($query);
     
-    echo "
+    $query = query("SELECT session_id FROM lc_appointments WHERE student_id = " . $row["student_id"]);
+    confirm($query);
+    
+    if($row = fetch_array($query))
+    {
+        echo "
         <table>
           <tr>
             <th>Tutor</th>
@@ -701,10 +712,42 @@ function student_view_appointment()
             <th>Date</th>
             <th>Start</th>
             <th>End</th>
-          </tr>
-          <tr>
-            <td></td>
           </tr>";
+        
+        do
+        {
+            $query2 = query("SELECT tutor_id, course_id, TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), DATE_FORMAT(session_date, '%M %d %Y') FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND session_date > '" . $_SESSION["current_date"] . "'");
+            confirm($query2);
+            $row2 = fetch_array($query2);
+
+            $query2 = query("SELECT student_id FROM lc_test_tutors WHERE tutor_id = " . $row2["tutor_id"]);
+            confirm($query2);
+            $row3 = fetch_array($query2);
+
+            $query2 = query("SELECT student_name, student_first_lastname FROM lc_test_students WHERE student_id = " . $row3["student_id"]);
+            confirm($query2);
+            $row3 = fetch_array($query2);
+            
+            $start = substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5);
+            $end = substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5);
+            
+            echo "
+                  <tr>
+                    <td>" . $row3["student_name"] . " " . $row3["student_first_lastname"] . "</td>
+                    <td>" . $row2["course_id"] . "</td>
+                    <td>" . $row2["DATE_FORMAT(session_date, '%M %d %Y')"] . "</td>
+                    <td>" . $start . "</td>
+                    <td>" . $end . "</td>
+                  </tr>";
+        }while($row = fetch_array($query));
+
+        echo "</table>";
+    }
+    else
+    {
+       echo "You don't have any appointments made. Make a new one so you it can appear here.";
+    }
+    close();
 }
 
 ?>

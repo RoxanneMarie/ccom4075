@@ -14,7 +14,7 @@
       <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Select Course</title>
+      <title>Professors</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
