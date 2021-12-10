@@ -1,5 +1,7 @@
 <?php
+
 session_start();
+
 function top_header_1()
 {
   echo '
@@ -59,7 +61,7 @@ function top_header_2()
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="create.php">Create</a><a class="text-black dropdown-item display-4" href="index.php">View</a></div></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="select_course.php">Create</a><a class="text-black dropdown-item display-4" href="index.php">View</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="account.php">View<br></a><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
                         </ul>
                     </div>
@@ -259,7 +261,21 @@ function redirect($location)
     return header('refresh:0; url='.$location);
     //return header('refresh:3; url='.$location);
 }
+/*
+function testing()
+{
+    $courseID = "CCOM3002";
+    $courseName = "COMPUTER PROGRAMMING II";
+    $departmentID = 3;
+    $tutor_available = 1;
 
+    $query = query('INSERT INTO lc_courses (course_id, course_name, dept_id, tutor_available)
+    VALUES("' . $courseID . '","' . $courseName . '",' . $departmentID . ',' . $tutor_available . ')');
+    
+    echo $query;
+    confirm($query);
+}
+*/
 function login()
 {
     if(isset($_POST['submit']))
@@ -379,20 +395,14 @@ function professor_available()
     $query = query("SELECT COUNT(dept_id) FROM lc_departments");
     confirm($query);
     $row = fetch_array($query);
+    $num = $row["COUNT(dept_id)"];
     
-    for ($x = 1; $x <= $row["COUNT(dept_id)"]; $x++)
+    for ($x = 1; $x <= $num; $x++)
     {
         if(isset($_POST["course_ready_{$x}"]))
         {
             $dept = $_POST["course_ready_{$x}"];
             $i = 0;
-            
-            echo $_POST["course_ready_{$x}"];
-            echo $dept;
-            echo $dept . "_course_1";
-            echo $_POST["{$dept}_course_1"];
-
-            //NEEDS FIXING. Not using $i to transcourse through courses
 
             do
             {
@@ -447,19 +457,19 @@ function student_select_professor()
                             <strong>' . $row['professor_name'] . ' ' . $row['professor_initial'] . ' ' . $row['professor_first_lastname'] . ' ' . $row['professor_second_lastname'] . '</strong>
                         </h5>
                         <div class="mbr-section-btn card-btn align-center">
-                            <button type="submit" form="form2" formmethod="POST" formaction="select_tutor.php" class="btn btn-primary display-4" name="professor_' . $x . ' value="' . $row["professor_entry_id"] . '">Select</button>
+                            <button type="submit" form="form' . $x . '" formmethod="POST" formaction="select_tutor.php" class="btn btn-primary display-4" name="professor_' . $x . '" value="' . $row["professor_entry_id"] . '">Select</button>
                         </div>
                     </div>
                 </div>
-            </div>';
+            </div>
+            <form id="form' . $x . '">
+                <input type="hidden" name="professor_ready">
+            </form>';
         
         $x++;
     }
     
     echo '
-                    <form id="form2">
-                        <input type="hidden" name="professor_ready">
-                    </form>
                 </div>
             </div>
         </section>';
@@ -474,12 +484,17 @@ function student_select_tutor()
         do
         {
             $i++;
-            if(isset($_POST["professor_{$i}"]))
+            if($_POST["professor_{$i}"] != NULL)
             {
                 $_SESSION['selected_professor'] = $_POST["professor_{$i}"];
             }
 
-        }while(!isset($_POST["professor_{$i}"]));
+        }while($_POST["professor_{$i}"] == NULL);
+        
+        $query = query("SELECT COUNT(tutor_id) FROM lc_tutor_offers WHERE course_id = '" . $_SESSION['selected_course'] . "' AND professor_entry_id = '" . $_SESSION['selected_professor'] . "'");
+        confirm($query);
+        $row = fetch_array($query);
+        $num = $row["COUNT(tutor_id)"];
         
         $query = query("SELECT tutor_id FROM lc_tutor_offers WHERE course_id = '" . $_SESSION['selected_course'] . "' AND professor_entry_id = '" . $_SESSION['selected_professor'] . "'");
         confirm($query);
@@ -487,19 +502,24 @@ function student_select_tutor()
     
     else
     {
+        $query = query("SELECT COUNT(tutor_id) FROM lc_tutor_offers WHERE course_id = '" . $_SESSION['selected_course'] . "'");
+        confirm($query);
+        $row = fetch_array($query);
+        $num = $row["COUNT(tutor_id)"];
+        
         $query = query("SELECT tutor_id FROM lc_tutor_offers WHERE course_id = '" . $_SESSION['selected_course'] . "'");
         confirm($query);
     }
     
     $row = fetch_array($query);
-        
-    $query = query("SELECT student_id FROM lc_test_tutors WHERE tutor_id = '" . $row["tutor_id"] . "'");
-    confirm($query);
+    
+    $query2 = query("SELECT student_id FROM lc_test_tutors WHERE tutor_id = '" . $row["tutor_id"] . "'");
+    confirm($query2);
 
-    $row = fetch_array($query);
+    $row2 = fetch_array($query2);
 
-    $query = query("SELECT student_name, student_initial, student_first_lastname, student_second_lastname FROM lc_test_students WHERE student_id = '" . $row["student_id"] . "'");
-    confirm($query);
+    $query2 = query("SELECT student_name, student_initial, student_first_lastname, student_second_lastname FROM lc_test_students WHERE student_id = '" . $row2["student_id"] . "'");
+    confirm($query2);
     
     echo '
         <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
@@ -513,8 +533,10 @@ function student_select_tutor()
     
     $x = 1;
     
-    while($row = fetch_array($query))
+    do
     {
+        
+        $row2 = fetch_array($query2);
         echo '
             <div class="col-sm-6 col-lg-3">
                 <div class="card-wrap">
@@ -523,25 +545,166 @@ function student_select_tutor()
                     </div>
                     <div class="content-wrap">
                         <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
-                            <strong>' . $row['student_name'] . ' ' . $row['student_initial'] . ' ' . $row['student_first_lastname'] . ' ' . $row['student_second_lastname'] . '</strong>
+                            <strong>' . $row2['student_name'] . ' ' . $row2['student_initial'] . ' ' . $row2['student_first_lastname'] . ' ' . $row2['student_second_lastname'] . '</strong>
                         </h5>
                         <div class="mbr-section-btn card-btn align-center">
-                            <button type="submit" form="form" formmethod="POST" formaction="select_tutor.php" class="btn btn-primary display-4" name="tutor_' . $x . '">Select</button>
+                            <button type="submit" form="form' . $x . '" formmethod="POST" formaction="select_time.php" class="btn btn-primary display-4" name="tutor_' . $x . '" value="' . $row["tutor_id"] . '">Select</button>
                         </div>
                     </div>
                 </div>
-            </div>';
-        
+            </div>
+            <form id="form' . $x . '">
+                <input type="hidden" name="tutor_ready">
+            </form>';
         $x++;
-    }
+        
+    }while($row = fetch_array($query));
     
-    echo '
-                    <form id="form">
-                        <input type="hidden" name="tutor_ready">
-                    </form>
+    echo '   
                 </div>
             </div>
         </section>';
+}
+
+function student_select_time()
+{
+    echo '
+            <section data-bs-version="5.1" class="content16 cid-sO0lfEsMNZ" id="content16-t">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-4">
+                            <div class="mbr-section-head align-center mb-4">
+                                <h3 class="mbr-section-title mb-0 mbr-fonts-style display-2"><strong>Tutoring Courses</strong></h3>
+                            </div>
+                            <div id="bootstrap-accordion_17" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">';
+    
+    if(isset($_POST["tutor_ready"]))
+    {
+        $i = 0;
+        
+        do
+        {
+            $i++;
+            
+            if($_POST["tutor_{$i}"] != NULL)
+            {
+                $_SESSION['selected_tutor'] = $_POST["tutor_{$i}"];
+            }
+
+        }while($_POST["tutor_{$i}"] == NULL);
+        
+        $query = query("SELECT COUNT(DISTINCT(day)) FROM lc_tutor_schedule  WHERE tutor_id = " . $_SESSION['selected_tutor']);
+        confirm($query);
+        $row = fetch_array($query);
+    }
+    
+    $num = $row['COUNT(DISTINCT(day))'];
+    
+    $query = query("SELECT DISTINCT(DAY) FROM lc_tutor_schedule  WHERE tutor_id = " . $_SESSION['selected_tutor'] . " ORDER BY (CASE DAY WHEN 'Monday' THEN 1 WHEN 'Tuesday' THEN 2 WHEN 'Wednesday' THEN 3 WHEN 'Thursday' THEN 4 WHEN 'Friday' THEN 5 END) ASC");
+    confirm($query);
+    
+    for ($x = 1; $x <= $num; $x++)
+    {
+        $row = fetch_array($query);
+        
+         echo '
+                    <div class="card mb-3">
+                        <div class="card-header" role="tab" id="headingOne">
+                            <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse' . $x . '_17" aria-expanded="false" aria-controls="collapse' . $x . '">
+                                <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>' . $row["DAY"] . '</strong></h6>
+                                <span class="sign mbr-iconfont mbri-arrow-down"></span>
+                            </a>
+                        </div>
+                        <div id="collapse' . $x . '_17" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_17">
+                            <div class="panel-body">
+                                <p class="mbr-fonts-style panel-text display-4">
+                                    <div class="mbr-section-btn mt-3">';
+        
+        $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time FROM lc_tutor_schedule  WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND DAY = '" . $row["DAY"] . "' ORDER BY start_time ASC");
+        confirm($query2);
+        
+        $i = 1;
+        
+        while($row2 = fetch_array($query2))
+        {
+            $start = substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5);
+            $end = substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5);
+            
+            echo '<button type="submit" form="form' . $x . '" formmethod="POST" formaction="session.php" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '">' . $start . ' - ' . $end . '</button>';
+            echo '<input type="hidden" name="end_time_' . $i . '" value="' . $row2["end_time"] . '">';
+            $i++;
+        }
+        
+        echo '
+                                        <form id="form' . $x . '">
+                                            <input type="hidden" name="time_ready_' . $x . '" value="' . $row["DAY"] . '">
+                                        </form>
+                                    </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>';
+    }
+    
+    echo '
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>';
+    close();
+}
+
+function create_session()
+{
+    $x = 0;
+    do
+    {
+        $x++;
+        
+        if(isset($_POST["time_ready_" . $x]))
+        {
+            $i = 0;
+
+            do
+            {
+                $i++;
+
+                if($_POST["start_time_{$i}"] != NULL)
+                {
+                    $_SESSION['selected_start_time'] = $_POST["start_time_{$i}"];
+                    $_SESSION['selected_end_time'] = $_POST["end_time_{$i}"];
+                }
+
+            }while($_POST["start_time_{$i}"] == NULL);
+            
+            $query = query('INSERT INTO lc_sessions (tutor_id, course_id, session_date, start_time, end_time)
+            VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION['selected_course'] . '",  ,"' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '")');
+        }
+        
+    }while(!isset($_POST["time_ready_" . $x]));
+    
+    redirect("index.php");
+}
+
+//WORK IN PROGRESS. CHECK HOW TO TELL DAY OF WEEK FOR APPOINTMENT MAKING AKA session_date ^^^
+
+function student_view_appointment()
+{
+    $query2 = query("SELECT tutor_id, course_id, session_date, FROM lc_tutor_schedule  WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND DAY = '" . $row["DAY"] . "' ORDER BY session_date ASC, start_hour ASC");
+    
+    echo "
+        <table>
+          <tr>
+            <th>Tutor</th>
+            <th>Course</th>
+            <th>Date</th>
+            <th>Start</th>
+            <th>End</th>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>";
 }
 
 ?>

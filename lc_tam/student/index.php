@@ -1,5 +1,5 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php");
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +32,7 @@
 
         <?php 
             top_header_2();
-            student_select_course();
+            student_view_appointment();
         ?>
 
         <!-- <section data-bs-version="5.1" class="content16 cid-sO0lfEsMNZ" id="content16-t">
