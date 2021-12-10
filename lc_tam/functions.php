@@ -568,15 +568,15 @@ function student_select_tutor()
 
 function student_select_time()
 {
-    echo '
-            <section data-bs-version="5.1" class="content16 cid-sO0lfEsMNZ" id="content16-t">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-md-4">
-                            <div class="mbr-section-head align-center mb-4">
-                                <h3 class="mbr-section-title mb-0 mbr-fonts-style display-2"><strong>Tutoring Courses</strong></h3>
+    echo "
+            <section data-bs-version='5.1' class='content16 cid-sO0lfEsMNZ' id='content16-t'>
+                <div class='container'>
+                    <div class='row justify-content-center'>
+                        <div class='col-12 col-md-4'>
+                            <div class='mbr-section-head align-center mb-4'>
+                                <h3 class='mbr-section-title mb-0 mbr-fonts-style display-2'><strong>Tutor's Schedule</strong></h3>
                             </div>
-                            <div id="bootstrap-accordion_17" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">';
+                            <div id='bootstrap-accordion_17' class='panel-group accordionStyles accordion' role='tablist' aria-multiselectable='true'>";
     
     if(isset($_POST["tutor_ready"]))
     {
