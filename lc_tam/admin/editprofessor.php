@@ -1,6 +1,10 @@
 <?php 
     require_once("../functions.php");
     
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+    }
+
     if(isset($_POST['submit'])){
         $courseID = $_POST['Course_ID'];
         $professorname = $_POST['professor_name'];
@@ -8,8 +12,9 @@
         $professorflname = $_POST['professor_flname'];
         $professorslname = $_POST['professor_slname'];
 
-    echo $query = query('INSERT INTO lc_professors ( course_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname)
-    VALUES("' . $courseID . '","' . $professorname . '" , "' . $professorinitial . '" , "' . $professorflname . '" , "' . $professorslname . '")');
+    /*echo $query = query('UPDATE lc_professors SET course_id = "' . $courseID . '"', professor_name = "' . $professorname . '",
+ professor_initial = "' . $professorinitial . '", professor_first_lastname =  "' . $professorflname . '" ,
+      professor_second_lastname =  "' . $professorslname . '" WHERE professor_entry_id = '$id');*/
 }
 ?>
 
@@ -90,27 +95,32 @@
         <main class="mcourses" style="justify-content:center;">
             <article class="mcourse">
             <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Professor</h3>
-            <form action="addprofessor.php" method="POST">
+                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Edit Professor</h3>
+                <?php 
+                $query = query("SELECT * FROM lc_professors WHERE professor_entry_id = '". $id ."'");
+                confirm($query);
+                $row = fetch_array($query);
+                ?>
+            <form action="editprofessor.php" method="POST">
                 <div>
                     <label for="Course_ID">Course ID:</label>
-                    <input id="Course_ID" type="text" name="Course_ID">
+                    <input id="Course_ID" type="text" name="Course_ID" value=<?php echo $row['course_id']; ?>>
                 </div>
                 <div>
                     <label for="professor_name">Professor Name:</label>
-                    <input id="professor_name" type="text" name="professor_name">
+                    <input id="professor_name" type="text" name="professor_name" value=<?php echo $row['professor_name']; ?>>
                 </div>
                 <div>
                     <label for="professor_initial">Professor Initial:</label>
-                    <input id="professor_initial" type="text" name="professor_initial">
+                    <input id="professor_initial" type="text" name="professor_initial" value=<?php echo $row['professor_initial']; ?>>
                 </div>
                 <div>
                     <label for="professor_flname">Professor First Last Name:</label>
-                    <input id="professor_flname" type="text" name="professor_flname">
+                    <input id="professor_flname" type="text" name="professor_flname" value=<?php echo $row['professor_first_lastname']; ?>>
                 </div>
                 <div>
                     <label for="professor_slname">Professor Second Last Name:</label>
-                    <input id="professor_slname" type="text" name="professor_slname">
+                    <input id="professor_slname" type="text" name="professor_slname" value=<?php echo $row['professor_second_lastname']; ?>>
                 </div>
                 <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
             </form>

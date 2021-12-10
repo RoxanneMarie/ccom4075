@@ -1,16 +1,5 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_POST['submit'])){
-        $courseID = $_POST['Course_ID'];
-        $professorname = $_POST['professor_name'];
-        $professorinitial = $_POST['professor_initial'];
-        $professorflname = $_POST['professor_flname'];
-        $professorslname = $_POST['professor_slname'];
-
-    echo $query = query('INSERT INTO lc_professors ( course_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname)
-    VALUES("' . $courseID . '","' . $professorname . '" , "' . $professorinitial . '" , "' . $professorflname . '" , "' . $professorslname . '")');
-}
+    require_once("../functions.php") 
 ?>
 
 <!DOCTYPE html>
@@ -84,40 +73,40 @@
     </head>
     <body>
         <?php 
-            top_header_2(); 
-            ?>
-    <input type="hidden" value="student_btn" name="action">
-        <main class="mcourses" style="justify-content:center;">
-            <article class="mcourse">
-            <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Professor</h3>
-            <form action="addprofessor.php" method="POST">
-                <div>
-                    <label for="Course_ID">Course ID:</label>
-                    <input id="Course_ID" type="text" name="Course_ID">
+            top_header_2();
+    echo '<input type="hidden" value="student_btn" name="action">
+    <main class="mcourses" style="justify-content:center;">
+        <article class="mcourse">
+        <div class="text">
+            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professors</h3>
+                <table class="tCourses">
+            <tr>
+                <td>Edit</td>
+                <td>Professor ID</td>
+                <td>Course ID</td>
+                <td>Name</td>
+                <td>Initial</td>
+                <td>First Last Name</td>
+                <td>Second Last name</td>
+            </tr>';
+    $query = query("SELECT * FROM lc_professors");
+    confirm($query);
+    while ($row = fetch_array($query)) {
+        echo '    
+                <tr class="trCourses">
+                    <td>   <a href="editprofessor.php?id='. $row['professor_entry_id'] .'">Edit</a>
+                    <td>'. $row['professor_entry_id'] .'</td>
+                    <td>'. $row['course_id'] .'</td>
+                    <td>'. $row['professor_name'] .'</td>
+                    <td>'. $row['professor_initial'] .'</td>
+                    <td>'. $row['professor_first_lastname'] .'</td>
+                    <td>'. $row['professor_second_lastname'] .'</td>
+                    </tr>
+                    '; } echo '
+                </table><br><br>
                 </div>
-                <div>
-                    <label for="professor_name">Professor Name:</label>
-                    <input id="professor_name" type="text" name="professor_name">
-                </div>
-                <div>
-                    <label for="professor_initial">Professor Initial:</label>
-                    <input id="professor_initial" type="text" name="professor_initial">
-                </div>
-                <div>
-                    <label for="professor_flname">Professor First Last Name:</label>
-                    <input id="professor_flname" type="text" name="professor_flname">
-                </div>
-                <div>
-                    <label for="professor_slname">Professor Second Last Name:</label>
-                    <input id="professor_slname" type="text" name="professor_slname">
-                </div>
-                <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
-            </form>
-            </div>
-            </article>
-        </main>
-        <?php
+                </article>
+            </main>';
             bottom_footer();
             credit_mobirise_1();
         ?>
