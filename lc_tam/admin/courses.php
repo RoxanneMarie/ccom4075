@@ -79,13 +79,14 @@
         <article class="mcourse">
         <div class="text">
             <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3>
-            <input type="submit"  name="btn_addCourse" value="Add Course">
+            <a href="addcourse.php">Add Course</a>
                 <table class="tCourses">
             <tr>
                 <td>Course ID</td>
                 <td>Course Name</td>
                 <td>Course Professor</td>
                 <td>Department</td>
+                <td>Tutors Available</td>
             </tr>';
     $query = query("SELECT * FROM lc_courses");
     confirm($query);
@@ -102,6 +103,7 @@
                     <td>'. $row['course_name'] .'</td>
                     <td>'. $row2['professor_name'] .'</td>
                     <td>'. $row3['dept_name'] .'</td>
+                    <td>'. $row['tutor_available'] .'</td>
                     </tr>
     '; } echo '
                 </table><br><br>

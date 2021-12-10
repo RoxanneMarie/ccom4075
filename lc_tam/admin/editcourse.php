@@ -1,15 +1,6 @@
 <?php 
-    require_once("../functions.php");
+    require_once("../functions.php") 
     
-    if(isset($_POST['submit'])){
-        $courseID = $_POST['Course_ID'];
-        $courseName = $_POST['Course_Name'];
-        $departmentID = $_POST['departmentID'];
-        $tutor_available = 1;
-
-    echo $query = query('INSERT INTO lc_courses (course_id, course_name, dept_id, tutor_available)
-    VALUES("' . $courseID . '","' . $courseName . '",' . $departmentID . ',' . $tutor_available . ')');
-}
 ?>
 
 <!DOCTYPE html>
@@ -83,52 +74,44 @@
     </head>
     <body>
         <?php 
-            top_header_2(); 
-            ?>
-    <input type="hidden" value="student_btn" name="action">
-        <main class="mcourses" style="justify-content:center;">
-            <article class="mcourse">
-            <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Course</h3>
-            <form action="addcourse.php" method="POST">
-                <div>
-                    <label for="Course_ID">Course ID:</label>
-                    <input id="Course_ID" type="text" name="Course_ID">
+            top_header_2();
+    echo '<input type="hidden" value="student_btn" name="action">
+    <main class="mcourses" style="justify-content:center;">
+        <article class="mcourse">
+        <div class="text">
+            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3>
+                <table class="tCourses">
+            <tr>
+                <td>Edit</td>
+                <td>Course ID</td>
+                <td>Course Name</td>
+                <td>Course Professor</td>
+                <td>Department</td>
+                <td>Tutors Available</td>
+            </tr>';
+    $query = query("SELECT * FROM lc_courses");
+    confirm($query);
+    while($row = fetch_array($query)) {
+        $query2 = query("SELECT * FROM lc_professors WHERE course_id = '" . $row['course_id'] ." ' ");
+        confirm($query2);
+        $row2 = fetch_array($query2);
+        $query3 = query("SELECT * FROM lc_departments WHERE dept_id = '" . $row['dept_id'] ." ' ");
+        confirm($query3); 
+        $row3 = fetch_array($query3);
+        echo '    
+                <tr class="trCourses">
+                    <td>   <a href="editcourseinfo.php?id='. $row['course_id'] .'">Edit</a>
+                    <td>'. $row['course_id'] .'</td>
+                    <td>'. $row['course_name'] .'</td>
+                    <td>'. $row2['professor_name'] .'</td>
+                    <td>'. $row3['dept_name'] .'</td>
+                    <td>'. $row['tutor_available'] .'</td>
+                    </tr>
+    '; } echo '
+                </table><br><br>
                 </div>
-                <div>
-                    <label for="Course_Name">Course Name:</label>
-                    <input id="Course_Name" type="text" name="Course_Name">
-                </div>
-<!--                <div>
-                    <label for="professorID">Professor:</label>
-                    <select class="" id="professorID" name="professorID"> 
-                    <option value="">Select a Professor</option>
-                        <?php /*
-                            $query = query("SELECT * FROM lc_professors");
-                            confirm($query);
-                            while($row = fetch_array($query)) {
-                                ?>
-                        <option value=<?php echo $row['professor_entry_id'] ?> ><?php echo $row['professor_name']; } */ ?></option>
-                    </select>
-                </div> -->
-                <div>
-                    <label for="departmentID">Department:</label>
-                    <select class="" id="departmentID" name="departmentID"> 
-                    <option value="">Select a Department</option>
-                        <?php 
-                            $query = query("SELECT * FROM lc_departments");
-                            confirm($query);
-                            while($row = fetch_array($query)) {
-                                ?>
-                        <option value=<?php echo $row['dept_id'] ?> ><?php echo $row['dept_name'];  } ?></option>
-                    </select>
-                </div>
-                <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
-            </form>
-            </div>
-            </article>
-        </main>
-        <?php
+                </article>
+            </main>';
             bottom_footer();
             credit_mobirise_1();
         ?>

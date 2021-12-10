@@ -3,12 +3,13 @@
     
     if(isset($_POST['submit'])){
         $courseID = $_POST['Course_ID'];
-        $courseName = $_POST['Course_Name'];
-        $departmentID = $_POST['departmentID'];
-        $tutor_available = 1;
+        $professorname = $_POST['professor_name'];
+        $professorinitial = $_POST['professor_initial'];
+        $professorflname = $_POST['professor_flname'];
+        $professorslname = $_POST['professor_slname'];
 
-    echo $query = query('INSERT INTO lc_courses (course_id, course_name, dept_id, tutor_available)
-    VALUES("' . $courseID . '","' . $courseName . '",' . $departmentID . ',' . $tutor_available . ')');
+    echo $query = query('INSERT INTO lc_professors ( course_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname)
+    VALUES("' . $courseID . '","' . $professorname . '" , "' . $professorinitial . '" , "' . $professorflname . '" , "' . $professorslname . '")');
 }
 ?>
 
@@ -89,39 +90,27 @@
         <main class="mcourses" style="justify-content:center;">
             <article class="mcourse">
             <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Course</h3>
-            <form action="addcourse.php" method="POST">
+                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Professor</h3>
+            <form action="addprofessor.php" method="POST">
                 <div>
                     <label for="Course_ID">Course ID:</label>
                     <input id="Course_ID" type="text" name="Course_ID">
                 </div>
                 <div>
-                    <label for="Course_Name">Course Name:</label>
-                    <input id="Course_Name" type="text" name="Course_Name">
+                    <label for="professor_name">professor Name:</label>
+                    <input id="professor_name" type="text" name="professor_name">
                 </div>
-<!--                <div>
-                    <label for="professorID">Professor:</label>
-                    <select class="" id="professorID" name="professorID"> 
-                    <option value="">Select a Professor</option>
-                        <?php /*
-                            $query = query("SELECT * FROM lc_professors");
-                            confirm($query);
-                            while($row = fetch_array($query)) {
-                                ?>
-                        <option value=<?php echo $row['professor_entry_id'] ?> ><?php echo $row['professor_name']; } */ ?></option>
-                    </select>
-                </div> -->
                 <div>
-                    <label for="departmentID">Department:</label>
-                    <select class="" id="departmentID" name="departmentID"> 
-                    <option value="">Select a Department</option>
-                        <?php 
-                            $query = query("SELECT * FROM lc_departments");
-                            confirm($query);
-                            while($row = fetch_array($query)) {
-                                ?>
-                        <option value=<?php echo $row['dept_id'] ?> ><?php echo $row['dept_name'];  } ?></option>
-                    </select>
+                    <label for="professor_initial">Professor Initial:</label>
+                    <input id="professor_initial" type="text" name="professor_initial">
+                </div>
+                <div>
+                    <label for="professor_flname">Professor First Last Name:</label>
+                    <input id="professor_flname" type="text" name="professor_flname">
+                </div>
+                <div>
+                    <label for="professor_slname">Professor Second Last Name:</label>
+                    <input id="professor_slname" type="text" name="professor_slname">
                 </div>
                 <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
             </form>

@@ -1,14 +1,22 @@
 <?php 
     require_once("../functions.php");
     
-    if(isset($_POST['submit'])){
-        $courseID = $_POST['Course_ID'];
-        $courseName = $_POST['Course_Name'];
-        $departmentID = $_POST['departmentID'];
-        $tutor_available = 1;
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+    }else{
+        
+      }
 
-    echo $query = query('INSERT INTO lc_courses (course_id, course_name, dept_id, tutor_available)
-    VALUES("' . $courseID . '","' . $courseName . '",' . $departmentID . ',' . $tutor_available . ')');
+    if(isset($_POST['submit'])){
+        $courseID = $_GET['Course_ID'];
+        $courseName = $_GET['Course_Name'];
+        $departmentID = $_GET['departmentID'];
+        $tutor_available = $_GET['tutor_available'];
+ echo 'UPDATE lc_courses SET course_id = "'.$courseID.'", course_name = "'.$courseName.'",
+ dept_id = '.$departmentID.', tutor_available = '.$tutor_available.' WHERE course_id = "'.$id.'"';
+        $query = query('UPDATE lc_courses SET course_id = "'.$courseID.'", course_name = "'.$courseName.'",
+        dept_id = '.$departmentID.', tutor_available = '.$tutor_available.' WHERE course_id = "'.$id.'"');
+    confirm($query);
 }
 ?>
 
@@ -89,15 +97,27 @@
         <main class="mcourses" style="justify-content:center;">
             <article class="mcourse">
             <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Course</h3>
-            <form action="addcourse.php" method="POST">
+                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Edit Course</h3>
+            <?php 
+            $query = query("SELECT * FROM lc_courses WHERE course_id = '". $id ."'");
+            confirm($query);
+            $row = fetch_array($query);
+            $query2 = query("SELECT * FROM lc_departments WHERE dept_id = '" . $row['dept_id'] ." ' ");
+            confirm($query2); 
+            $row2 = fetch_array($query2);
+            $query3 = query("SELECT * FROM lc_departments");
+            confirm($query3);
+            $row3 = fetch_array($query3);
+            ?>
+            <form action="editcourseinfo.php" method="GET">
                 <div>
                     <label for="Course_ID">Course ID:</label>
-                    <input id="Course_ID" type="text" name="Course_ID">
+                    <input type="hidden" value="<?php echo $row['course_id']; ?>" name="id">
+                    <input id="Course_ID" type="text" name="Course_ID" value="<?php echo $row['course_id']; ?>">
                 </div>
                 <div>
                     <label for="Course_Name">Course Name:</label>
-                    <input id="Course_Name" type="text" name="Course_Name">
+                    <input id="Course_Name" type="text" name="Course_Name" value="<?php echo $row['course_name']; ?>">
                 </div>
 <!--                <div>
                     <label for="professorID">Professor:</label>
@@ -113,15 +133,19 @@
                 </div> -->
                 <div>
                     <label for="departmentID">Department:</label>
-                    <select class="" id="departmentID" name="departmentID"> 
-                    <option value="">Select a Department</option>
+                    <select class="" id="departmentID" name="departmentID" value="<?php echo $row['dept_id']; ?>"> 
+                    <option selected value="<?php echo $row2['dept_id']; ?> "><?php echo $row2['dept_name']; ?></option>
                         <?php 
-                            $query = query("SELECT * FROM lc_departments");
-                            confirm($query);
-                            while($row = fetch_array($query)) {
+                            $query4 = query("SELECT * FROM lc_departments");
+                            confirm($query4);
+                            while($row4 = fetch_array($query4)) {
                                 ?>
-                        <option value=<?php echo $row['dept_id'] ?> ><?php echo $row['dept_name'];  } ?></option>
+                        <option value=<?php echo $row4['dept_id'] ?> ><?php echo $row4['dept_name'];  } ?></option>
                     </select>
+                </div>
+                <div>
+                    <label for="Course_Name">Tutor Available:</label>
+                    <input id="Course_Name" type="text" name="tutor_available" value="<?php echo $row['tutor_available']; ?>">
                 </div>
                 <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
             </form>
