@@ -97,7 +97,7 @@ VALUES("' . $courseID . '",' . $start . ',' . $end . ')');
     </head>
     <body>
         <?php 
-            top_header_2(); 
+            top_header_3(); 
             ?>
     <input type="hidden" value="student_btn" name="action">
         <main class="mcourses" style="justify-content:center;">

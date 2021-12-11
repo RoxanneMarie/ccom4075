@@ -38,7 +38,7 @@
                 </div>
                 <div class="row justify-content-center mt-4">
                     <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
-                        <form action="login.php" method="POST" class="mbr-form form-with-styler mx-auto" data-form-title="Form Name">
+                        <form action="index.php" method="POST" class="mbr-form form-with-styler mx-auto" data-form-title="Form Name">
                             <!-- <input type="hidden" name="email" data-form-email="true" value="qEQkUZCrQV0jr3m7VxTivJu/7YR7JO7sqhde/qdpvDpts06yWNd/vJUYUsoNSK4Z+UioUOHdxBjPEBJTN4N6mgVq4kn330NZGvXg7oSdLvjTJe+dzIPufSvwIdwj2lg2">
                             <div class="row">
                                 <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Login Successful!</div>

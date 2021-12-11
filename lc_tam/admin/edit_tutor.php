@@ -1,8 +1,8 @@
 <?php 
   require_once("../functions.php");
     
-    if(isset($_GET['id'])){
-        $id = $_GET['id'];
+    if(isset($_POST['id'])){
+        $id = $_POST['id'];
     }
 
     if(isset($_POST['submit'])){
@@ -95,7 +95,7 @@
     </head>
     <body>
         <?php 
-            top_header_2(); 
+            top_header_3(); 
             ?>
         
         <br><br>

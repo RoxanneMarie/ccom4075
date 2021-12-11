@@ -16,7 +16,7 @@ function top_header_1()
                     <div class="navbar-brand">
                         <span class="navbar-logo">
                             <a href="index.php">
-                                <img src="assets/images/lc-logo1-121x74.png" alt="Mobirise" style="height: 3.8rem;">
+                                <img src="assets/images/lc_logo1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
                         <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="index.php">Tutoring <br>Appointment<br>Manager</a></span>
@@ -31,7 +31,7 @@ function top_header_1()
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item" ><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
+                            
                         </ul>
                     </div>
                 </div>
@@ -40,8 +40,9 @@ function top_header_1()
         </section>';
 }
 
-function top_header_2()
+function top_header_2() //estudiante
 {
+    session_start();
   echo '
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
@@ -50,7 +51,7 @@ function top_header_2()
                     <div class="navbar-brand">
                         <span class="navbar-logo">
                             <a href="index.php">
-                                <img src="../assets/images/lc-logo1-121x74.png" alt="Mobirise" style="height: 3.8rem;">
+                                <img src="../assets/images/lc_logo1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
                         <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="index.php">Tutoring <br>Appointment<br>Manager</a></span>
@@ -66,7 +67,7 @@ function top_header_2()
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="select_course.php">Create</a><a class="text-black dropdown-item display-4" href="index.php">View</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="account.php">View<br></a><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.$_SESSION['name'].'</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="account.php">View<br></a><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
                         </ul>
                     </div>
                 </div>
@@ -75,7 +76,7 @@ function top_header_2()
         </section>';
 }
 
-function top_header_3()
+function top_header_3() //admin
 {
   echo '
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
@@ -85,19 +86,12 @@ function top_header_3()
                     <div class="navbar-brand">
                         <span class="navbar-logo">
                             <a href="index.php">
-                                <img src="../assets/images/lc-logo1-121x74.png" alt="Mobirise" style="height: 3.8rem;">
+                                <img src="../assets/images/lc_logo1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
                         <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="index.php">Tutoring <br>Appointment<br>Manager</a></span>
                     </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </button>
+                   
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
                             <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
@@ -105,7 +99,7 @@ function top_header_3()
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="create.php">Create</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Schedule</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Attendance</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Reports</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Generate</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">View<br></a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Logout</a></div></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.$_SESSION['name'].'</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="account.php">View Account<br></a><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
                         </ul>
 
 
@@ -116,7 +110,7 @@ function top_header_3()
         </section>';
 }
 
-function top_header_4()
+function top_header_4() //tutor
 {
   echo '
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
@@ -126,27 +120,18 @@ function top_header_4()
                     <div class="navbar-brand">
                         <span class="navbar-logo">
                             <a href="index.php">
-                                <img src="../assets/images/lc-logo1-121x74.png" alt="Mobirise" style="height: 3.8rem;">
+                                <img src="../assets/images/lc_logo1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
                         <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="index.php">Tutoring <br>Appointment<br>Manager</a></span>
                     </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
                             <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="create.php">Create</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Schedule</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Attendance</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Reports</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Generate</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">View<br></a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Logout</a></div></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.$_SESSION['name'].'</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">View<br></a><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
                         </ul>
 
 
@@ -297,34 +282,67 @@ function login()
         $email = escape_string($_POST['email']);
         $password = escape_string($_POST['password']);
         
-        $query = query("SELECT student_email, acc_stat_id FROM lc_test_students WHERE student_email = '{$email}' AND student_password = MD5('{$password}')");
+        $query = query("SELECT student_id, student_name, student_email, acc_stat_id FROM lc_test_students WHERE student_email = '{$email}' AND student_password = MD5('{$password}')");
         confirm($query);
 
-        if(mysqli_num_rows($query) == 0)
+        if(mysqli_num_rows($query) == 0) //no era estudiante o tutor
         {
-            //set_message("Your Password or Username is incorrect");
-            //redirect("login.php");
+            $query2 = query("SELECT admin_email, admin_name FROM lc_test_admins WHERE admin_email = '{$email}' AND admin_password = MD5('{$password}')");
+            confirm($query2);
+            if(mysqli_num_rows($query2) == 0) //no era admin
+            {
+                echo("Your Password or Username is incorrect");
+                redirect("login.php");
+            }
+            else // es admin
+            {
+                $admin1 = fetch_array($query2);
+                $_SESSION['type'] = "Admin";
+                $_SESSION['name'] = $admin1['admin_name'];
+                $_SESSION['email'] = $admin1['admin_email'];
+                redirect("admin/admin.php");
+            }
+            
         }
-        else
+        else//es estudiante o tutor
         {
             $row = fetch_array($query);
-            $query = query("SELECT acc_stat_name FROM lc_account_status WHERE acc_stat_id = '{$row['acc_stat_id']}'");
-            confirm($query);
-            $row2 = fetch_array($query);
+
+            $query3 = query("SELECT acc_stat_name FROM lc_account_status WHERE acc_stat_id = '{$row['acc_stat_id']}'");
+            confirm($query3);
+            $row2 = fetch_array($query3);
             
-            if($row2['acc_stat_name'] != 'Active')
+            if($row2['acc_stat_name'] != 'Active') //no esta activo
             {
-                //set_message("Your Password or Username is incorrect");
-                //redirect("login.php");
+                echo("Your Account is no active");
+                redirect("login.php");
             }
-            else
+            else // esta ACTIVO
             {
-                $_SESSION['type'] = "Student";
-                $_SESSION['email'] = $row['student_email'];
-                $_SESSION["current_date"] = date("Y-m-d");
-                $_SESSION["current_day_of_the_week"] = "Monday";//date("l");
-                //set_message("Login Successful!");
-                redirect("student/index.php");
+                $query3 = query("SELECT student_id FROM lc_test_tutors WHERE student_id = '{$row['student_id']}'");
+                confirm($query3);
+
+                if(mysqli_num_rows($query3) == 0)  //es estudiante
+                {
+                    $_SESSION['type'] = "Student";
+                    $_SESSION['name'] = $row['student_name'];
+                    $_SESSION['email'] = $row['student_email'];
+                    $_SESSION["current_date"] = date("Y-m-d");
+                    $_SESSION["current_day_of_the_week"] = "Monday";//date("l");
+                    //echo("Login Successful!");
+                    redirect("student/index.php");
+                }
+                else // es tutor
+                {
+                    $tutor = fetch_array($query);
+                    $_SESSION['type'] = "Tutor";
+                    $_SESSION['name'] = $row['student_name'];
+                    $_SESSION['email'] = $row['student_email'];
+                    $_SESSION["current_date"] = date("Y-m-d");
+                    $_SESSION["current_day_of_the_week"] = "Monday";//date("l");
+                    redirect("tutor/tutor.php");
+                }
+                
             }
         }
         close();

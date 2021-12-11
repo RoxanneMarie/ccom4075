@@ -73,7 +73,7 @@
     </head>
     <body>
         <?php 
-            top_header_2();
+            top_header_3();
     echo '
     <main class="mcourses" style="justify-content:center;">
         <article class="mcourse">
@@ -101,13 +101,19 @@
             INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id INNER JOIN lc_account_status 
             ON lc_test_students.acc_stat_id = lc_account_status.acc_stat_id");
     while ($row = fetch_array($query)) {
+    //     <form action="edit_tutor.php" method="post">
+    //     <input type="hidden" name="id" value="'. $row['student_id'] .'"> 
+    //     <input type="button" name="id" value="Edit">
+    // </form>
+session_start();
+$_SESSION['id'] =  $row['student_id'];
         echo '    
                 <tr class="trCourses">
                 
                     <td>
                         <form action="edit_tutor.php" method="post">
-                            <input type="hidden" name="id" value="'. $row['student_id'] .'"> 
-                            <input type="button" name="id" value="Edit">
+                           <input type="hidden" name="id" value="'. $row['student_id'] .'">Edit</a>
+                           
                         </form>
                     </td>
                     <td>'.$row['student_id'].'</td>

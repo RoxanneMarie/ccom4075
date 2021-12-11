@@ -73,7 +73,7 @@
     </head>
     <body>
         <?php 
-            top_header_2();
+            top_header_3();
     echo '<input type="hidden" value="student_btn" name="action">
     <main class="mcourses" style="justify-content:center;">
         <article class="mcourse">
@@ -87,31 +87,31 @@
                 <td>Initial</td>
                 <td>First Lastname</td>
                 <td>Second Lastname</td>
-                <td>Role</td>
+                <td>email</td>
             </tr>';
     $query = query("SELECT * FROM lc_test_students");
     confirm($query);
-    $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id ");
-    confirm($query2);
-    global $connection;
-    $stmt = $pdo->prepare($query2);
-    $stmt->execute();
-    $row2 = $stmt->fetchAll();
+    // $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id ");
+    // confirm($query2);
+    // global $connection;
+    // $stmt = $pdo->prepare($query2);
+    // $stmt->execute();
+    // $row2 = $stmt->fetchAll();
     
-    while($row = fetch_array($query)) 
+     while($row = fetch_array($query)) 
     {
-        $role = "";
-        $flag = false;
-        $id =  $row['student_id'];
+    //     $role = "";
+    //     $flag = false;
+    //     $id =  $row['student_id'];
 
-        foreach($row2 as $rowTutor)
-        {
-            if($row['student_id']== $rowTutor['student_id'])
-                {
-                echo 'entre while /n';
-                    $flag = true;
-                }
-        }
+    //     foreach($row2 as $rowTutor)
+    //     {
+    //         if($row['student_id']== $rowTutor['student_id'])
+    //             {
+    //             echo 'entre while /n';
+    //                 $flag = true;
+    //             }
+    //     }
       
 /* 
         $id =  $row['student_id'];
@@ -131,14 +131,14 @@
             }
         } */
 
-        if($flag == true){
-            $role = "Tutor";
-        }
+        // if($flag == true){
+        //     $role = "Tutor";
+        // }
            
-        if($flag == false)
-        {
-            $role = "Student";
-        }
+        // if($flag == false)
+        // {
+        //     $role = "Student";
+        // }
 
 
 
@@ -149,7 +149,7 @@
                     <td>'. $row['student_initial'] .'</td>
                     <td>'. $row['student_first_lastname'] .' </td>
                     <td>'. $row['student_second_lastname'] .'</td>
-                    <td>'. $role .'</td>
+                   <td>'.$row['student_email'].'</td>
                 </tr>'; 
     } 
     echo '   </table><br><br>
