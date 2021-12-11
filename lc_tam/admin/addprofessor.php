@@ -71,7 +71,7 @@
         }
 
         .tCourses {
-        background: rgb(196, 127, 0);
+        background: #fd8f00;
         table-layout: auto;
         width: 100%;
         }

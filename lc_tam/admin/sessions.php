@@ -52,7 +52,7 @@
         padding: 0 20px 20px;
         }
         .card .text > button {
-        background: rgb(196, 127, 0);
+        background: #fd8f00;
         border: 1;
         color: white;
         padding: 10px;

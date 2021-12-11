@@ -85,7 +85,7 @@ function top_header_3() //admin
                 <div class="container-fluid">
                     <div class="navbar-brand">
                         <span class="navbar-logo">
-                            <a href="index.php">
+                            <a href="../admin/admin.php">
                                 <img src="../assets/images/lc_logo1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
@@ -117,7 +117,7 @@ function top_header_4() //tutor
                 <div class="container-fluid">
                     <div class="navbar-brand">
                         <span class="navbar-logo">
-                            <a href="index.php">
+                            <a href="../tutor/tutor.php">
                                 <img src="../assets/images/lc_logo1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
