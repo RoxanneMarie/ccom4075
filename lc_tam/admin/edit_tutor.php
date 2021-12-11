@@ -1,5 +1,5 @@
 <?php 
-    require_once("../functions.php");
+  require_once("../functions.php");
     
     if(isset($_GET['id'])){
         $id = $_GET['id'];
@@ -14,7 +14,7 @@
 
     /*echo $query = query('UPDATE lc_professors SET course_id = "' . $courseID . '"', professor_name = "' . $professorname . '",
  professor_initial = "' . $professorinitial . '", professor_first_lastname =  "' . $professorflname . '" ,
-      professor_second_lastname =  "' . $professorslname . '" WHERE professor_entry_id = '$id');*/
+      professor_second_lastname =  "' . $professorslname . '" WHERE professor_entry_id = '.$id.');*/
 }
 ?>
 
@@ -41,7 +41,7 @@
       <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
-        <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+    <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
     <style>
         /*----------------------- CSS HOME PAGE*/
 
@@ -84,16 +84,6 @@
         .trCourses {
         background: white;
         }
-
-        .btnt{
-            font-weight: 700;
-            background-color: #fd8f00;
-            color: #ffffff;
-            font-style: normal;
-            cursor: pointer;
-            padding: 0.6rem 1.2rem;
-            margin: 0 auto;
-        }
     </style>
 
     </head>
@@ -105,29 +95,37 @@
         <main class="mcourses" style="justify-content:center;">
             <article class="mcourse">
             <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Edit Professor</h3>
+                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Edit Tutor</h3>
                 <?php 
-                $query = query("SELECT * FROM lc_professors WHERE professor_entry_id = '". $id ."'");
+                $query = query("SELECT * FROM lc_test_students INNER JOIN lc_test_tutors ON lc_test_students.'". $id ."' = lc_test_tutors.'". $id ."' 
+                INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id INNER JOIN lc_account_status 
+                ON lc_test_students.acc_stat_id = lc_account_status.acc_stat_id");
                 confirm($query);
                 $row = fetch_array($query);
+                /* $query = query("SELECT * FROM lc_professors WHERE professor_entry_id = '". $id ."'");
+                confirm($query);
+                $row = fetch_array($query); */
                 ?>
-            <form action="editprofessor.php" method="POST"><br>
-                    <label for="Course_ID">Course ID:</label>
-                    <input id="Course_ID" type="text" name="Course_ID" value=<?php echo $row['course_id']; ?>><br><br>
-
-                    <label for="professor_name">Professor Name:</label>
-                    <input id="professor_name" type="text" name="professor_name" value=<?php echo $row['professor_name']; ?>><br><br>
-
-                    <label for="professor_initial">Professor Initial:</label>
-                    <input id="professor_initial" type="text" name="professor_initial" value=<?php echo $row['professor_initial']; ?>><br><br>
-
+            <form action="editprofessor.php" method="POST">
+                <div>
+                    <label for="Course_ID">Student Number: <?php echo $row['student_id']; ?></label>
+                    <input type="text" name="inputname" value=<?php echo $row['student_id']; ?> readonly>
+                </div>
+                <div>
+                    <label for="professor_name">Tutor Name:  <?php echo '"'.$row['student_name'].'" "'.$row['student_initial'].'" "'.$row['student_first_lastname'].'" "'.$row['student_second_lastname'].'"';?></label>
+                    <input type="text" name="inputname" value="datos a enviar" readonly>
+                </div>
+                <div>
+                    <label for="professor_initial">Email:  </label>
+                    <input type="text" name="inputname" value=<?php echo $row['student_email']; ?> readonly>
+                </div>
+                <div>
                     <label for="professor_flname">Professor First Last Name:</label>
-                    <input id="professor_flname" type="text" name="professor_flname" value=<?php echo $row['professor_first_lastname']; ?>><br><br>
-
+                </div>
+                <div>
                     <label for="professor_slname">Professor Second Last Name:</label>
-                    <input id="professor_slname" type="text" name="professor_slname" value=<?php echo $row['professor_second_lastname']; ?>><br><br>
-
-                    <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
+                </div>
+                <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
             </form>
             </div>
             </article>

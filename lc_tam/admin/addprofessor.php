@@ -79,6 +79,16 @@
         .trCourses {
         background: white;
         }
+
+        .btnt{
+            font-weight: 700;
+            background-color: #fd8f00;
+            color: #ffffff;
+            font-style: normal;
+            cursor: pointer;
+            padding: 0.6rem 1.2rem;
+            margin: 0 auto;
+        }
     </style>
 
     </head>
@@ -91,28 +101,23 @@
             <article class="mcourse">
             <div class="text">
                 <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Professor</h3>
-            <form action="addprofessor.php" method="POST">
-                <div>
+            <form action="addprofessor.php" method="POST"><br>
                     <label for="Course_ID">Course ID:</label>
-                    <input id="Course_ID" type="text" name="Course_ID">
-                </div>
-                <div>
+                    <input id="Course_ID" type="text" name="Course_ID"><br><br>
+
                     <label for="professor_name">Professor Name:</label>
-                    <input id="professor_name" type="text" name="professor_name">
-                </div>
-                <div>
+                    <input id="professor_name" type="text" name="professor_name"><br><br>
+
                     <label for="professor_initial">Professor Initial:</label>
-                    <input id="professor_initial" type="text" name="professor_initial">
-                </div>
-                <div>
+                    <input id="professor_initial" type="text" name="professor_initial"><br><br>
+
                     <label for="professor_flname">Professor First Last Name:</label>
-                    <input id="professor_flname" type="text" name="professor_flname">
-                </div>
-                <div>
+                    <input id="professor_flname" type="text" name="professor_flname"><br><br>
+
                     <label for="professor_slname">Professor Second Last Name:</label>
-                    <input id="professor_slname" type="text" name="professor_slname">
-                </div>
-                <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
+                    <input id="professor_slname" type="text" name="professor_slname"><br><br>
+
+                    <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
             </form>
             </div>
             </article>

@@ -81,62 +81,58 @@
 
     </head>
     <body>
-
-        <?php
-            top_header_2();
-            echo'
-          
-            <main class="cards" style="justify-content:center;">
+    
+      <?php
+             top_header_2();
+     echo'<main class="cards" style="justify-content:center;">
                 <article class="card">
                 <div class="text"><br>
-                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Accounts</h3><br>
-                    <a href="view_accounts.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
+                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">My Courses</h3><br>
+                    <a href="../admin/view_accounts.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
                     <a href=""><input type="submit" class="home_button" name="btn_admin" value="Edit Yours"></a><br><br>
                 </div>
                 </article>
                 <article class="card">
                 <div class="text"><br>
-                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Tutors</h3><br>
-                    <a href="tutors.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-                    <a href=""><input type="submit" class="home_button" name="btn_admin" value="Add Tutor" ></a><br><br>
+                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Schedules</h3><br>
+                    <a href=""><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
+                    <a href=""><input type="submit" class="home_button" name="btn_admin" value="Add" ></a><br><br>
                 </div>
                 </article>
                 <article class="card">
                 <div class="text"><br>
-                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Sessions</h3><br>
-                    <a href="sessions.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-                    <a  href="addsession.php"><input type="submit" class="home_button" name="btn_admin" value="Add Session"></a><br><br>
-                </div>
-                </article>
-                </main>
-
-            <main class="cards" style="justify-content:center;">
-                <article class="card">
-                <div class="text"><br>
-                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professors</h3><br>
-                    <a href="professors.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-                    <a  href="addprofessor.php"><input type="submit" class="home_button" name="btn_admin" value="Add Professor"></a><br><br>
+                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Attendance</h3><br>
+                    <a href=""><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
+                    <a href=""><input type="submit" class="home_button" name="btn_admin" value="Add" ></a><br><br>
                 </div>
                 </article>
                 <article class="card">
                 <div class="text"><br>
-                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Departments</h3><br>
-                    <a href="departments.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-                    <a href="departmentadd.php"><input type="submit" class="home_button" name="btn_admin"value="Add Department" ></a><br><br>
-                </div>
-                </article>
-                <article class="card">
-                <div class="text"><br>
-                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3><br>
-                    <a href="courses.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-                    <a href="addcourse.php"><input type="submit" class="home_button" name="btn_admin"value="Add Course" ></a><br><br>
+                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Full Session</h3><br>
+                    <a href=""><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
+                    <a href=""><input type="submit" class="home_button" name="btn_admin" value="Add" ></a><br><br>
                 </div>
                 </article>
             </main>
-           
-            
+
            ';
-        ?>
+            // <main class="cards" style="justify-content:center;">
+            //     <article class="card">
+            //     <div class="text"><br>
+            //         <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Departments</h3><br>
+            //         <a href=""><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
+            //         <a href=""><input type="submit" class="home_button" name="btn_admin"value="Add Department" ></a><br><br>
+            //     </div>
+            //     </article>
+            //     <article class="card">
+            //     <div class="text"><br>
+            //         <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3><br>
+            //         <a href="courses.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
+            //         <a href="addcourse.php"><input type="submit" class="home_button" name="btn_admin"value="Add Course" ></a><br><br>
+            //     </div>
+            //     </article>
+            // </main>
+        ?> 
         <?php
             bottom_footer();
             credit_mobirise_1();
