@@ -74,7 +74,7 @@
     <body>
         <?php 
             top_header_2();
-    echo '<input type="hidden" value="student_btn" name="action">
+    echo '
     <main class="mcourses" style="justify-content:center;">
         <article class="mcourse">
         <div class="text">
@@ -103,7 +103,13 @@
     while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>   <a href="edit_tutor.php?id='. $row['student_id'] .'">Edit</a>
+                
+                    <td>
+                        <form action="edit_tutor.php" method="post">
+                            <input type="hidden" name="id" value="'. $row['student_id'] .'"> 
+                            <input type="button" name="id" value="Edit">
+                        </form>
+                    </td>
                     <td>'.$row['student_id'].'</td>
                     <td>'. $row['student_name'] .'</td>
                     <td>'. $row['student_initial'] .'</td>

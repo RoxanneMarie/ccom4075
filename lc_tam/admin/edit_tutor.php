@@ -6,15 +6,12 @@
     }
 
     if(isset($_POST['submit'])){
-        $courseID = $_POST['Course_ID'];
-        $professorname = $_POST['professor_name'];
-        $professorinitial = $_POST['professor_initial'];
-        $professorflname = $_POST['professor_flname'];
-        $professorslname = $_POST['professor_slname'];
+        $t_id = $_POST['tutor_id'];
+        $studID = $_POST['Stud_ID'];
+        $t_type = $_POST['tutor_type'];
+        $a_stat = $_POST['acc_status'];
 
-    /*echo $query = query('UPDATE lc_professors SET course_id = "' . $courseID . '"', professor_name = "' . $professorname . '",
- professor_initial = "' . $professorinitial . '", professor_first_lastname =  "' . $professorflname . '" ,
-      professor_second_lastname =  "' . $professorslname . '" WHERE professor_entry_id = '.$id.');*/
+    echo $query = query("UPDATE lc_test_tutors SET tutor_id = '$t_id',student_id = '$studID', tutor_type_id = '$t_type.', tutor_status_id = '$a_stat' WHERE  student_id = '$studID'");
 }
 ?>
 
@@ -84,6 +81,15 @@
         .trCourses {
         background: white;
         }
+        .btnt{           
+            font-weight: 700;
+            background-color: #fd8f00;
+            color: #ffffff;
+            font-style: normal;
+            cursor: pointer;
+            padding: 0.6rem 1.2rem;
+            margin: 0 auto;
+        }
     </style>
 
     </head>
@@ -91,44 +97,84 @@
         <?php 
             top_header_2(); 
             ?>
+        
+        <br><br>
+                
     <input type="hidden" value="student_btn" name="action">
         <main class="mcourses" style="justify-content:center;">
             <article class="mcourse">
             <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Edit Tutor</h3>
-                <?php 
-                $query = query("SELECT * FROM lc_test_students INNER JOIN lc_test_tutors ON lc_test_students.'". $id ."' = lc_test_tutors.'". $id ."' 
-                INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id INNER JOIN lc_account_status 
-                ON lc_test_students.acc_stat_id = lc_account_status.acc_stat_id");
+                <?php
+
+            $query = query("SELECT * FROM lc_test_students WHERE student_id = '".$id."'");
                 confirm($query);
                 $row = fetch_array($query);
+                $fullname = $row['student_name'].' '.$row['student_initial'].' '.$row['student_first_lastname'].' '.$row['student_second_lastname'];
+               ?>
+            <br>
+<h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Edit Tutor: <?php echo $fullname; ?></h3><br>
+                
+                <?php 
+                //SELECT * FROM lc_test_students INNER JOIN lc_test_tutors ON lc_test_students.student_id = lc_test_tutors.student_id 
+                // INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id 
+                //INNER JOIN lc_account_status ON lc_test_students.acc_stat_id = lc_account_status.acc_stat_id
+                
+
+                $query1 = query("SELECT * FROM lc_test_tutors WHERE student_id = '".$id."'");
+                confirm($query1);
+                $row1 = fetch_array($query1);
+
+
+                $query2 = query("SELECT * FROM lc_tutor_type WHERE tutor_type_id = '".$row1['tutor_type_id']."'");
+                confirm($query2);
+                $row2 = fetch_array($query2);
+
+                $query3 = query("SELECT * FROM lc_account_status WHERE acc_stat_id = '".$row['acc_stat_id']."'");
+                confirm($query3);
+                $row3 = fetch_array($query3);
+
                 /* $query = query("SELECT * FROM lc_professors WHERE professor_entry_id = '". $id ."'");
                 confirm($query);
                 $row = fetch_array($query); */
+                
                 ?>
-            <form action="editprofessor.php" method="POST">
-                <div>
-                    <label for="Course_ID">Student Number: <?php echo $row['student_id']; ?></label>
-                    <input type="text" name="inputname" value=<?php echo $row['student_id']; ?> readonly>
-                </div>
-                <div>
-                    <label for="professor_name">Tutor Name:  <?php echo '"'.$row['student_name'].'" "'.$row['student_initial'].'" "'.$row['student_first_lastname'].'" "'.$row['student_second_lastname'].'"';?></label>
-                    <input type="text" name="inputname" value="datos a enviar" readonly>
-                </div>
-                <div>
-                    <label for="professor_initial">Email:  </label>
-                    <input type="text" name="inputname" value=<?php echo $row['student_email']; ?> readonly>
-                </div>
-                <div>
-                    <label for="professor_flname">Professor First Last Name:</label>
-                </div>
-                <div>
-                    <label for="professor_slname">Professor Second Last Name:</label>
-                </div>
-                <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
+            <form action="edit_tutor.php" method="POST">
+                <div >
+                    
+                    <input id="tutor_id" type="hidden" name="tutor_id" value=<?php echo $row1['tutor_id']?>>
+                    <label for="Stud_ID">Student Number: </label>
+                    <input id="Stud_ID"type="text" name="Stud_id" value=<?php echo $row['student_id']; ?> readonly><br><br>
+
+                    <label for="stud_email">Email: </label>
+                    <input id="stud_email" type="text" name="stud_email" value=<?php echo $row['student_email']; ?> readonly><br><br>
+                
+                    <label for="tutor_type">Tutor Type: </label>
+                    <select class="" id="tutor_type" name="tutor_type" value="">
+                        <option selected value=""><?php echo $row2['tutor_type_name'];?></option>
+                        <?php 
+                            $query5 = query("SELECT * FROM lc_tutor_type");
+                            confirm($query5);
+                            while($row5 = fetch_array($query5)) {
+                                ?>
+                        <option value=<?php echo $row5['tutor_type_id'] ?> ><?php echo $row5['tutor_type_name'];  } ?></option>
+                    </select><br><br>
+                
+                    <label for="acc_status">Account Status: </label>
+                    <select class="" id="acc_status" name="acc_status" value="">
+                        <option selected value=""><?php echo $row3['acc_stat_name'];?></option>
+                        <?php 
+                            $query4 = query("SELECT * FROM lc_account_status ");
+                            confirm($query4);
+                            while($row4 = fetch_array($query4)) {
+                                ?>
+                        <option value=<?php echo $row4['acc_stat_id'] ?> ><?php echo $row4['acc_stat_name']; } ?></option>
+                    </select>  <br><br>
+                <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
             </form>
             </div>
+            <br>
             </article>
+            <br>
         </main>
         <?php
             bottom_footer();
