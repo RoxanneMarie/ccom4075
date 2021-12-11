@@ -129,7 +129,7 @@ function top_header_4() //tutor
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="create.php">Create</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Schedule</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Attendance</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Reports</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Generate</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.$_SESSION['name'].'</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">View<br></a><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.$_SESSION['name'].'</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">View<br></a><a class="text-black dropdown-item display-4" href="../student/index.php">Student<br></a><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
                         </ul>
 
 
@@ -869,6 +869,7 @@ function create_session()
 
 function student_view_appointment()
 {
+    session_start();
     $query = query("SELECT student_id FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
     confirm($query);
     $row = fetch_array($query);
