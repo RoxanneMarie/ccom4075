@@ -86,6 +86,16 @@
         .trCourses {
         background: white;
         }
+
+        .btnt{
+            font-weight: 700;
+            background-color: #fd8f00;
+            color: #ffffff;
+            font-style: normal;
+            cursor: pointer;
+            padding: 0.6rem 1.2rem;
+            margin: 0 auto;
+        }
     </style>
 
     </head>
@@ -109,16 +119,14 @@
             confirm($query3);
             $row3 = fetch_array($query3);
             ?>
-            <form action="editcourseinfo.php" method="GET">
-                <div>
+            <form action="editcourseinfo.php" method="GET"><br>
                     <label for="Course_ID">Course ID:</label>
                     <input type="hidden" value="<?php echo $row['course_id']; ?>" name="id">
-                    <input id="Course_ID" type="text" name="Course_ID" value="<?php echo $row['course_id']; ?>">
-                </div>
-                <div>
+                    <input id="Course_ID" type="text" name="Course_ID" value="<?php echo $row['course_id']; ?>"><br><br>
+
                     <label for="Course_Name">Course Name:</label>
-                    <input id="Course_Name" type="text" name="Course_Name" value="<?php echo $row['course_name']; ?>">
-                </div>
+                    <input id="Course_Name" type="text" name="Course_Name" value="<?php echo $row['course_name']; ?>"><br><br>
+
 <!--                <div>
                     <label for="professorID">Professor:</label>
                     <select class="" id="professorID" name="professorID"> 
@@ -131,23 +139,22 @@
                         <option value=<?php echo $row['professor_entry_id'] ?> ><?php echo $row['professor_name']; } */ ?></option>
                     </select>
                 </div> -->
-                <div>
                     <label for="departmentID">Department:</label>
-                    <select class="" id="departmentID" name="departmentID" value="<?php echo $row['dept_id']; ?>"> 
+                    <select class="" id="departmentID" name="departmentID" value="<?php echo $row['dept_id']; ?>">
                     <option selected value="<?php echo $row2['dept_id']; ?> "><?php echo $row2['dept_name']; ?></option>
                         <?php 
                             $query4 = query("SELECT * FROM lc_departments");
                             confirm($query4);
                             while($row4 = fetch_array($query4)) {
                                 ?>
-                        <option value=<?php echo $row4['dept_id'] ?> ><?php echo $row4['dept_name'];  } ?></option>
-                    </select>
-                </div>
-                <div>
-                    <label for="Course_Name">Tutor Available:</label>
-                    <input id="Course_Name" type="text" name="tutor_available" value="<?php echo $row['tutor_available']; ?>">
-                </div>
-                <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
+                            <option value=<?php echo $row4['dept_id'] ?> ><?php echo $row4['dept_name'];  } ?></option>
+                            </select>
+                            <div>
+                                <br>
+                                <label for="Course_Name">Tutor Available:</label>
+                                <input id="Course_Name" type="text" name="tutor_available" value="<?php echo $row['tutor_available']; ?>"><br><br>
+                            </div>
+                            <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
             </form>
             </div>
             </article>

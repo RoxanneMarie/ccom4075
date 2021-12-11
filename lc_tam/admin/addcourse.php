@@ -78,6 +78,16 @@
         .trCourses {
         background: white;
         }
+
+        .btnt{
+            font-weight: 700;
+            background-color: #fd8f00;
+            color: #ffffff;
+            font-style: normal;
+            cursor: pointer;
+            padding: 0.6rem 1.2rem;
+            margin: 0 auto;
+        }
     </style>
 
     </head>
@@ -90,14 +100,14 @@
             <article class="mcourse">
             <div class="text">
                 <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Course</h3>
-            <form action="addcourse.php" method="POST">
+            <form action="addcourse.php" method="POST"><br>
                 <div>
                     <label for="Course_ID">Course ID:</label>
-                    <input id="Course_ID" type="text" name="Course_ID">
+                    <input id="Course_ID" type="text" name="Course_ID"><br><br>
                 </div>
                 <div>
                     <label for="Course_Name">Course Name:</label>
-                    <input id="Course_Name" type="text" name="Course_Name">
+                    <input id="Course_Name" type="text" name="Course_Name"><br><br>
                 </div>
 <!--                <div>
                     <label for="professorID">Professor:</label>
@@ -113,7 +123,7 @@
                 </div> -->
                 <div>
                     <label for="departmentID">Department:</label>
-                    <select class="" id="departmentID" name="departmentID"> 
+                    <select class="" id="departmentID" name="departmentID"><br><br>
                     <option value="">Select a Department</option>
                         <?php 
                             $query = query("SELECT * FROM lc_departments");
@@ -123,7 +133,7 @@
                         <option value=<?php echo $row['dept_id'] ?> ><?php echo $row['dept_name'];  } ?></option>
                     </select>
                 </div>
-                <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
+                <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
             </form>
             </div>
             </article>

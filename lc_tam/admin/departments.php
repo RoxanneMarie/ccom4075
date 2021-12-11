@@ -1,16 +1,5 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_POST['submit'])){
-        $courseID = $_POST['Course_ID'];
-        $professorname = $_POST['professor_name'];
-        $professorinitial = $_POST['professor_initial'];
-        $professorflname = $_POST['professor_flname'];
-        $professorslname = $_POST['professor_slname'];
-
-    echo $query = query('INSERT INTO lc_professors ( course_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname)
-    VALUES("' . $courseID . '","' . $professorname . '" , "' . $professorinitial . '" , "' . $professorflname . '" , "' . $professorslname . '")');
-}
+    require_once("../functions.php") 
 ?>
 
 <!DOCTYPE html>
@@ -79,50 +68,38 @@
         .trCourses {
         background: white;
         }
-
-        .btnt{
-            font-weight: 700;
-            background-color: #fd8f00;
-            color: #ffffff;
-            font-style: normal;
-            cursor: pointer;
-            padding: 0.6rem 1.2rem;
-            margin: 0 auto;
-        }
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_2(); 
-            ?>
-    <input type="hidden" value="student_btn" name="action">
-        <main class="mcourses" style="justify-content:center;">
-            <article class="mcourse">
-            <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Professor</h3>
-            <form action="addprofessor.php" method="POST"><br>
-                    <label for="Course_ID">Course ID:</label>
-                    <input id="Course_ID" type="text" name="Course_ID"><br><br>
-
-                    <label for="professor_name">Professor Name:</label>
-                    <input id="professor_name" type="text" name="professor_name"><br><br>
-
-                    <label for="professor_initial">Professor Initial:</label>
-                    <input id="professor_initial" type="text" name="professor_initial"><br><br>
-
-                    <label for="professor_flname">Professor First Last Name:</label>
-                    <input id="professor_flname" type="text" name="professor_flname"><br><br>
-
-                    <label for="professor_slname">Professor Second Last Name:</label>
-                    <input id="professor_slname" type="text" name="professor_slname"><br><br>
-
-                    <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
-            </form>
-            </div>
-            </article>
-        </main>
-        <?php
+            top_header_2();
+    echo '<input type="hidden" value="student_btn" name="action">
+    <main class="mcourses" style="justify-content:center;">
+        <article class="mcourse">
+        <div class="text">
+            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Departments</h3>
+            <a href="departmentadd.php">Add Department</a>
+                <table class="tCourses">
+            <tr>
+                <td>Edit</td>
+                <td>Department ID</td>
+                <td>Department Name</td>
+            </tr>';
+    $query = query("SELECT * FROM lc_departments");
+    confirm($query);
+    while ($row = fetch_array($query)) {
+        echo '    
+                <tr class="trCourses">
+                    <td>   <a href="editdepartment.php?id='. $row['dept_id'] .'">Edit</a>
+                    <td>'. $row['dept_id'] .'</td>
+                    <td>'. $row['dept_name'] .'</td>
+                    </tr>
+                    '; } echo '
+                </table><br><br>
+                </div>
+                </article>
+            </main>';
             bottom_footer();
             credit_mobirise_1();
         ?>

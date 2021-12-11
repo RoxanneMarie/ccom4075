@@ -1,16 +1,5 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_POST['submit'])){
-        $courseID = $_POST['Course_ID'];
-        $professorname = $_POST['professor_name'];
-        $professorinitial = $_POST['professor_initial'];
-        $professorflname = $_POST['professor_flname'];
-        $professorslname = $_POST['professor_slname'];
-
-    echo $query = query('INSERT INTO lc_professors ( course_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname)
-    VALUES("' . $courseID . '","' . $professorname . '" , "' . $professorinitial . '" , "' . $professorflname . '" , "' . $professorslname . '")');
-}
+    require_once("../functions.php") 
 ?>
 
 <!DOCTYPE html>
@@ -79,50 +68,60 @@
         .trCourses {
         background: white;
         }
-
-        .btnt{
-            font-weight: 700;
-            background-color: #fd8f00;
-            color: #ffffff;
-            font-style: normal;
-            cursor: pointer;
-            padding: 0.6rem 1.2rem;
-            margin: 0 auto;
-        }
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_2(); 
-            ?>
-    <input type="hidden" value="student_btn" name="action">
-        <main class="mcourses" style="justify-content:center;">
-            <article class="mcourse">
-            <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Professor</h3>
-            <form action="addprofessor.php" method="POST"><br>
-                    <label for="Course_ID">Course ID:</label>
-                    <input id="Course_ID" type="text" name="Course_ID"><br><br>
-
-                    <label for="professor_name">Professor Name:</label>
-                    <input id="professor_name" type="text" name="professor_name"><br><br>
-
-                    <label for="professor_initial">Professor Initial:</label>
-                    <input id="professor_initial" type="text" name="professor_initial"><br><br>
-
-                    <label for="professor_flname">Professor First Last Name:</label>
-                    <input id="professor_flname" type="text" name="professor_flname"><br><br>
-
-                    <label for="professor_slname">Professor Second Last Name:</label>
-                    <input id="professor_slname" type="text" name="professor_slname"><br><br>
-
-                    <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
-            </form>
-            </div>
-            </article>
-        </main>
-        <?php
+            top_header_2();
+    echo '<input type="hidden" value="student_btn" name="action">
+    <main class="mcourses" style="justify-content:center;">
+        <article class="mcourse">
+        <div class="text">
+            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Sessions</h3>
+            <a href="addsession.php">Add Sessions</a>
+                <table class="tCourses">
+            <tr>
+                <td>Edit</td>
+                <td>Tutoring ID</td>
+                <td>Session ID</td>
+                <td>Appointment Date</td>
+                <td>Tutor</td>
+                <td>Course ID</td>
+                <td>Start time</td>
+                <td>End time</td>
+                <td>Appointment Cancelled?</td>
+                <td>Cancelation Date</td>
+            </tr>';
+    $query = query("SELECT * FROM lc_tutorings");
+    confirm($query);
+    while ($row = fetch_array($query)) {
+        $query2 = query("SELECT * FROM lc_test_tutors WHERE tutor_id = '" . $row['ID_Tutor'] ." ' ");
+        confirm($query2); 
+        $row2 = fetch_array($query2);
+        $query2 = query("SELECT * FROM lc_sessions WHERE session_id = '" . $row['ID_Session'] ." ' ");
+        confirm($query2); 
+        $row2 = fetch_array($query2);
+        echo '    
+                <tr class="trCourses">
+                    <td>   <a href="#'. $row['ID_Session'] .'">Edit</a>
+                    <td>'. $row['ID_Tutoring'] .'</td>
+                    <td>'. $row['ID_Session'] .'</td>
+                    <td>'. $row['date_appointment'] .'</td>
+                    <td>'. $row['student_id'] .'</td>
+                    <td>'. $row2['course_id'] .'</td>
+                    <td>'. $row2['start_time'] .'</td>
+                    <td>'. $row2['end_time'] .'</td>
+                    <td>'. $row['dept_name'] .'</td>
+                    <td>'. $row['dept_id'] .'</td>
+                    <td>'. $row['Cancel_appointment'] .'</td>
+                    <td>'. $row['Cancel_date'] .'</td>
+                    </tr>
+                   '; } echo '
+                </table><br><br>
+                </div>
+                </article>
+            </main>';
             bottom_footer();
             credit_mobirise_1();
         ?>

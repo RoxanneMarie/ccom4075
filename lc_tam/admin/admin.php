@@ -103,9 +103,9 @@
                 </article>
                 <article class="card">
                 <div class="text"><br>
-                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professors</h3><br>
-                    <a href="professors.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-                    <a  href="addprofessor.php"><input type="submit" class="home_button" name="btn_admin" value="Add Professor"></a><br><br>
+                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Sessions</h3><br>
+                    <a href="sessions.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
+                    <a  href="addsession.php"><input type="submit" class="home_button" name="btn_admin" value="Add Session"></a><br><br>
                 </div>
                 </article>
                 </main>
@@ -113,9 +113,16 @@
             <main class="cards" style="justify-content:center;">
                 <article class="card">
                 <div class="text"><br>
+                    <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professors</h3><br>
+                    <a href="professors.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
+                    <a  href="addprofessor.php"><input type="submit" class="home_button" name="btn_admin" value="Add Professor"></a><br><br>
+                </div>
+                </article>
+                <article class="card">
+                <div class="text"><br>
                     <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Departments</h3><br>
-                    <a href=""><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-                    <a href=""><input type="submit" class="home_button" name="btn_admin"value="Add Department" ></a><br><br>
+                    <a href="departments.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
+                    <a href="departmentadd.php"><input type="submit" class="home_button" name="btn_admin"value="Add Department" ></a><br><br>
                 </div>
                 </article>
                 <article class="card">
