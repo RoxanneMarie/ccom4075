@@ -84,7 +84,6 @@
             <tr>
                 <td>Course ID</td>
                 <td>Course Name</td>
-                <td>Course Professor</td>
                 <td>Department</td>
                 <td>Tutors Available</td>
             </tr>';
@@ -101,7 +100,6 @@
                 <tr class="trCourses">
                     <td>'. $row['course_id'] .'</td>
                     <td>'. $row['course_name'] .'</td>
-                    <td>'. $row2['professor_name'] .'</td>
                     <td>'. $row3['dept_name'] .'</td>
                     <td>'. $row['tutor_available'] .'</td>
                     </tr>
