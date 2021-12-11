@@ -298,6 +298,8 @@ function login()
                 $_SESSION['type'] = "Admin";
                 $_SESSION['name'] = $admin1['admin_name'];
                 $_SESSION['email'] = $admin1['admin_email'];
+                $_SESSION["current_date"] = date("Y-m-d");
+                $_SESSION["current_day_of_the_week"] = "Monday";//date("l");
                 redirect("admin/admin.php");
             }
             
@@ -322,6 +324,8 @@ function login()
 
                 if(mysqli_num_rows($query3) == 0)  //es estudiante
                 {
+                    
+                 $row = fetch_array($query);
                     $_SESSION['type'] = "Student";
                     $_SESSION['name'] = $row['student_name'];
                     $_SESSION['email'] = $row['student_email'];
@@ -332,7 +336,7 @@ function login()
                 }
                 else // es tutor
                 {
-                    $tutor = fetch_array($query);
+                    $row = fetch_array($query);
                     $_SESSION['type'] = "Tutor";
                     $_SESSION['name'] = $row['student_name'];
                     $_SESSION['email'] = $row['student_email'];
@@ -869,7 +873,6 @@ function create_session()
 
 function student_view_appointment()
 {
-    session_start();
     $query = query("SELECT student_id FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
     confirm($query);
     $row = fetch_array($query);
