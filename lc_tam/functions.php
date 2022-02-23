@@ -1,13 +1,9 @@
 <?php
 session_start();
-<<<<<<< Updated upstream
-=======
 
 date_default_timezone_set("America/Puerto_Rico");
 
 //error_reporting(0);
-
->>>>>>> Stashed changes
 function top_header_1()
 {
   echo '
@@ -281,10 +277,8 @@ function login()
 
         if(mysqli_num_rows($query) == 0)
         {
-<<<<<<< Updated upstream
             //set_message("Your Password or Username is incorrect");
             //redirect("login.php");
-=======
             $query2 = query("SELECT admin_email, admin_name FROM lc_test_admins WHERE admin_email = '{$email}' AND admin_password = MD5('{$password}')");
             confirm($query2);
             if(mysqli_num_rows($query2) == 0) //no era admin
@@ -302,8 +296,6 @@ function login()
                 $_SESSION["current_day_of_the_week"] = date("l");
                 redirect("admin/admin.php");
             }
-            
->>>>>>> Stashed changes
         }
         else
         {
@@ -319,12 +311,12 @@ function login()
             }
             else
             {
-<<<<<<< Updated upstream
+
                 $_SESSION['type'] = "Student";
                 $_SESSION['email'] = $row['student_email'];
                 //set_message("Login Successful!");
                 redirect("student/index.php");
-=======
+
                 $query3 = query("SELECT student_id FROM lc_test_tutors WHERE student_id = '{$row['student_id']}'");
                 confirm($query3);
 
@@ -348,7 +340,7 @@ function login()
                     redirect("tutor/tutor.php");
                 }
                 
->>>>>>> Stashed changes
+
             }
         }
         close();
@@ -596,9 +588,9 @@ function student_select_tutor()
                 </div>
             </div>';
         
-<<<<<<< Updated upstream
+
         $x++;
-=======
+
         do
         {
             $i++;
@@ -758,7 +750,7 @@ function student_select_tutor()
         {
             echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
         }
->>>>>>> Stashed changes
+
     }
     
     echo '
@@ -768,8 +760,8 @@ function student_select_tutor()
                 </div>
             </div>
         </section>';
-<<<<<<< Updated upstream
-=======
+
+
     close();
 }
 
@@ -939,7 +931,7 @@ function student_view_appointment()
        echo "You don't have any appointments.";
     }
     close();
->>>>>>> Stashed changes
+
 }
 
 ?>
