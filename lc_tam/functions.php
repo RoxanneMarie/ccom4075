@@ -1,5 +1,13 @@
 <?php
 session_start();
+<<<<<<< Updated upstream
+=======
+
+date_default_timezone_set("America/Puerto_Rico");
+
+//error_reporting(0);
+
+>>>>>>> Stashed changes
 function top_header_1()
 {
   echo '
@@ -273,8 +281,29 @@ function login()
 
         if(mysqli_num_rows($query) == 0)
         {
+<<<<<<< Updated upstream
             //set_message("Your Password or Username is incorrect");
             //redirect("login.php");
+=======
+            $query2 = query("SELECT admin_email, admin_name FROM lc_test_admins WHERE admin_email = '{$email}' AND admin_password = MD5('{$password}')");
+            confirm($query2);
+            if(mysqli_num_rows($query2) == 0) //no era admin
+            {
+                echo("Your Password or Username is incorrect");
+                redirect("login.php");
+            }
+            else // es admin
+            {
+                $admin1 = fetch_array($query2);
+                $_SESSION['type'] = "Admin";
+                $_SESSION['name'] = $admin1['admin_name'];
+                $_SESSION['email'] = $admin1['admin_email'];
+                $_SESSION["current_date"] = date("Y-m-d");
+                $_SESSION["current_day_of_the_week"] = date("l");
+                redirect("admin/admin.php");
+            }
+            
+>>>>>>> Stashed changes
         }
         else
         {
@@ -290,10 +319,36 @@ function login()
             }
             else
             {
+<<<<<<< Updated upstream
                 $_SESSION['type'] = "Student";
                 $_SESSION['email'] = $row['student_email'];
                 //set_message("Login Successful!");
                 redirect("student/index.php");
+=======
+                $query3 = query("SELECT student_id FROM lc_test_tutors WHERE student_id = '{$row['student_id']}'");
+                confirm($query3);
+
+                if(mysqli_num_rows($query3) == 0)  //es estudiante
+                {
+                    $_SESSION['type'] = "Student";
+                    $_SESSION['name'] = $row['student_name'];
+                    $_SESSION['email'] = $row['student_email'];
+                    $_SESSION["current_date"] = date("Y-m-d");
+                    $_SESSION["current_day_of_the_week"] = date("l");
+                    //echo("Login Successful!");
+                    redirect("student/index.php");
+                }
+                else // es tutor
+                {
+                    $_SESSION['type'] = "Tutor";
+                    $_SESSION['name'] = $row['student_name'];
+                    $_SESSION['email'] = $row['student_email'];
+                    $_SESSION["current_date"] = date("Y-m-d");
+                    $_SESSION["current_day_of_the_week"] = date("l");
+                    redirect("tutor/tutor.php");
+                }
+                
+>>>>>>> Stashed changes
             }
         }
         close();
@@ -349,8 +404,12 @@ function student_select_course()
             for ($y = 1; $y <= $row3['COUNT(course_id)']; $y++)
             {
                 $row4 = fetch_array($query4);
-
-                echo '<button type="submit" form="form' . $x . '" formmethod="POST" formaction="select_professor.php" class="btn btn-success display-4" name="' . $dept . '_course_' . $y . '" value="' . $row4["course_id"] . '">' . $row4["course_id"] . '</button>';
+                
+                $query5 = query("SELECT course_id FROM lc_tutor_offers WHERE course_id = '{$row4["course_id"]}'");
+                confirm($query5);
+                
+                if(mysqli_num_rows($query5) != 0)
+                    echo '<button type="submit" form="form' . $x . '" formmethod="POST" formaction="select_professor.php" class="btn btn-success display-4" name="' . $dept . '_course_' . $y . '" value="' . $row4["course_id"] . '">' . $row4["course_id"] . '</button>';
             }
         
             echo '
@@ -410,7 +469,10 @@ function professor_available()
             $row = fetch_array($query);
 
             if($row['COUNT(course_id)'] == 0)
+            {
                 redirect("select_tutor.php");
+                exit;
+            }
         }
         //else
             //redirect("logout.php");
@@ -534,7 +596,169 @@ function student_select_tutor()
                 </div>
             </div>';
         
+<<<<<<< Updated upstream
         $x++;
+=======
+        do
+        {
+            $i++;
+            
+            if($_POST["tutor_{$i}"] != NULL)
+            {
+                $flag = true;
+                $_SESSION['selected_tutor'] = $_POST["tutor_{$i}"];
+            }
+
+        }while($_POST["tutor_{$i}"] == NULL);
+    }
+    
+    $week_name = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
+    
+    $week = array("NULL", "NULL", "NULL", "NULL", "NULL");
+    
+    if($_SESSION["current_day_of_the_week"] == "Sunday")
+    {
+        $week[0] = date("Y-m-d", strtotime("+1 day"));
+        $week[1] = date("Y-m-d", strtotime("+2 day"));
+        $week[2] = date("Y-m-d", strtotime("+3 day"));
+        $week[3] = date("Y-m-d", strtotime("+4 day"));
+        $week[4] = date("Y-m-d", strtotime("+5 day"));
+    }
+    else if($_SESSION["current_day_of_the_week"] == "Monday")
+    {
+        $week[0] = date("Y-m-d");
+        $week[1] = date("Y-m-d", strtotime("+1 day"));
+        $week[2] = date("Y-m-d", strtotime("+2 day"));
+        $week[3] = date("Y-m-d", strtotime("+3 day"));
+        $week[4] = date("Y-m-d", strtotime("+4 day"));
+    }
+    else if($_SESSION["current_day_of_the_week"] == "Tuesday")
+    {
+        $week[1] = date("Y-m-d");
+        $week[2] = date("Y-m-d", strtotime("+1 day"));
+        $week[3] = date("Y-m-d", strtotime("+2 day"));
+        $week[4] = date("Y-m-d", strtotime("+3 day"));
+    }
+    else if($_SESSION["current_day_of_the_week"] == "Wednesday")
+    {
+        $week[2] = date("Y-m-d");
+        $week[3] = date("Y-m-d", strtotime("+1 day"));
+        $week[4] = date("Y-m-d", strtotime("+2 day"));
+    }
+    else if($_SESSION["current_day_of_the_week"] == "Thursday")
+    {
+        $week[3] = date("Y-m-d");
+        $week[4] = date("Y-m-d", strtotime("+1 day"));
+    }
+    else if($_SESSION["current_day_of_the_week"] == "Friday")
+    {
+        $week[4] = date("Y-m-d");
+    }
+    else
+    {
+        echo "You are not suppose to be here!";
+        redirect("logout.php");
+    }
+    
+    
+    for ($x = 1; $x <= 5; $x++)
+    {
+        if($week[$x-1] == "NULL")
+        {
+            continue;
+        }
+        
+        $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time FROM lc_tutor_schedule  WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
+        confirm($query2);
+        
+        if(mysqli_num_rows($query2) != 0)
+        {
+            echo '
+                <div class="card mb-3">
+                    <div class="card-header" role="tab" id="headingOne">
+                        <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse' . $x . '_17" aria-expanded="false" aria-controls="collapse' . $x . '">
+                            <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>' . $week_name[$x-1] . ' ' . $week[$x-1] . '</strong></h6>
+                            <span class="sign mbr-iconfont mbri-arrow-down"></span>
+                        </a>
+                    </div>
+                    <div id="collapse' . $x . '_17" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_17">
+                        <div class="panel-body">
+                            <p class="mbr-fonts-style panel-text display-4">
+                                <div class="mbr-section-btn mt-3">';
+            
+            $i = 1;
+            
+            while($row2 = fetch_array($query2))
+            {
+                $query3 = query("SELECT student_id FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
+                confirm($query3);
+                $row3 = fetch_array($query3);
+
+                $query3 = query("SELECT session_id FROM lc_appointments WHERE student_id = " . $row3["student_id"]);
+                confirm($query3);
+                
+                $flag2 = false;
+                /*
+                if(mysqli_num_rows($query3) != 0)
+                {
+                    while($row3 = fetch_array($query3))
+                    {
+                        $query4 = query("SELECT * FROM lc_sessions WHERE session_id = " . $row3["session_id"] . " AND session_date = '" . $_SESSION["selected_date"] . "'");
+                        confirm($query4);
+
+                        if(mysqli_num_rows($query4) != 0)
+                        {
+                            $flag2 = true;
+                            break;
+                        }
+                    }
+                }
+                */
+                $query3 = query("SELECT * FROM lc_sessions WHERE session_date = '" . $week[$x-1] . "' AND start_time = '" . $row2["start_time"] . "' AND tutor_id = " . $_SESSION['selected_tutor'] . " AND capacity >= 5");
+                confirm($query3);
+
+                $start = substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5);
+                $end = substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5);
+                
+                if(!$flag2)
+                {
+                    if(mysqli_num_rows($query3) != 0)
+                    {
+                        echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' FULL </button>';
+                    }
+                    else
+                    {
+                        echo '<button type="submit" form="form' . $x . '" formmethod="POST" formaction="session.php" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '">' . $start . ' - ' . $end . '</button>';
+                        echo '<input type="hidden" form="form' . $x . '" formmethod="POST" formaction="session.php" name="end_time_' . $i . '" value="' . $row2["end_time"] . '">';
+                        print_r($row2["end_time"]);
+                    }
+                }
+                else
+                {
+                    echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' RESERVED</button>';
+                    //echo '<input type="hidden" name="end_time_' . $i . '" value="' . $row2["end_time"] . '">';
+                }
+                
+                $i++;
+            }
+
+            echo '
+                                            <form id="form' . $x . '">
+                                                <input type="hidden" form="form' . $x . '" name="session_date" value="' . $week[$x-1] . '">
+                                                <input type="hidden" form="form' . $x . '" name="time_ready_' . $x . '">
+                                            </form>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>';
+        }
+        
+        if(!$flag)
+        {
+            echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
+        }
+>>>>>>> Stashed changes
     }
     
     echo '
@@ -544,6 +768,178 @@ function student_select_tutor()
                 </div>
             </div>
         </section>';
+<<<<<<< Updated upstream
+=======
+    close();
+}
+
+function create_session()
+{
+    print_r($_POST);
+    $x = 0;
+    do
+    {
+        $x++;
+        
+        if(isset($_POST["time_ready_" . $x]))
+        {
+            $i = 0;
+
+            do
+            {
+                $i++;
+
+                if(isset($_POST["start_time_{$i}"]))
+                {
+                    $_SESSION['selected_start_time'] = $_POST["start_time_{$i}"];
+                    $_SESSION['selected_end_time'] = $_POST["end_time_{$i}"];
+                    $_SESSION['selected_date'] = $_POST["session_date"];
+                }
+
+            }while(!isset($_POST["start_time_{$i}"]));
+            
+            $query = query("SELECT session_id FROM lc_sessions WHERE session_date = '" . $_SESSION["selected_date"] . "' AND start_time = '" . $_SESSION['selected_start_time'] . "' AND tutor_id = " . $_SESSION['selected_tutor']);
+            confirm($query);
+            
+            if(mysqli_num_rows($query) == 0)
+            {
+                $query = query('INSERT INTO lc_sessions (tutor_id, course_id, session_date, start_time, end_time, capacity) VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION['selected_course'] . '","' . $_SESSION["selected_date"] . '","' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '", 1)');
+                confirm($query);
+                
+                print_r($query);
+                
+                $id = last_id();
+                
+                $query = query("SELECT student_id FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
+                confirm($query);
+                $row = fetch_array($query);
+                
+                $query = query('INSERT INTO lc_appointments (student_id, session_id) VALUES(' . $row["student_id"] . ', ' . $id . ')');
+                confirm($query);
+                
+                unset($_SESSION["selected_course"], $_SESSION["selected_professor"], $_SESSION["selected_tutor"], $_SESSION["selected_date"], $_SESSION["selected_start_time"], $_SESSION["selected_end_time"]);
+            }
+            else
+            {
+                $row = fetch_array($query);
+                
+                $query = query("SELECT * FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND capacity >= 5");
+                confirm($query);
+                
+                if(mysqli_num_rows($query) == 0)
+                {
+                    $query = query('UPDATE lc_sessions SET capacity = capacity + 1 WHERE session_id = ' . $row["session_id"]);
+                    confirm($query);
+                    
+                    $query = query("SELECT student_id FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
+                    confirm($query);
+                    $row2 = fetch_array($query);
+                    
+                    $query = query('INSERT INTO lc_appointments (student_id, session_id) VALUES(' . $row2["student_id"] . ', ' . $row["session_id"] . ')');
+                    confirm($query);
+                    
+                    unset($_SESSION["selected_course"], $_SESSION["selected_professor"], $_SESSION["selected_tutor"], $_SESSION["selected_date"], $_SESSION["selected_start_time"], $_SESSION["selected_end_time"]);
+                }
+                else
+                {
+                    echo "Sorry! Appointment spaces ran out seconds ago. Please try another section that your chosen tutor has available!";
+                    redirect("select_time.php");
+                    exit;
+                }
+            }
+        }
+        
+    }while(!isset($_POST["time_ready_" . $x]));
+    
+    redirect("index.php");
+    exit;
+}
+
+//WORK IN PROGRESS. CHECK HOW TO TELL DAY OF WEEK FOR APPOINTMENT MAKING AKA session_date ^^^
+
+function student_view_appointment()
+{
+    //print_r($_SESSION);
+    $c = 0;
+    $name = array();
+    $lname = array();
+    $course = array();
+    $date = array();
+    
+    $query = query("SELECT student_id FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
+    confirm($query);
+    $row = fetch_array($query);
+    
+    $query = query("SELECT session_id FROM lc_appointments WHERE student_id = " . $row["student_id"]);
+    confirm($query);
+    
+    if(mysqli_num_rows($query) != 0)
+    {
+        while($row = fetch_array($query))
+        {
+            $query2 = query("SELECT tutor_id, course_id, TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), DATE_FORMAT(session_date, '%M %d %Y') FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND session_date >= '" . $_SESSION["current_date"] . "'");
+            confirm($query2);
+
+            if(mysqli_num_rows($query2) != 0)
+            {
+                $c++;
+                $row2 = fetch_array($query2);
+
+                $query3 = query("SELECT student_id FROM lc_test_tutors WHERE tutor_id = " . $row2["tutor_id"]);
+                confirm($query3);
+                $row3 = fetch_array($query3);
+
+                $query3 = query("SELECT student_name, student_first_lastname FROM lc_test_students WHERE student_id = " . $row3["student_id"]);
+                confirm($query3);
+                $row3 = fetch_array($query3);
+
+                $start = substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5);
+                $end = substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5);
+                
+                $name[$c-1] = $row3["student_name"];
+                $lname[$c-1] = $row3["student_first_lastname"];
+                $course[$c-1] = $row2["course_id"];
+                $date[$c-1] = $row2["DATE_FORMAT(session_date, '%M %d %Y')"];
+            } 
+        }
+        
+        if($c != 0)
+        {
+            echo "
+                <table>
+                  <tr>
+                    <th>Tutor</th>
+                    <th>Course</th>
+                    <th>Date</th>
+                    <th>Start</th>
+                    <th>End</th>
+                  </tr>";
+            
+            for($i=1; $i <= $c; $i++)
+            {
+                echo "
+                      <tr>
+                        <td>" . $name[$i-1] . " " . $lname[$i-1] . "</td>
+                        <td>" . $course[$i-1] . "</td>
+                        <td>" . $date[$i-1] . "</td>
+                        <td>" . $start . "</td>
+                        <td>" . $end . "</td>
+                      </tr>";
+            }
+
+            echo "</table>";
+        }
+        else
+        {
+            echo "You don't have any appointments.";
+        }
+    }
+    else
+    {
+       echo "You don't have any appointments.";
+    }
+    close();
+>>>>>>> Stashed changes
 }
 
 ?>
