@@ -268,6 +268,7 @@ function login()
         $email = escape_string($_POST['email']);
         $password = escape_string($_POST['password']);
         
+        //query confirms if student exists.
         $query = query("SELECT student_email, acc_stat_id FROM lc_test_students WHERE student_email = '{$email}' AND student_password = MD5('{$password}')");
         confirm($query);
 

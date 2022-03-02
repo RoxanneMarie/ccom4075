@@ -60,7 +60,7 @@
         }
 
         .tCourses {
-        background: #fd8f00;
+        background: rgb(196, 127, 0);
         table-layout: auto;
         width: 100%;
         }
@@ -78,80 +78,47 @@
     <main class="mcourses" style="justify-content:center;">
         <article class="mcourse">
         <div class="text">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">All Accounts</h3>
-           
+            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Sessions</h3>
+            <a href="addsession.php">Add Sessions</a>
                 <table class="tCourses">
             <tr>
-                <td>Student Num</td>
-                <td>Name</td>
-                <td>Initial</td>
-                <td>First Lastname</td>
-                <td>Second Lastname</td>
-                <td>Role</td>
+                <td>Edit</td>
+                <td>Tutoring ID</td>
+                <td>Session ID</td>
+                <td>Appointment Date</td>
+                <td>Tutor</td>
+                <td>Course ID</td>
+                <td>Start time</td>
+                <td>End time</td>
+                <td>Appointment Cancelled?</td>
+                <td>Cancelation Date</td>
             </tr>';
-    $query = query("SELECT * FROM lc_test_students");
+    $query = query("SELECT * FROM lc_tutorings");
     confirm($query);
-    $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id ");
-    confirm($query2);
-    global $connection;
-    $stmt = $pdo->prepare($query2);
-    $stmt->execute();
-    $row2 = $stmt->fetchAll();
-    
-    while($row = fetch_array($query)) 
-    {
-        $role = "";
-        $flag = false;
-        $id =  $row['student_id'];
-
-        foreach($row2 as $rowTutor)
-        {
-            if($row['student_id']== $rowTutor['student_id'])
-                {
-                echo 'entre while /n';
-                    $flag = true;
-                }
-        }
-      
-/* 
-        $id =  $row['student_id'];
-        //echo'SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id';
-        $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = ". $id ."");
-        confirm($query2);
-        
-        $row2= fetch_All($query2);
-        for($x =1; $x <= $row2["COUNT(student_id)"]; $x++)
-        {
-            if($row['student_id']== $row2['student_id'])
-            {
-                
-            echo 'entre while /n';
-                $flag = true;
-            }
-        } */
-
-        if($flag == true){
-            $role = "Tutor";
-        }
-           
-        if($flag == false)
-        {
-            $role = "Student";
-        }
-
-
-
+    while ($row = fetch_array($query)) {
+        $query2 = query("SELECT * FROM lc_test_tutors WHERE tutor_id = '" . $row['ID_Tutor'] ." ' ");
+        confirm($query2); 
+        $row2 = fetch_array($query2);
+        $query2 = query("SELECT * FROM lc_sessions WHERE session_id = '" . $row['ID_Session'] ." ' ");
+        confirm($query2); 
+        $row2 = fetch_array($query2);
         echo '    
                 <tr class="trCourses">
+                    <td>   <a href="#'. $row['ID_Session'] .'">Edit</a>
+                    <td>'. $row['ID_Tutoring'] .'</td>
+                    <td>'. $row['ID_Session'] .'</td>
+                    <td>'. $row['date_appointment'] .'</td>
                     <td>'. $row['student_id'] .'</td>
-                    <td>'. $row['student_name'] .' </td>
-                    <td>'. $row['student_initial'] .'</td>
-                    <td>'. $row['student_first_lastname'] .' </td>
-                    <td>'. $row['student_second_lastname'] .'</td>
-                    <td>'. $role .'</td>
-                </tr>'; 
-    } 
-    echo '   </table><br><br>
+                    <td>'. $row2['course_id'] .'</td>
+                    <td>'. $row2['start_time'] .'</td>
+                    <td>'. $row2['end_time'] .'</td>
+                    <td>'. $row['dept_name'] .'</td>
+                    <td>'. $row['dept_id'] .'</td>
+                    <td>'. $row['Cancel_appointment'] .'</td>
+                    <td>'. $row['Cancel_date'] .'</td>
+                    </tr>
+                   '; } echo '
+                </table><br><br>
                 </div>
                 </article>
             </main>';

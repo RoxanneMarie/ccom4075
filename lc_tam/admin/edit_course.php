@@ -1,5 +1,6 @@
 <?php 
     require_once("../functions.php") 
+    
 ?>
 
 <!DOCTYPE html>
@@ -60,7 +61,7 @@
         }
 
         .tCourses {
-        background: #fd8f00;
+        background: rgb(196, 127, 0);
         table-layout: auto;
         width: 100%;
         }
@@ -78,80 +79,36 @@
     <main class="mcourses" style="justify-content:center;">
         <article class="mcourse">
         <div class="text">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">All Accounts</h3>
-           
+            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3>
                 <table class="tCourses">
             <tr>
-                <td>Student Num</td>
-                <td>Name</td>
-                <td>Initial</td>
-                <td>First Lastname</td>
-                <td>Second Lastname</td>
-                <td>Role</td>
+                <td>Edit</td>
+                <td>Course ID</td>
+                <td>Course Name</td>
+                <td>Course Professor</td>
+                <td>Department</td>
+                <td>Tutors Available</td>
             </tr>';
-    $query = query("SELECT * FROM lc_test_students");
+    $query = query("SELECT * FROM lc_courses");
     confirm($query);
-    $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id ");
-    confirm($query2);
-    global $connection;
-    $stmt = $pdo->prepare($query2);
-    $stmt->execute();
-    $row2 = $stmt->fetchAll();
-    
-    while($row = fetch_array($query)) 
-    {
-        $role = "";
-        $flag = false;
-        $id =  $row['student_id'];
-
-        foreach($row2 as $rowTutor)
-        {
-            if($row['student_id']== $rowTutor['student_id'])
-                {
-                echo 'entre while /n';
-                    $flag = true;
-                }
-        }
-      
-/* 
-        $id =  $row['student_id'];
-        //echo'SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id';
-        $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = ". $id ."");
+    while($row = fetch_array($query)) {
+        $query2 = query("SELECT * FROM lc_professors WHERE course_id = '" . $row['course_id'] ." ' ");
         confirm($query2);
-        
-        $row2= fetch_All($query2);
-        for($x =1; $x <= $row2["COUNT(student_id)"]; $x++)
-        {
-            if($row['student_id']== $row2['student_id'])
-            {
-                
-            echo 'entre while /n';
-                $flag = true;
-            }
-        } */
-
-        if($flag == true){
-            $role = "Tutor";
-        }
-           
-        if($flag == false)
-        {
-            $role = "Student";
-        }
-
-
-
+        $row2 = fetch_array($query2);
+        $query3 = query("SELECT * FROM lc_departments WHERE dept_id = '" . $row['dept_id'] ." ' ");
+        confirm($query3); 
+        $row3 = fetch_array($query3);
         echo '    
                 <tr class="trCourses">
-                    <td>'. $row['student_id'] .'</td>
-                    <td>'. $row['student_name'] .' </td>
-                    <td>'. $row['student_initial'] .'</td>
-                    <td>'. $row['student_first_lastname'] .' </td>
-                    <td>'. $row['student_second_lastname'] .'</td>
-                    <td>'. $role .'</td>
-                </tr>'; 
-    } 
-    echo '   </table><br><br>
+                    <td>   <a href="editcourseinfo.php?id='. $row['course_id'] .'">Edit</a>
+                    <td>'. $row['course_id'] .'</td>
+                    <td>'. $row['course_name'] .'</td>
+                    <td>'. $row2['professor_name'] .'</td>
+                    <td>'. $row3['dept_name'] .'</td>
+                    <td>'. $row['tutor_available'] .'</td>
+                    </tr>
+    '; } echo '
+                </table><br><br>
                 </div>
                 </article>
             </main>';

@@ -1,5 +1,15 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php");
+    
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+    }
+
+    if(isset($_POST['submit'])){
+        $deptartmentName = $_POST['DepartmentName'];
+
+    echo $query = query("UPDATE lc_departments SET dept_name = ' . $deptartmentName . ' WHERE professor_entry_id = '$id'");
+}
 ?>
 
 <!DOCTYPE html>
@@ -60,7 +70,7 @@
         }
 
         .tCourses {
-        background: #fd8f00;
+        background: rgb(196, 127, 0);
         table-layout: auto;
         width: 100%;
         }
@@ -68,93 +78,42 @@
         .trCourses {
         background: white;
         }
+
+        .btnt{
+            font-weight: 700;
+            background-color: #fd8f00;
+            color: #ffffff;
+            font-style: normal;
+            cursor: pointer;
+            padding: 0.6rem 1.2rem;
+            margin: 0 auto;
+        }
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_2();
-    echo '<input type="hidden" value="student_btn" name="action">
-    <main class="mcourses" style="justify-content:center;">
-        <article class="mcourse">
-        <div class="text">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">All Accounts</h3>
-           
-                <table class="tCourses">
-            <tr>
-                <td>Student Num</td>
-                <td>Name</td>
-                <td>Initial</td>
-                <td>First Lastname</td>
-                <td>Second Lastname</td>
-                <td>Role</td>
-            </tr>';
-    $query = query("SELECT * FROM lc_test_students");
-    confirm($query);
-    $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id ");
-    confirm($query2);
-    global $connection;
-    $stmt = $pdo->prepare($query2);
-    $stmt->execute();
-    $row2 = $stmt->fetchAll();
-    
-    while($row = fetch_array($query)) 
-    {
-        $role = "";
-        $flag = false;
-        $id =  $row['student_id'];
-
-        foreach($row2 as $rowTutor)
-        {
-            if($row['student_id']== $rowTutor['student_id'])
-                {
-                echo 'entre while /n';
-                    $flag = true;
-                }
-        }
-      
-/* 
-        $id =  $row['student_id'];
-        //echo'SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id';
-        $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = ". $id ."");
-        confirm($query2);
-        
-        $row2= fetch_All($query2);
-        for($x =1; $x <= $row2["COUNT(student_id)"]; $x++)
-        {
-            if($row['student_id']== $row2['student_id'])
-            {
-                
-            echo 'entre while /n';
-                $flag = true;
-            }
-        } */
-
-        if($flag == true){
-            $role = "Tutor";
-        }
-           
-        if($flag == false)
-        {
-            $role = "Student";
-        }
-
-
-
-        echo '    
-                <tr class="trCourses">
-                    <td>'. $row['student_id'] .'</td>
-                    <td>'. $row['student_name'] .' </td>
-                    <td>'. $row['student_initial'] .'</td>
-                    <td>'. $row['student_first_lastname'] .' </td>
-                    <td>'. $row['student_second_lastname'] .'</td>
-                    <td>'. $role .'</td>
-                </tr>'; 
-    } 
-    echo '   </table><br><br>
-                </div>
-                </article>
-            </main>';
+            top_header_2(); 
+            ?>
+    <input type="hidden" value="student_btn" name="action">
+        <main class="mcourses" style="justify-content:center;">
+            <article class="mcourse">
+            <div class="text">
+                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Department</h3>
+                <?php 
+                $query = query("SELECT * FROM lc_departments WHERE dept_id = '$id'");
+                confirm($query);
+                $row = fetch_array($query);
+                ?>
+                <form action="editdepartment.php" method="POST"><br>
+                    <label for="Deparment_Name">Department Name:</label>
+                    <input id="Department_Name" type="text" name="Department_Name" value="<?php echo $row['dept_name']; ?>"><br>
+                    <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
+            </form>
+            </div>
+            </article>
+        </main>
+        <?php
             bottom_footer();
             credit_mobirise_1();
         ?>
