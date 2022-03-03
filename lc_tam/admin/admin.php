@@ -26,134 +26,132 @@
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
-    <style>
+        <style>
         /*----------------------- CSS HOME PAGE*/
 
+        
         .cards{
-        text-align: center;
-        margin: auto;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: stretch;
-        justify-content:center;
+            text-align: center;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch;
+            justify-content:center;
 
-        }
-        .card {
-        flex: 0 0 200px;
-        margin: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-        background-color: white;
-        }
-        .card img {
-        max-width: 100%;
-        }
-        .card .text {
-        padding: 0 20px 20px;
-        }
-        .card .text > button {
-        background: rgb(196, 127, 0);
-        border: 1;
-        color: white;
-        padding: 10px;
-        width: 100%;
-        }
+            }
+            .card {
+            flex: 0 0 250px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            height: 303.5px;
+            box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
+            background-color: white;
+            }
+
+            .card .text {
+            padding: 0 5px 5px;
+            }
+
+
+            .card > .text > h3 {
+            font-size:30px;
+            text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);
+            }
+
+            .card .text > button {
+            background: #fd8f00;
+            border: 1;
+            color: white;
+            padding: 15px;
+            width: 100%;
+            }
+
+            .home_button {
+                font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+                border: 4px solid #fd8f00;
+                border-radius: 12px;
+                padding: 5px;
+                color: #fd8f00;
+                background-color: white;
+                text-align: center;
+                font-weight: bold;
+                text-decoration: none;
+                display: inline-block;
+                transition-duration: 0.4s;
+                cursor: pointer;
+                width: auto;
+                font-size: 19px;
+                box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
+                /*hsl(44, 63%, 89%)*/
+            }
     </style>
 
     </head>
     <body>
 
         <?php
-            top_header_2();
+            top_header_5();
             echo'
-            <div class = "container-fluid">
+            <div class = "container">
            <input type="hidden" value="student_btn" name="action">
            <main class="cards" style="justify-content:center;">
-<<<<<<< Updated upstream
                <article class="card">
                <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Account</h3>
-                   <input type="submit"  name="btn_student" value="view All Account"><br><br>
-                   <input type="submit"  name="btn_student" value="Edit Account">
+                   <h3>Account</h3>
+                   <input class = "home_button" type="submit" name="btn_student" value="View All Account"><br><br>
+                   <input class = "home_button" type="submit" name="btn_student" value="Edit Account">
                </div>
                </article>
                <article class="card">
                <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Tutor</h3>
-                   <input type="submit"  name="btn_addTutor" value="Add Tutor"><br><br>
-                   <input type="submit"  name="btn_editTutor" value="Edit Tutor">
+                   <h3>Tutor</h3>
+                   <input class = "home_button" type="submit" name="btn_addTutor" value="Add Tutor"><br><br>
+                   <input class = "home_button" type="submit" name="btn_editTutor" value="Edit Tutor">
                </div>
                </article>
                <article class="card">
                <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professor</h3>
-                   <input type="submit"  name="btn_addProf" value="Add Professor"><br><br>
-                   <input type="submit"  name="btn_editProf" value="Edit Professor">
+                   <h3>Professor</h3>
+                   <input class = "home_button" type="submit" name="btn_addProf" value="Add Professor"><br><br>
+                   <input class = "home_button" type="submit" name="btn_editProf" value="Edit Professor">
                </div>
                </article>
                <article class="card">
                <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Department</h3>
-                   <input type="submit"  name="btn_AddDepartment" value="Add Department"><br><br>
-                   <input type="submit"  name="btn_EditDepartment" value="Edit Department"><br><br>
-                   <input type="submit"  name="btn_AddCourse" value="Add Course"><br><br>
-                   <input type="submit"  name="btn_EditCourse" value="Edit Course">
+                   <h3>Department</h3>
+                   <input class = "home_button" type="submit" name="btn_AddDepartment" value="Add Department"><br><br>
+                   <input class = "home_button" type="submit" name="btn_EditDepartment" value="Edit Department"><br><br>
+                   <input class = "home_button" type="submit" name="btn_AddCourse" value="Add Course"><br><br>
+                   <input class = "home_button" type="submit" name="btn_EditCourse" value="Edit Course">
                </div>
                </article>
                <article class="card">
                <div class="text">
-                   <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3>
-                   <input type="submit" name="btn_student" value="My Courses"><br><br>
-                   <input type="submit"  name="btn_student" value="View Courses">
+                   <h3>Tutoring Course</h3>
+                   <input class = "home_button" type="submit" name="btn_student" value="My Courses"><br><br>
+                   <input class = "home_button" type="submit"  name="btn_student" value="View Courses">
                </div>
                </article>
-=======
-           <article class="card">
-           <div class="text"><br>
-               <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Accounts</h3><br>
-               <a href="view_accounts.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-               <a href=""><input type="submit" class="home_button" name="btn_admin" value="Edit Yours"></a><br><br>
-           </div>
-           </article>
-           <article class="card">
-           <div class="text"><br>
-               <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Tutors</h3><br>
-               <a href="tutors.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-               <a href=""><input type="submit" class="home_button" name="btn_admin" value="Add Tutor" ></a><br><br>
-           </div>
-           </article>
-           <article class="card">
-           <div class="text"><br>
-               <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Sessions</h3><br>
-               <a href="sessions.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-               <a  href="addsession.php"><input type="submit" class="home_button" name="btn_admin" value="Add Session"></a><br><br>
-           </div>
-           </article>
->>>>>>> Stashed changes
+               <article class="card">
+               <div class="text">
+                   <h3>Tutoring Session</h3>
+                   <input class = "home_button" type="submit"  name="btn_student" value="View Tutoring Session"><br><br>
+               </div>
+               </article>
+               <article class="card">
+               <div class="text">
+                   <h3>Semester</h3>
+                   <input class = "home_button" type="submit"  name="btn_student" value="Add Semester"><br><br>
+                   <input class = "home_button" type="submit"  name="btn_student" value="Remove Semester"><br><br>
+               </div>
+               </article>
+               <article class="card">
+               <div class="text">
+                   <h3>Grades</h3>
+                   <input class = "home_button" type="submit"  name="btn_student" value="View Grades"><br><br>
+               </div>
+               </article>
            </main>
-       <main class="cards" style="justify-content:center;">
-           <article class="card">
-           <div class="text"><br>
-               <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professors</h3><br>
-               <a href="professors.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-               <a  href="addprofessor.php"><input type="submit" class="home_button" name="btn_admin" value="Add Professor"></a><br><br>
-           </div>
-           </article>
-           <article class="card">
-           <div class="text"><br>
-               <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Departments</h3><br>
-               <a href="departments.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-               <a href="departmentadd.php"><input type="submit" class="home_button" name="btn_admin"value="Add Department" ></a><br><br>
-           </div>
-           </article>
-           <article class="card">
-           <div class="text"><br>
-               <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3><br>
-               <a href="courses.php"><input type="submit" class="home_button" name="btn_admin" value="View & Edit" ></a><br><br>
-               <a href="addcourse.php"><input type="submit" class="home_button" name="btn_admin"value="Add Course" ></a><br><br>
-           </div>
-           </article>
-       </main>
            </div>
            ';
         ?>

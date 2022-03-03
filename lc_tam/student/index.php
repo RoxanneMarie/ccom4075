@@ -32,9 +32,22 @@
 
         <?php 
             top_header_2();
+            
             student_select_course();
         ?>
-
+        <div class="card text-center">
+            <div class="card-header">
+                Greetings
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+            <div class="card-footer text-muted">
+                2 days ago
+            </div>
+        </div>
         <!-- <section data-bs-version="5.1" class="content16 cid-sO0lfEsMNZ" id="content16-t">
             <div class="container">
                 <div class="row justify-content-center">

@@ -151,6 +151,43 @@ function top_header_4()
         </section>';
 }
 
+function top_header_5()
+{
+  echo '
+        <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
+    
+            <nav class="navbar navbar-dropdown navbar-expand-lg">
+                <div class="container-fluid">
+                    <div class="navbar-brand">
+                        <span class="navbar-logo">
+                            <a href="admin.php">
+                                <img src="../assets/images/lc-logo1-121x74.png" alt="Mobirise" style="height: 3.8rem;">
+                            </a>
+                        </span>
+                        <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="admin.php">Tutoring <br>Appointment<br>Manager</a></span>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <div class="hamburger">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="admin.php">Home</a></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="#">View<br></a><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
+                        </ul>
+
+
+                    </div>
+                </div>
+            </nav>
+
+        </section>';
+}
+
 function bottom_footer()
 {
     echo '
@@ -268,7 +305,6 @@ function login()
         $email = escape_string($_POST['email']);
         $password = escape_string($_POST['password']);
         
-        //query confirms if student exists.
         $query = query("SELECT student_email, acc_stat_id FROM lc_test_students WHERE student_email = '{$email}' AND student_password = MD5('{$password}')");
         confirm($query);
 
@@ -276,6 +312,23 @@ function login()
         {
             //set_message("Your Password or Username is incorrect");
             //redirect("login.php");
+            $query2 = query("SELECT admin_email, admin_name FROM lc_test_admins WHERE admin_email = '{$email}' AND admin_password = MD5('{$password}')");
+            confirm($query2);
+            if(mysqli_num_rows($query2) == 0) //no era admin
+            {
+                echo("Your Password or Username is incorrect");
+                redirect("login.php");
+            }
+            else // es admin
+            {
+                $admin1 = fetch_array($query2);
+                $_SESSION['type'] = "Admin";
+                $_SESSION['name'] = $admin1['admin_name'];
+                $_SESSION['email'] = $admin1['admin_email'];
+                $_SESSION["current_date"] = date("Y-m-d");
+                $_SESSION["current_day_of_the_week"] = date("l");
+                redirect("admin/admin.php");
+            }
         }
         else
         {
@@ -291,10 +344,36 @@ function login()
             }
             else
             {
+
                 $_SESSION['type'] = "Student";
                 $_SESSION['email'] = $row['student_email'];
                 //set_message("Login Successful!");
                 redirect("student/index.php");
+
+                $query3 = query("SELECT student_id FROM lc_test_tutors WHERE student_id = '{$row['student_id']}'");
+                confirm($query3);
+
+                if(mysqli_num_rows($query3) == 0)  //es estudiante
+                {
+                    $_SESSION['type'] = "Student";
+                    $_SESSION['name'] = $row['student_name'];
+                    $_SESSION['email'] = $row['student_email'];
+                    $_SESSION["current_date"] = date("Y-m-d");
+                    $_SESSION["current_day_of_the_week"] = date("l");
+                    //echo("Login Successful!");
+                    redirect("student/index.php");
+                }
+                else // es tutor
+                {
+                    $_SESSION['type'] = "Tutor";
+                    $_SESSION['name'] = $row['student_name'];
+                    $_SESSION['email'] = $row['student_email'];
+                    $_SESSION["current_date"] = date("Y-m-d");
+                    $_SESSION["current_day_of_the_week"] = date("l");
+                    redirect("tutor/tutor.php");
+                }
+                
+
             }
         }
         close();
