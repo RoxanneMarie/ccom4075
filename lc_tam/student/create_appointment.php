@@ -1,5 +1,6 @@
 <?php 
     require_once("../functions.php");
+    create_app();
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +33,6 @@
 
         <?php
             select_header($_SESSION['type']);
-            confirm_app();
             bottom_footer();
             credit_mobirise_1();
         ?>

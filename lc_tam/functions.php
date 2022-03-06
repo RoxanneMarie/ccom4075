@@ -6,7 +6,6 @@ date_default_timezone_set("America/Puerto_Rico");
 
 //error_reporting(0);
 
-
 function select_header($choice)
 {
     if($choice == "Student")
@@ -293,6 +292,8 @@ function redirect($location)
 
 function last_id()
 {
+    global $connection;
+    
     return $connection->insert_id;
 }
 
@@ -413,6 +414,7 @@ function student_select_course()
         $query3 = query("SELECT COUNT(course_id) FROM lc_courses WHERE dept_id = '{$x}' AND tutor_available = 1");
         confirm($query3);
         $row3 = fetch_array($query3);
+        
         if($row3['COUNT(course_id)'] != 0)
         {
             echo '
@@ -446,7 +448,8 @@ function student_select_course()
         
             echo '
                                         <form id="form' . $x . '">
-                                            <input type="hidden" name="course_ready_' . $x . '" value="' . $dept . '">
+                                            <input type="hidden" name="course_ready" value="' . $dept . '">
+                                            <input type="hidden" name="dept_id" value"' . $x . '">
                                         </form>
                                     </div>
                                 </p>
@@ -467,47 +470,29 @@ function student_select_course()
 
 function professor_available()
 {
-    $query = query("SELECT COUNT(dept_id) FROM lc_departments");
-    confirm($query);
-    $row = fetch_array($query);
-    
-    for ($x = 1; $x <= $row["COUNT(dept_id)"]; $x++)
+    if(isset($_POST["course_ready"]))
     {
-        if(isset($_POST["course_ready_{$x}"]))
+        $dept = $_POST["course_ready"];
+        
+        $i = 0;
+        do
         {
-            $dept = $_POST["course_ready_{$x}"];
-            $i = 0;
+            $i++;
             
-            echo $_POST["course_ready_{$x}"];
-            echo $dept;
-            echo $dept . "_course_1";
-            echo $_POST["{$dept}_course_1"];
+            if(isset($_POST["{$dept}_course_{$i}"]))
+                $_SESSION["selected_course"] = $_POST["{$dept}_course_{$i}"];
+            
+        }while(!isset($_POST["{$dept}_course_{$i}"]));
+        
+        $query = query("SELECT COUNT(course_id) FROM lc_professors WHERE course_id = '" . $_SESSION['selected_course'] . "'");
+        confirm($query);
+        $row = fetch_array($query);
 
-            //NEEDS FIXING. Not using $i to transcourse through courses
-
-            do
-            {
-                $i++;
-                if($_POST["{$dept}_course_{$i}"] != NULL)
-                {
-                    $_SESSION["selected_course"] = $_POST["{$dept}_course_{$i}"];
-                }
-
-
-            }while($_POST["{$dept}_course_{$i}"] == NULL);
-
-            $query = query("SELECT COUNT(course_id) FROM lc_professors WHERE course_id = '" . $_SESSION['selected_course'] . "'");
-            confirm($query);
-            $row = fetch_array($query);
-
-            if($row['COUNT(course_id)'] == 0)
-            {
-                redirect("select_tutor.php");
-                exit;
-            }
+        if($row['COUNT(course_id)'] == 0)
+        {
+            redirect("select_tutor.php");
+            exit;
         }
-        //else
-            //redirect("logout.php");
     }
 }
 
@@ -718,9 +703,7 @@ function student_select_time()
         for ($x = 1; $x <= 5; $x++)
         {
             if($week[$x-1] == "NULL")
-            {
                 continue;
-            }
 
             $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time FROM lc_tutor_schedule  WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
             confirm($query2);
@@ -744,30 +727,12 @@ function student_select_time()
 
                 while($row2 = fetch_array($query2))
                 {
-                    //$query3 = query("SELECT student_email FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
-                    //confirm($query3);
-                    //$row3 = fetch_array($query3);
 
                     $query3 = query("SELECT session_id FROM lc_appointments WHERE student_email = '" . $_SESSION["email"] . "'");
                     confirm($query3);
 
                     $flag2 = false;
-                    /*
-                    if(mysqli_num_rows($query3) != 0)
-                    {
-                        while($row3 = fetch_array($query3))
-                        {
-                            $query4 = query("SELECT * FROM lc_sessions WHERE session_id = " . $row3["session_id"] . " AND session_date = '" . $_SESSION["selected_date"] . "'");
-                            confirm($query4);
-
-                            if(mysqli_num_rows($query4) != 0)
-                            {
-                                $flag2 = true;
-                                break;
-                            }
-                        }
-                    }
-                    */
+                    
                     $query3 = query("SELECT * FROM lc_sessions WHERE session_date = '" . $week[$x-1] . "' AND start_time = '" . $row2["start_time"] . "' AND tutor_id = " . $_SESSION['selected_tutor'] . " AND capacity >= 5");
                     confirm($query3);
 
@@ -777,9 +742,7 @@ function student_select_time()
                     if(!$flag2)
                     {
                         if(mysqli_num_rows($query3) != 0)
-                        {
                             echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' FULL </button>';
-                        }
                         else
                         {
                             echo '<button type="submit" form="form' . $x . '" formmethod="POST" formaction="confirm_appointment.php" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '">' . $start . ' - ' . $end . '</button>';
@@ -788,10 +751,7 @@ function student_select_time()
                         }
                     }
                     else
-                    {
                         echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' RESERVED</button>';
-                        //echo '<input type="hidden" name="end_time_' . $i . '" value="' . $row2["end_time"] . '">';
-                    }
 
                     $i++;
                 }
@@ -800,6 +760,7 @@ function student_select_time()
                                                 <form id="form' . $x . '">
                                                     <input type="hidden" form="form' . $x . '" name="session_date" value="' . $week[$x-1] . '">
                                                     <input type="hidden" form="form' . $x . '" name="time_' . $x . '">
+                                                    <input type="hidden" form="form' . $x . '" name="num" value="' . $x . '">
                                                 </form>
                                             </div>
                                         </p>
@@ -826,18 +787,51 @@ function student_select_time()
         redirect("../logout.php");
 }
 
-function create_session()
+function confirm_app()
 {
     //print_r($_POST);
-    $x=0;
-    if(!isset($_POST["confirm_app"]))
+    
+    if(isset($_POST["time_" . $_POST["num"]]))
     {
+        $i = 0;
+
         do
         {
-            $x++;
-        }while(!isset($_POST["time_" . $x]) || $x>99);
+            $i++;
+
+            if(isset($_POST["start_time_{$i}"]))
+            {
+                $_SESSION['selected_start_time'] = $_POST["start_time_{$i}"];
+                $_SESSION['selected_end_time'] = $_POST["end_time_{$i}"];
+                $_SESSION['selected_date'] = $_POST["session_date"];
+            }
+
+        }while(!isset($_POST["start_time_{$i}"]));
+        
+        echo '
+            <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
+                                <strong>Do you confirm the information of your chosen appointment?</strong>
+                            </h3>
+                        </div>';
+         echo '<button type="submit" form="form" formmethod="POST" formaction="create_appointment.php" class="btn btn-success display-4" name="">Confirm</button>';
+        echo '
+                        <form id="form">
+                            <input type="hidden" name="confirm_app">
+                        </form>
+                    </div>
+                </div>
+            </section>';
     }
-    
+    else
+        redirect("../logout.php");
+}
+
+function create_app()
+{
     if(isset($_POST["confirm_app"]))
     {
         $query = query("SELECT session_id FROM lc_sessions WHERE session_date = '" . $_SESSION["selected_date"] . "' AND start_time = '" . $_SESSION['selected_start_time'] . "' AND tutor_id = " . $_SESSION['selected_tutor']);
@@ -856,7 +850,7 @@ function create_session()
             confirm($query);
             $row = fetch_array($query);
 
-            $query = query('INSERT INTO lc_appointments (student_email, session_id) VALUES(' . $row["student_email"] . ', ' . $id . ')');
+            $query = query('INSERT INTO lc_appointments (student_email, session_id) VALUES("' . $row["student_email"] . '", ' . $id . ')');
             confirm($query);
 
             unset($_SESSION["selected_course"], $_SESSION["selected_professor"], $_SESSION["selected_tutor"], $_SESSION["selected_date"], $_SESSION["selected_start_time"], $_SESSION["selected_end_time"]);
@@ -865,7 +859,7 @@ function create_session()
         {
             $row = fetch_array($query);
 
-            $query = query("SELECT * FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND capacity >= 5");
+            $query = query("SELECT * FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND capacity >= 5"); // Capacity number should be able to be edited by the Admin
             confirm($query);
 
             if(mysqli_num_rows($query) == 0)
@@ -893,59 +887,14 @@ function create_session()
             exit;
         }
     }
-    else if(isset($_POST["time_" . $x]))
-    {
-        $i = 0;
-
-        do
-        {
-            $i++;
-
-            if(isset($_POST["start_time_{$i}"]))
-            {
-                $_SESSION['selected_start_time'] = $_POST["start_time_{$i}"];
-                $_SESSION['selected_end_time'] = $_POST["end_time_{$i}"];
-                $_SESSION['selected_date'] = $_POST["session_date"];
-            }
-
-        }while(!isset($_POST["start_time_{$i}"]));
-        
-        echo '
-            <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
-                <div class="container-fluid">
-                    <div class="row justify-content-center">
-                        <div class="col-12">
-                            <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                                <strong>Do you confirm the information of your chosen appointment?</strong>
-                            </h3>
-                        </div>';
-         echo '<button type="submit" form="form" formmethod="POST" formaction="confirm_appointment.php" class="btn btn-success display-4" name="">Confirm</button>';
-        echo '
-                        <form id="form">
-                            <input type="hidden" name="confirm_app">
-                        </form>
-                    </div>
-                </div>
-            </section>';
-    }
     else
         redirect("../logout.php");
 }
-
-//WORK IN PROGRESS. CHECK HOW TO TELL DAY OF WEEK FOR APPOINTMENT MAKING AKA session_date ^^^
 
 function student_view_appointment()
 {
     //print_r($_SESSION);
     $c = 0;
-    $name = array();
-    $lname = array();
-    $course = array();
-    $date = array();
-    
-    //$query = query("SELECT student_email FROM lc_test_students WHERE student_email = '" . $_SESSION["email"] . "'");
-    //confirm($query);
-    //$row = fetch_array($query);
     
     $query = query("SELECT session_id FROM lc_appointments WHERE student_email = '" . $_SESSION["email"] . "'");
     confirm($query);
@@ -966,19 +915,17 @@ function student_view_appointment()
                 confirm($query3);
                 $row3 = fetch_array($query3);
 
-                $query3 = query("SELECT student_name, student_first_lastname FROM lc_test_students WHERE student_email = " . $row3["student_email"]);
+                $query3 = query("SELECT student_name, student_first_lastname FROM lc_test_students WHERE student_email = '" . $row3["student_email"] . "'");
                 confirm($query3);
                 $row3 = fetch_array($query3);
-
-                $start = substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5);
-                $end = substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5);
                 
-                $name[$c-1] = $row3["student_name"];
-                $lname[$c-1] = $row3["student_first_lastname"];
-                $course[$c-1] = $row2["course_id"];
-                $date[$c-1] = $row2["DATE_FORMAT(session_date, '%M %d %Y')"];
+                $app_info[$c-1] = array('f_name' => $row3["student_name"], 'l_name' => $row3["student_first_lastname"], 'course' => $row2["course_id"], 'date' => $row2["DATE_FORMAT(session_date, '%M %d %Y')"], 's_time' => substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5), 'e_time' => substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5));
             } 
         }
+        
+        $columns_1 = array_column($app_info, 'date');
+        $columns_2 = array_column($app_info, 's_time');
+        array_multisort($columns_1, SORT_ASC, $columns_2, SORT_ASC, $app_info);
         
         if($c != 0)
         {
@@ -996,11 +943,11 @@ function student_view_appointment()
             {
                 echo "
                       <tr>
-                        <td>" . $name[$i-1] . " " . $lname[$i-1] . "</td>
-                        <td>" . $course[$i-1] . "</td>
-                        <td>" . $date[$i-1] . "</td>
-                        <td>" . $start . "</td>
-                        <td>" . $end . "</td>
+                        <td>" . $app_info[0]["f_name"] . " " . $app_info[$i-1]["l_name"] . "</td>
+                        <td>" . $app_info[$i-1]["course"] . "</td>
+                        <td>" . $app_info[$i-1]["date"] . "</td>
+                        <td>" . $app_info[$i-1]["s_time"] . "</td>
+                        <td>" . $app_info[$i-1]["e_time"] . "</td>
                       </tr>";
             }
 
