@@ -121,8 +121,6 @@ function top_header_3()
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Schedule</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Attendance</a></div></li>
                             <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="../logout.php">Logout</a></li>
                         </ul>
-
-
                     </div>
                 </div>
             </nav>
@@ -162,8 +160,6 @@ function top_header_4()
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Reports</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Generate</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">View<br></a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Logout</a></div></li>
                         </ul>
-
-
                     </div>
                 </div>
             </nav>
@@ -623,8 +619,15 @@ function student_select_tutor()
     close();
 }
 
+// Needs Crowd Control.
+// Not let a student have more than one space reserved in the same section.
+// Use appointments already made by student to see what day and time available conflicts with already reserved appointments.
+// How many appointments can a student make per week.
+// How many appointments can a student make on a single department per day.
+// How many weeks can the student see to make appointments in?
+
 function student_select_time()
-{
+{   
     if(isset($_POST['tutor_ready']))
     {
         $i=0;
@@ -633,13 +636,10 @@ function student_select_time()
         {
             $i++;
 
-            if($_POST["tutor_{$i}"] != NULL)
-            {
-                $flag = true;
+            if(isset($_POST["tutor_{$i}"]))
                 $_SESSION['selected_tutor'] = $_POST["tutor_{$i}"];
-            }
 
-        }while($_POST["tutor_{$i}"] == NULL);
+        }while(!isset($_POST["tutor_{$i}"]));
 
         echo '
             <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
@@ -728,18 +728,20 @@ function student_select_time()
                 while($row2 = fetch_array($query2))
                 {
 
-                    $query3 = query("SELECT session_id FROM lc_appointments WHERE student_email = '" . $_SESSION["email"] . "'");
+                    $query3 = query("SELECT max_capacity FROM lc_conditions");
                     confirm($query3);
+                    $row3 = fetch_array($query3);
 
-                    $flag2 = false;
+                    $flag = false; //flag that, if true, tells if the section was cancelled
+                    $flag2 = false; //flag that, if true, tells if the section was cancelle
                     
-                    $query3 = query("SELECT * FROM lc_sessions WHERE session_date = '" . $week[$x-1] . "' AND start_time = '" . $row2["start_time"] . "' AND tutor_id = " . $_SESSION['selected_tutor'] . " AND capacity >= 5");
+                    $query3 = query("SELECT * FROM lc_sessions WHERE session_date = '" . $week[$x-1] . "' AND start_time = '" . $row2["start_time"] . "' AND tutor_id = " . $_SESSION['selected_tutor'] . " AND capacity >= " . $row3["max_capacity"]);
                     confirm($query3);
 
                     $start = substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5);
                     $end = substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5);
 
-                    if(!$flag2)
+                    if(!$flag)
                     {
                         if(mysqli_num_rows($query3) != 0)
                             echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' FULL </button>';
@@ -751,7 +753,7 @@ function student_select_time()
                         }
                     }
                     else
-                        echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' RESERVED</button>';
+                        echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' CANCELED</button>';
 
                     $i++;
                 }
@@ -768,18 +770,14 @@ function student_select_time()
                                 </div>
                             </div>';
             }
-
-            if(!$flag)
-            {
+            else
                 echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
-            }
         }
 
         echo '
                     </div>
                 </div>
             </section>';
-
 
         close();
     }
@@ -858,8 +856,12 @@ function create_app()
         else
         {
             $row = fetch_array($query);
+            
+            $query = query("SELECT max_capacity FROM lc_conditions");
+            confirm($query);
+            $row2 = fetch_array($query);
 
-            $query = query("SELECT * FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND capacity >= 5"); // Capacity number should be able to be edited by the Admin
+            $query = query("SELECT * FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND capacity >= " . $row2["max_capacity"]);
             confirm($query);
 
             if(mysqli_num_rows($query) == 0)
@@ -879,17 +881,17 @@ function create_app()
             else
             {
                 echo "Sorry! A few minutes ago, all available spaces for this section has been reserved. Please try another section that the tutor of your selection has available!";
+                close();
                 redirect("select_time.php");
             }
-            
-            close();
-            redirect("index.php");
-            exit;
         }
+        
+        close();
+        redirect("index.php");
+        exit;
     }
     else
         redirect("../logout.php");
-}
 
 function student_view_appointment()
 {
