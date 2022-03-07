@@ -1,14 +1,21 @@
 <?php 
     require_once("../functions.php");
     
-    if(isset($_GET['id'])){
+    if(isset($_GET) & !empty($_GET)){
         $id = $_GET['id'];
+    } else {
+        redirect('departments.php');
     }
+    if(isset($_POST) & !empty($_POST)){
+        $departmentName = $_POST['Department_Name'];
+        $query = "UPDATE lc_departments SET dept_name = '$departmentName' WHERE dept_id = '$id'";
+        //print_r($query);
+        $res = query($query);
+        //print_r($query);
+        confirm($query);
+       //header('departments.php?success');
+        redirect('departments.php?success');
 
-    if(isset($_POST['submit'])){
-        $deptartmentName = $_POST['DepartmentName'];
-
-    echo $query = query("UPDATE lc_departments SET dept_name = ' . $deptartmentName . ' WHERE professor_entry_id = '$id'");
 }
 ?>
 
@@ -23,7 +30,7 @@
       <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Appointments</title>
+      <title>Edit Department - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -36,79 +43,29 @@
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
-    <style>
-        /*----------------------- CSS HOME PAGE*/
-
-        .mcourses{
-        text-align: center;
-        margin: 0 auto;
-        width: 1100px;
-        flex-wrap: none;
-        align-items: stretch; 
-        justify-content:center;
-
-        }
-        .mcourse {
-        flex: 0 0 500px;
-        margin: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-        background-color: white;
-        } 
-        .card img {
-        max-width: 100%;
-        }
-        .card .text {
-        padding: 0 20px 20px;
-        }
-        .card .text > button {
-        background: rgb(196, 127, 0);
-        border: 1;
-        color: white;
-        padding: 10px;
-        width: 100%;
-        }
-
-        .tCourses {
-        background: rgb(196, 127, 0);
-        table-layout: auto;
-        width: 100%;
-        }
-
-        .trCourses {
-        background: white;
-        }
-
-        .btnt{
-            font-weight: 700;
-            background-color: #fd8f00;
-            color: #ffffff;
-            font-style: normal;
-            cursor: pointer;
-            padding: 0.6rem 1.2rem;
-            margin: 0 auto;
-        }
-    </style>
-
     </head>
     <body>
         <?php 
-            top_header_2(); 
+            top_header_5(); 
             ?>
-    <input type="hidden" value="student_btn" name="action">
-        <main class="mcourses" style="justify-content:center;">
-            <article class="mcourse">
-            <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Department</h3>
+        <main class = "container">
+            <article>
+            <div class="container sm">
+                <h3 class = "h3 text-center">Edit Department</h3>
                 <?php 
                 $query = query("SELECT * FROM lc_departments WHERE dept_id = '$id'");
                 confirm($query);
                 $row = fetch_array($query);
                 ?>
-                <form action="editdepartment.php" method="POST"><br>
-                    <label for="Deparment_Name">Department Name:</label>
-                    <input id="Department_Name" type="text" name="Department_Name" value="<?php echo $row['dept_name']; ?>"><br>
-                    <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
+                <form action="edit_department.php?id=<?php echo $row['dept_id']; ?>" method="POST"><br>
+                    <div class="input-group input-group-lg">
+                        <div class="input-group-prepend">
+                        <label for="Deparment_Name" class= "input-group-text" id = id="inputGroup-sizing-lg">Department Name:</label>
+                        </div>
+                        <input type="text" class="form-control" id="Department_Name" name="Department_Name" value = "<?php echo $row['dept_name']; ?>" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
+                        <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
+                    </div>
+                <br><br><br>
             </form>
             </div>
             </article>

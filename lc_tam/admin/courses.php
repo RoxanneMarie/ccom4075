@@ -13,7 +13,7 @@
       <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Appointments</title>
+      <title>Courses - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -29,65 +29,47 @@
     <style>
         /*----------------------- CSS HOME PAGE*/
 
-        .mcourses{
-        text-align: center;
-        margin: 0 auto;
-        width: 1100px;
-        flex-wrap: none;
-        align-items: stretch; 
-        justify-content:center;
-
-        }
-        .mcourse {
-        flex: 0 0 500px;
-        margin: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-        background-color: white;
-        } 
-        .card img {
-        max-width: 100%;
-        }
-        .card .text {
-        padding: 0 20px 20px;
-        }
-        .card .text > button {
-        background: rgb(196, 127, 0);
-        border: 1;
-        color: white;
-        padding: 10px;
-        width: 100%;
-        }
-
         .tCourses {
         background: rgb(196, 127, 0);
-        table-layout: auto;
-        width: 100%;
         }
 
-        .trCourses {
-        background: white;
-        }
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_2();
-    echo '<input type="hidden" value="student_btn" name="action">
-    <main class="mcourses" style="justify-content:center;">
-        <article class="mcourse">
-        <div class="text">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3>
-            <a href="addcourse.php">Add Course</a>
-                <table class="tCourses">
-            <tr>
-                <td>Course ID</td>
-                <td>Course Name</td>
-                <td>Course Professor</td>
-                <td>Department</td>
-                <td>Tutors Available</td>
-            </tr>';
+            top_header_5();
+    echo '
+    <main class="container">
+        <article>
+        <div class="container-sm">
+            <h3 class = "h3 text-center">Course</h3>
+            <a class = "btn btn-primary" href="add_course.php">Add Course</a>
+            '; if(isset($_GET['success'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Course updated successfully.</span>
+            </div>'; 
+            }
+             if(isset($_GET['removed'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Course removed successfully.</span>
+            </div>
+            ';
+            }
+            if(isset($_GET['Added'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Course added successfully.</span>
+            </div>
+            ';
+            } echo '
+                <table class="table table-responsive">
+            <thead class = "tCourses">
+                <th>Action</th>
+                <th>Course ID</th>
+                <th>Course Name</th>
+                <th>Department</th>
+                <th>Tutors Available</th>
+            </thead>';
     $query = query("SELECT * FROM lc_courses");
     confirm($query);
     while($row = fetch_array($query)) {
@@ -99,9 +81,11 @@
         $row3 = fetch_array($query3);
         echo '    
                 <tr class="trCourses">
+                    <td> <a href="edit_course.php?id='. $row['course_id'] .'">Edit</a>
+                    <a href="delete_course.php?id='. $row['course_id'] .'">Delete</a>
+                    </td>
                     <td>'. $row['course_id'] .'</td>
                     <td>'. $row['course_name'] .'</td>
-                    <td>'. $row2['professor_name'] .'</td>
                     <td>'. $row3['dept_name'] .'</td>
                     <td>'. $row['tutor_available'] .'</td>
                     </tr>

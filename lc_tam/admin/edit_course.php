@@ -1,6 +1,24 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php");
     
+    if(isset($_GET) & !empty($_GET)){
+        $id = $_GET['id'];
+    } else {
+        redirect('courses.php');
+    }
+    if(isset($_POST) & !empty($_POST)){
+        //$id = $_POST['id'];
+        $CourseName = $_POST['Course_Name'];
+        $DepartmentID = $_POST['Department_ID'];
+        $TutorAvailable = $_POST['Tutor_Available'];
+        $Uquery = "UPDATE lc_courses 
+        SET course_name = '$CourseName', dept_id = '$DepartmentID', tutor_available = '$TutorAvailable'
+        WHERE course_id = '$id'";
+        print_r($Uquery);
+        $res = query($Uquery);
+        confirm($Uquery);
+        redirect('courses.php?success');
+}
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +32,7 @@
       <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Appointments</title>
+      <title>Edit Course Information - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -26,92 +44,55 @@
       <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
-        <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
-    <style>
-        /*----------------------- CSS HOME PAGE*/
-
-        .mcourses{
-        text-align: center;
-        margin: 0 auto;
-        width: 1100px;
-        flex-wrap: none;
-        align-items: stretch; 
-        justify-content:center;
-
-        }
-        .mcourse {
-        flex: 0 0 500px;
-        margin: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-        background-color: white;
-        } 
-        .card img {
-        max-width: 100%;
-        }
-        .card .text {
-        padding: 0 20px 20px;
-        }
-        .card .text > button {
-        background: rgb(196, 127, 0);
-        border: 1;
-        color: white;
-        padding: 10px;
-        width: 100%;
-        }
-
-        .tCourses {
-        background: rgb(196, 127, 0);
-        table-layout: auto;
-        width: 100%;
-        }
-
-        .trCourses {
-        background: white;
-        }
-    </style>
-
+      <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
     </head>
     <body>
         <?php 
-            top_header_2();
-    echo '<input type="hidden" value="student_btn" name="action">
-    <main class="mcourses" style="justify-content:center;">
-        <article class="mcourse">
-        <div class="text">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Course</h3>
-                <table class="tCourses">
-            <tr>
-                <td>Edit</td>
-                <td>Course ID</td>
-                <td>Course Name</td>
-                <td>Course Professor</td>
-                <td>Department</td>
-                <td>Tutors Available</td>
-            </tr>';
-    $query = query("SELECT * FROM lc_courses");
-    confirm($query);
-    while($row = fetch_array($query)) {
-        $query2 = query("SELECT * FROM lc_professors WHERE course_id = '" . $row['course_id'] ." ' ");
-        confirm($query2);
-        $row2 = fetch_array($query2);
-        $query3 = query("SELECT * FROM lc_departments WHERE dept_id = '" . $row['dept_id'] ." ' ");
-        confirm($query3); 
-        $row3 = fetch_array($query3);
-        echo '    
-                <tr class="trCourses">
-                    <td>   <a href="editcourseinfo.php?id='. $row['course_id'] .'">Edit</a>
-                    <td>'. $row['course_id'] .'</td>
-                    <td>'. $row['course_name'] .'</td>
-                    <td>'. $row2['professor_name'] .'</td>
-                    <td>'. $row3['dept_name'] .'</td>
-                    <td>'. $row['tutor_available'] .'</td>
-                    </tr>
-    '; } echo '
-                </table><br><br>
+            top_header_5(); 
+            ?>
+            <main class="container d-flex justify-content-center">
+                <article>
+                    <div>
+                    <h3 class = "h3 d-flex justify-content-center">Edit Course</h3>
+            <?php 
+            $query = query("SELECT lc_courses.course_id, lc_courses.course_name, lc_courses.dept_id, lc_courses.tutor_available, lc_departments.dept_id, lc_departments.dept_name FROM lc_courses INNER JOIN lc_departments ON lc_courses.dept_id = lc_departments.dept_id WHERE course_id = '$id'");
+            confirm($query);
+            $row = fetch_array($query);
+            ?>
+            <form action="edit_course.php?id=<?php echo $row['course_id']; ?>" method="POST"><br>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="Course_ID">Course ID:</label>
+                    <input type="Course_ID" class="form-control" id="Course_ID" name = "Course_ID" value = "<?php echo $row['course_id']; ?>" disabled>
                 </div>
-                </article>
-            </main>';
+                <div class="form-group col-md-6">
+                    <label for="Course_Name">Course Name:</label>
+                    <input type="Course_Name" class="form-control" id="Course_Name" name = "Course_Name" value = "<?php echo $row['course_name']; ?>" required>
+                </div>
+            </div>
+
+           <div class="form-group">
+                <label for="Department_ID">Department:</label>
+                <select class="form-control" id="Department_ID" name = "Department_ID">
+                <option selected value = "<?php echo $row['dept_id']; ?> " ><?php echo $row['dept_name']; ?></option>
+                <?php 
+                    $query2 = query("SELECT * FROM lc_departments");
+                    confirm($query2);
+                    while($row2 = fetch_array($query2)) { ?>
+                    <option value=<?php echo $row2['dept_id'] ?> ><?php echo $row2['dept_name'];  } ?></option>
+                    </select>
+            </div>
+            <div class="form-group col-md-6">
+                    <label for="Tutor_Available">Tutor's Available: </label>
+                    <input type="number" class="form-control" id="Tutor_Available" name = "Tutor_Available" value = "<?php echo $row['tutor_available']; ?>" min = "1" max = "10" required>
+            </div>
+            <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button><br>
+            </form>
+            </div>
+            </article>
+        </main>
+        <?php
             bottom_footer();
             credit_mobirise_1();
         ?>

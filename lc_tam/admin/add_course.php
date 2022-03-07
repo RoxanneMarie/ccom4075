@@ -4,11 +4,14 @@
     if(isset($_POST['submit'])){
         $courseID = $_POST['Course_ID'];
         $courseName = $_POST['Course_Name'];
-        $departmentID = $_POST['departmentID'];
+        $departmentID = $_POST['Department_ID'];
         $tutor_available = 1;
 
     echo $query = query('INSERT INTO lc_courses (course_id, course_name, dept_id, tutor_available)
     VALUES("' . $courseID . '","' . $courseName . '",' . $departmentID . ',' . $tutor_available . ')');
+    if($query) {
+        header('location:courses.php?Added');
+    }
 }
 ?>
 
@@ -23,7 +26,7 @@
       <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Appointments</title>
+      <title>Add Course - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -36,104 +39,46 @@
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
-    <style>
-        /*----------------------- CSS HOME PAGE*/
-
-        .mcourses{
-        text-align: center;
-        margin: 0 auto;
-        width: 1100px;
-        flex-wrap: none;
-        align-items: stretch; 
-        justify-content:center;
-
-        }
-        .mcourse {
-        flex: 0 0 500px;
-        margin: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-        background-color: white;
-        } 
-        .card img {
-        max-width: 100%;
-        }
-        .card .text {
-        padding: 0 20px 20px;
-        }
-        .card .text > button {
-        background: rgb(196, 127, 0);
-        border: 1;
-        color: white;
-        padding: 10px;
-        width: 100%;
-        }
-
-        .tCourses {
-        background: rgb(196, 127, 0);
-        table-layout: auto;
-        width: 100%;
-        }
-
-        .trCourses {
-        background: white;
-        }
-
-        .btnt{
-            font-weight: 700;
-            background-color: #fd8f00;
-            color: #ffffff;
-            font-style: normal;
-            cursor: pointer;
-            padding: 0.6rem 1.2rem;
-            margin: 0 auto;
-        }
-    </style>
-
     </head>
     <body>
         <?php 
-            top_header_2(); 
+            top_header_5(); 
             ?>
-    <input type="hidden" value="student_btn" name="action">
-        <main class="mcourses" style="justify-content:center;">
-            <article class="mcourse">
-            <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Course</h3>
-            <form action="addcourse.php" method="POST"><br>
-                <div>
-                    <label for="Course_ID">Course ID:</label>
-                    <input id="Course_ID" type="text" name="Course_ID"><br><br>
-                </div>
-                <div>
-                    <label for="Course_Name">Course Name:</label>
-                    <input id="Course_Name" type="text" name="Course_Name"><br><br>
-                </div>
-<!--                <div>
-                    <label for="professorID">Professor:</label>
-                    <select class="" id="professorID" name="professorID"> 
-                    <option value="">Select a Professor</option>
-                        <?php /*
-                            $query = query("SELECT * FROM lc_professors");
-                            confirm($query);
-                            while($row = fetch_array($query)) {
-                                ?>
-                        <option value=<?php echo $row['professor_entry_id'] ?> ><?php echo $row['professor_name']; } */ ?></option>
-                    </select>
-                </div> -->
-                <div>
-                    <label for="departmentID">Department:</label>
-                    <select class="" id="departmentID" name="departmentID"><br><br>
-                    <option value="">Select a Department</option>
-                        <?php 
+        <main class="container d-flex justify-content-center">
+            <article>
+            <div class="container-sm>">
+                <h3 class = "h3 d-flex justify-content-center">Add Course</h3>
+            <form action="add_course.php" method="POST"><br>
+                    <div class="input-group input-group-lg">
+                        <div class="input-group-prepend">
+                        <label for="Course_ID" class= "input-group-text" id= "inputGroup-sizing-lg">Course ID:</label>
+                        </div>
+                        <input type="text" class="form-control" id="Course_ID" name="Course_ID" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
+                    </div>
+                    <br>
+                    <div class="input-group input-group-lg">
+                        <div class="input-group-prepend">
+                        <label for="Course_Name" class= "input-group-text" id = "inputGroup-sizing-lg">Course Name:</label>
+                        </div>
+                        <input type="text" class="form-control" id="Course_Name" name="Course_Name" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
+                    </div>
+                    <br>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="Department">Department:</label>
+                        </div>
+                        <select class="custom-select" id = "Department_ID" name = "Department_ID">
+                            <option selected>Select a Department</option>
+                            <?php 
                             $query = query("SELECT * FROM lc_departments");
                             confirm($query);
                             while($row = fetch_array($query)) {
                                 ?>
                         <option value=<?php echo $row['dept_id'] ?> ><?php echo $row['dept_name'];  } ?></option>
-                    </select>
-                </div>
-                <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
+                        </select>
+                    </div>
+                    <br>
+                <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button><br>
             </form>
             </div>
             </article>

@@ -13,7 +13,7 @@
       <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Appointments</title>
+      <title>Admin Home - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -40,7 +40,7 @@
 
             }
             .card {
-            flex: 0 0 250px;
+            flex: 0 0 270px;
             margin: 10px;
             border: 1px solid #ccc;
             height: 303.5px;
@@ -98,31 +98,30 @@
                <article class="card">
                <div class="text">
                    <h3>Account</h3>
-                   <input class = "home_button" type="submit" name="btn_student" value="View All Account"><br><br>
-                   <input class = "home_button" type="submit" name="btn_student" value="Edit Account">
+                   <a class = "home_button" href = "view_accounts.php">View All Accounts</a><br><br>
                </div>
                </article>
                <article class="card">
                <div class="text">
                    <h3>Tutor</h3>
-                   <input class = "home_button" type="submit" name="btn_addTutor" value="Add Tutor"><br><br>
-                   <input class = "home_button" type="submit" name="btn_editTutor" value="Edit Tutor">
+                   <a class = "home_button" href = "tutors.php">View Tutors</a><br><br>
+                   <a class = "home_button" href = "add_tutor.php">Add Tutor</a><br><br>
                </div>
                </article>
                <article class="card">
                <div class="text">
                    <h3>Professor</h3>
-                   <input class = "home_button" type="submit" name="btn_addProf" value="Add Professor"><br><br>
-                   <input class = "home_button" type="submit" name="btn_editProf" value="Edit Professor">
+                   <a class = "home_button" href = "professors.php">View Professors</a><br><br>
+                   <a class = "home_button" href = "add_professor.php">Add Professor</a><br><br>
                </div>
                </article>
                <article class="card">
                <div class="text">
                    <h3>Department</h3>
-                   <input class = "home_button" type="submit" name="btn_AddDepartment" value="Add Department"><br><br>
-                   <input class = "home_button" type="submit" name="btn_EditDepartment" value="Edit Department"><br><br>
-                   <input class = "home_button" type="submit" name="btn_AddCourse" value="Add Course"><br><br>
-                   <input class = "home_button" type="submit" name="btn_EditCourse" value="Edit Course">
+                   <a class = "home_button" href = "departments.php">View Departments</a><br><br>
+                   <a class = "home_button" href = "add_department.php">Add Department</a><br><br>
+                   <a class = "home_button" href = "courses.php">View Courses</a><br><br>
+                   <a class = "home_button" href = "add_course.php">Add Course</a><br><br>
                </div>
                </article>
                <article class="card">
@@ -135,20 +134,22 @@
                <article class="card">
                <div class="text">
                    <h3>Tutoring Session</h3>
-                   <input class = "home_button" type="submit"  name="btn_student" value="View Tutoring Session"><br><br>
+                   <a class = "home_button" href = "tutoring_sessions.php">View Tutoring Sessions</a><br><br>
                </div>
                </article>
                <article class="card">
                <div class="text">
                    <h3>Semester</h3>
-                   <input class = "home_button" type="submit"  name="btn_student" value="Add Semester"><br><br>
-                   <input class = "home_button" type="submit"  name="btn_student" value="Remove Semester"><br><br>
+                   <a class = "home_button" href = "#">Add Semester</a><br><br>
+                   <a class = "home_button" href = "#">Edit Semester</a><br><br>
+
+
                </div>
                </article>
                <article class="card">
                <div class="text">
                    <h3>Grades</h3>
-                   <input class = "home_button" type="submit"  name="btn_student" value="View Grades"><br><br>
+                   <a class = "home_button" href = "#">View Grades</a><br><br>
                </div>
                </article>
            </main>

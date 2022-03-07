@@ -13,7 +13,7 @@
       <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Appointments</title>
+      <title>Professors - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -29,40 +29,8 @@
     <style>
         /*----------------------- CSS HOME PAGE*/
 
-        .mcourses{
-        text-align: center;
-        margin: 0 auto;
-        width: 1100px;
-        flex-wrap: none;
-        align-items: stretch; 
-        justify-content:center;
-
-        }
-        .mcourse {
-        flex: 0 0 500px;
-        margin: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-        background-color: white;
-        } 
-        .card img {
-        max-width: 100%;
-        }
-        .card .text {
-        padding: 0 20px 20px;
-        }
-        .card .text > button {
-        background: rgb(196, 127, 0);
-        border: 1;
-        color: white;
-        padding: 10px;
-        width: 100%;
-        }
-
         .tCourses {
         background: rgb(196, 127, 0);
-        table-layout: auto;
-        width: 100%;
         }
 
         .trCourses {
@@ -76,18 +44,18 @@
             top_header_2();
     echo '<input type="hidden" value="student_btn" name="action">
     <main class="mcourses" style="justify-content:center;">
-        <article class="mcourse">
-        <div class="text">
+        <article>
+        <div class="container">
             <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professors</h3>
-                <table class="tCourses">
-            <tr>
-                <td>Edit</td>
-                <td>Professor ID</td>
-                <td>Course ID</td>
-                <td>Name</td>
-                <td>Initial</td>
-                <td>First Last Name</td>
-                <td>Second Last name</td>
+            <table class = "table table-responsive">
+            <thead class = "tCourses">
+                <th>Edit</th>
+                <th>Professor ID</th>
+                <th>Course ID</th>
+                <th>Name</th>
+                <th>Initial</th>
+                <th>First Last Name</th>
+                <th>Second Last name</th>
             </tr>';
     $query = query("SELECT * FROM lc_professors");
     confirm($query);

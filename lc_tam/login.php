@@ -1,6 +1,7 @@
 <?php
     require_once("functions.php");
     login();
+    $alert = 0;
 ?>
 
 <!DOCTYPE html>
@@ -45,11 +46,14 @@
                                 <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">Oops...! Try Again!</div>
                             </div> -->
                             <div class="dragArea row">
+                            <?php if($alert){ ?>
+                                <div class = "alert alert-primary" role = "alert"> Invalid Login. Please try again. </div>
+                                <?php } ?>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="name">
-                                    <input type="email" name="email" placeholder="Email" data-form-field="name" class="form-control" value="" id="name-form6-u">
+                                    <input type="email" name="email" placeholder="Email" data-form-field="name" class="form-control" value="" id="name-form6-u" required>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="email">
-                                    <input type="password" name="password" placeholder="Password" data-form-field="email" class="form-control" value="" id="email-form6-u">
+                                    <input type="password" name="password" placeholder="Password" data-form-field="email" class="form-control" value="" id="email-form6-u" required>
                                 </div>
                                 <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
                             </div>

@@ -42,7 +42,8 @@
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
             <div class="card-footer text-muted">
-                2 days ago
+                <div class = "image-wrap">
+        </div>
             </div>
         </div>
 

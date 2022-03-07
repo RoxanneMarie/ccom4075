@@ -317,7 +317,8 @@ function login()
             if(mysqli_num_rows($query2) == 0) //no era admin
             {
                 echo("Your Password or Username is incorrect");
-                redirect("login.php");
+                //redirect("login.php");
+                $alert = '1';
             }
             else // es admin
             {
