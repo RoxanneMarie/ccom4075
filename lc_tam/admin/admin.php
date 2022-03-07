@@ -140,8 +140,9 @@
                <article class="card">
                <div class="text">
                    <h3>Semester</h3>
-                   <a class = "home_button" href = "#">Add Semester</a><br><br>
-                   <a class = "home_button" href = "#">Edit Semester</a><br><br>
+                   <a class = "home_button" href = "semesters.php">View Semester</a><br><br>
+                   <a class = "home_button" href = "add_semester.php">Add Semester</a><br><br>
+                   
 
 
                </div>
