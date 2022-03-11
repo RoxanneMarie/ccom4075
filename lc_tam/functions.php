@@ -259,6 +259,7 @@ function credit_mobirise_2()
         <script src="../assets/formoid/formoid.min.js"></script>';
 }
 
+/*
 defined("DB_HOST") ? null : define("DB_HOST" , "localhost");
 
 defined("DB_USER") ? null : define("DB_USER", "root");
@@ -266,8 +267,8 @@ defined("DB_USER") ? null : define("DB_USER", "root");
 defined("DB_PASS") ? null : define("DB_PASS", "");
 
 defined("DB_NAME") ? null : define("DB_NAME", "lc_tam");
+*/
 
-/*
 defined("DB_HOST") ? null : define("DB_HOST" , "136.145.29.193");
 
 defined("DB_USER") ? null : define("DB_USER", "roxmaral");
@@ -275,7 +276,7 @@ defined("DB_USER") ? null : define("DB_USER", "roxmaral");
 defined("DB_PASS") ? null : define("DB_PASS", "R@mar12345");
 
 defined("DB_NAME") ? null : define("DB_NAME", "roxmaral_db");
-*/
+
 
 $connection = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
 
