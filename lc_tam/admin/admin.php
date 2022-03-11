@@ -65,7 +65,6 @@
             padding: 15px;
             width: 100%;
             }
-
             .home_button {
                 font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
                 border: 4px solid #fd8f00;

@@ -289,6 +289,8 @@ function query($sql)
 {
     global $connection;
     
+    //echo $sql;
+    
     return mysqli_query($connection, $sql);
 }
 
@@ -317,6 +319,13 @@ function redirect($location)
     return header('refresh: 0; url='.$location);
     //return header('refresh:3; url='.$location);
 }
+/*
+function testing()
+{
+    $courseID = "CCOM3002";
+    $courseName = "COMPUTER PROGRAMMING II";
+    $departmentID = 3;
+    $tutor_available = 1;
 
 function last_id()
 {
@@ -324,6 +333,7 @@ function last_id()
     
     return $connection->insert_id;
 }
+*/
 
 function login()
 {
@@ -585,19 +595,19 @@ function student_select_professor()
                             <strong>' . $row['professor_name'] . ' ' . $row['professor_initial'] . ' ' . $row['professor_first_lastname'] . ' ' . $row['professor_second_lastname'] . '</strong>
                         </h5>
                         <div class="mbr-section-btn card-btn align-center">
-                            <button type="submit" form="form2" formmethod="POST" formaction="select_tutor.php" class="btn btn-primary display-4" name="professor_' . $x . ' value="' . $row["professor_entry_id"] . '">Select</button>
+                            <button type="submit" form="form' . $x . '" formmethod="POST" formaction="select_tutor.php" class="btn btn-primary display-4" name="professor_' . $x . '" value="' . $row["professor_entry_id"] . '">Select</button>
                         </div>
                     </div>
                 </div>
-            </div>';
+            </div>
+            <form id="form' . $x . '">
+                <input type="hidden" name="professor_ready">
+            </form>';
         
         $x++;
     }
     
     echo '
-                    <form id="form2">
-                        <input type="hidden" name="professor_ready">
-                    </form>
                 </div>
             </div>
         </section>';
@@ -622,18 +632,28 @@ function student_select_tutor()
         do
         {
             $i++;
-            if(isset($_POST["professor_{$i}"]))
+            if($_POST["professor_{$i}"] != NULL)
             {
                 $_SESSION['selected_professor'] = $_POST["professor_{$i}"];
             }
 
-        }while(!isset($_POST["professor_{$i}"]));
+        }while($_POST["professor_{$i}"] == NULL);
+        
+        $query = query("SELECT COUNT(tutor_id) FROM lc_tutor_offers WHERE course_id = '" . $_SESSION['selected_course'] . "' AND professor_entry_id = '" . $_SESSION['selected_professor'] . "'");
+        confirm($query);
+        $row = fetch_array($query);
+        $num = $row["COUNT(tutor_id)"];
         
         $query = query("SELECT tutor_id FROM lc_tutor_offers WHERE course_id = '" . $_SESSION['selected_course'] . "' AND professor_entry_id = '" . $_SESSION['selected_professor'] . "'");
         confirm($query);
     }
     else
     {
+        $query = query("SELECT COUNT(tutor_id) FROM lc_tutor_offers WHERE course_id = '" . $_SESSION['selected_course'] . "'");
+        confirm($query);
+        $row = fetch_array($query);
+        $num = $row["COUNT(tutor_id)"];
+        
         $query = query("SELECT tutor_id FROM lc_tutor_offers WHERE course_id = '" . $_SESSION['selected_course'] . "'");
         confirm($query);
     }
@@ -671,9 +691,8 @@ function student_select_tutor()
     }
     
     echo '
-                    <form id="form">
-                        <input type="hidden" name="tutor_ready">
-                    </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>';
