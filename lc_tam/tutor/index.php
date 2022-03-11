@@ -99,54 +99,18 @@
            <main class="cards" style="justify-content:center;">
                <article class="card">
                <div class="text">
-                   <h3>Account</h3>
-                   <a class = "home_button" href = "view_accounts.php">View All Accounts</a><br><br>
+               <h3>Schedule</h3>
+                   <a class = "home_button" href = "view_accounts.php"> View Calendar</a><br><br>
+                   <a class = "home_button" href = "view_accounts.php">View Schedule</a><br><br>
+                   <a class = "home_button" href = "semesters.php">My Sessions per Semester</a><br><br>
                </div>
                </article>
                <article class="card">
                <div class="text">
-                   <h3>Tutor</h3>
-                   <a class = "home_button" href = "tutors.php">View Tutors</a><br><br>
-                   <a class = "home_button" href = "add_tutor.php">Add Tutor</a><br><br>
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3>Professor</h3>
-                   <a class = "home_button" href = "professors.php">View Professors</a><br><br>
-                   <a class = "home_button" href = "add_professor.php">Add Professor</a><br><br>
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3>Department</h3>
-                   <a class = "home_button" href = "departments.php">View Departments</a><br><br>
-                   <a class = "home_button" href = "add_department.php">Add Department</a><br><br>
-                   <a class = "home_button" href = "courses.php">View Courses</a><br><br>
-                   <a class = "home_button" href = "add_course.php">Add Course</a><br><br>
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3>Tutoring Course</h3>
-                   <input class = "home_button" type="submit" name="btn_student" value="My Courses"><br><br>
-                   <input class = "home_button" type="submit"  name="btn_student" value="View Courses">
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3>Tutoring Session</h3>
-                   <a class = "home_button" href = "tutoring_sessions.php">View Tutoring Sessions</a><br><br>
-               </div>
-               </article>
-               <article class="card">
-               <div class="text">
-                   <h3>Semester</h3>
-                   <a class = "home_button" href = "semesters.php">View Semester</a><br><br>
-                   <a class = "home_button" href = "add_semester.php">Add Semester</a><br><br>
-
-
-               </div>
+                   <h3>Attendance</h3>
+                   <a class = "home_button" href = "tutors.php">Take Attendance per Session</a><br><br>
+                   <a class = "home_button" href = "tutors.php">All My Attendance Session lists per Semester</a><br><br>
+                </div>
                </article>
            </main>
            </div>
