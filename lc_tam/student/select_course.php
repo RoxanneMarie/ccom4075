@@ -1,5 +1,5 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php");
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +31,7 @@
     <body>
 
         <?php 
-            top_header_2();
+            select_header($_SESSION['type']);
             student_select_course();
             bottom_footer();
             credit_mobirise_1();

@@ -1,5 +1,5 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php");
 ?>
 
 <!DOCTYPE html>
@@ -31,122 +31,8 @@
     <body>
 
         <?php 
-            top_header_2();
-            
-            student_select_course();
-        ?>
-        <!-- <section data-bs-version="5.1" class="content16 cid-sO0lfEsMNZ" id="content16-t">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-4">
-                        <div class="mbr-section-head align-center mb-4">
-                            <h3 class="mbr-section-title mb-0 mbr-fonts-style display-2"><strong>Tutoring Courses</strong></h3>
-                        </div>
-                        <div id="bootstrap-accordion_17" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">
-                            <div class="card mb-3">
-                                <div class="card-header" role="tab" id="headingOne">
-                                    <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse1_17" aria-expanded="false" aria-controls="collapse1">
-                                        <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>Business Administration</strong></h6>
-                                        <span class="sign mbr-iconfont mbri-arrow-down"></span>
-                                    </a>
-                                </div>
-                                <div id="collapse1_17" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_17">
-                                    <div class="panel-body">
-                                        <p class="mbr-fonts-style panel-text display-4">
-                                            <div class="mbr-section-btn mt-3">
-                                                <input type="button" class="btn btn-success display-4" value="CONT 3005"><br>
-                                                <input type="button" class="btn btn-success display-4" value="FINA 3106">
-                                                <a class="btn btn-success-outline display-4" href="https://mobiri.se">Live Demos &gt;</a>
-                                            </div><br>CONT 3005<br>CONT 3006<br>CONT 3101<br>FINA 3106<br>FINA 3107<br>MECU 3031<br>MECU 3032</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-header" role="tab" id="headingOne">
-                                    <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse2_17" aria-expanded="false" aria-controls="collapse2">
-                                        <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>Biology</strong></h6>
-                                        <span class="sign mbr-iconfont mbri-arrow-down"></span>
-                                    </a>
-                                </div>
-                                <div id="collapse2_17" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_17">
-                                    <div class="panel-body">
-                                        <p class="mbr-fonts-style panel-text display-4">BIOL 3011<br>BIOL 3012</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-header" role="tab" id="headingOne">
-                                    <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse3_17" aria-expanded="false" aria-controls="collapse3">
-                                        <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>Computer Science</strong></h6>
-                                        <span class="sign mbr-iconfont mbri-arrow-down"></span>
-                                    </a>
-                                </div>
-                                <div id="collapse3_17" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_17">
-                                    <div class="panel-body">
-                                        <p class="mbr-fonts-style panel-text display-4">CCOM 3001<br>CCOM 3020<br>CCOM 3025<br>CCOM 4005</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-header" role="tab" id="headingOne">
-                                    <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse4_17" aria-expanded="false" aria-controls="collapse4">
-                                        <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>Spanish</strong></h6>
-                                        <span class="sign mbr-iconfont mbri-arrow-down"></span>
-                                    </a>
-                                </div>
-                                <div id="collapse4_17" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_17">
-                                    <div class="panel-body">
-                                        <p class="mbr-fonts-style panel-text display-4">ESPA 0060<br>ESPA 3101<br>ESPA 3102<br></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-header" role="tab" id="headingOne">
-                                    <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse5_17" aria-expanded="false" aria-controls="collapse5">
-                                        <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>Physics &amp; Chemistry</strong></h6>
-                                        <span class="sign mbr-iconfont mbri-arrow-down"></span>
-                                    </a>
-                                </div>
-                                <div id="collapse5_17" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_17">
-                                    <div class="panel-body">
-                                        <p class="mbr-fonts-style panel-text display-4">FISI 3001<br>FISI 3011<br>FISI 3012<br>QUIM 3025<br>QUIM 3131<br>QUIM 3461<br>TEQU 3001<br>TEQU 3203<br></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-header" role="tab" id="headingOne">
-                                    <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse6_17" aria-expanded="false" aria-controls="collapse6">
-                                        <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>English</strong></h6>
-                                        <span class="sign mbr-iconfont mbri-arrow-down"></span>
-                                    </a>
-                                </div>
-                                <div id="collapse6_17" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_17">
-                                    <div class="panel-body">
-                                        <p class="mbr-fonts-style panel-text display-4">INGL 3101<br>INGL 3102<br>INGL 3103<br><br></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-header" role="tab" id="headingOne">
-                                    <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse7_17" aria-expanded="false" aria-controls="collapse7">
-                                        <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>Mathematics</strong>
-                                        </h6>
-                                        <span class="sign mbr-iconfont mbri-arrow-down"></span>
-                                    </a>
-                                </div>
-                                <div id="collapse7_17" class="panel-collapse noScroll collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion" data-bs-parent="#bootstrap-accordion_17">
-                                    <div class="panel-body">
-                                        <p class="mbr-fonts-style panel-text display-4">MATE 0008<br>MATE 3001<br>MATE 3031<br>MATE 3035<br>MATE 3171<br>MATE 3172</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> -->
-
-        <?php 
+            select_header($_SESSION['type']);
+            student_view_appointment();
             bottom_footer();
             credit_mobirise_1();
         ?>
