@@ -393,23 +393,23 @@ function login()
                 $query2 = query("SELECT acc_stat_id FROM lc_test_assistants WHERE student_email = '{$email}'");
                 confirm($query2);
 
-                if(mysqli_num_rows($query) != 0 || mysqli_num_rows($query2) != 0)  //es o era tutor
+                if(mysqli_num_rows($query) != 0 || mysqli_num_rows($query2) != 0)  //(es o era) tutor o asistente
                 {
-                    $row = fetch_array($query);
-                    
-                    $query = query("SELECT acc_stat_name FROM lc_account_status WHERE acc_stat_id = '{$row['acc_stat_id']}'");
-                    confirm($query);
-                    $row = fetch_array($query);
-                    
-                    $row2 = fetch_array($query2);
+                    $row2 = fetch_array($query);
                     
                     $query = query("SELECT acc_stat_name FROM lc_account_status WHERE acc_stat_id = '{$row2['acc_stat_id']}'");
                     confirm($query);
                     $row2 = fetch_array($query);
                     
-                    if($row['acc_stat_name'] != 'Active' && $row2['acc_stat_name'] != 'Active')   //era tutor y era asistente
+                    $row3 = fetch_array($query2);
+                    
+                    $query = query("SELECT acc_stat_name FROM lc_account_status WHERE acc_stat_id = '{$row3['acc_stat_id']}'");
+                    confirm($query);
+                    $row3 = fetch_array($query);
+                    
+                    if($row2['acc_stat_name'] != 'Active' && $row3['acc_stat_name'] != 'Active')   //era tutor y era asistente
                         $_SESSION['type'] = "Student";
-                    else if($row['acc_stat_name'] == 'Active') //es tutor
+                    else if($row2['acc_stat_name'] == 'Active') //es tutor
                         $_SESSION['type'] = "Tutor";
                     else    //es asistente
                         $_SESSION['type'] = "Assistant";
@@ -420,31 +420,6 @@ function login()
                     $_SESSION['type'] = "Student";
                 
                 redirect("student/index.php");
-
-                $query3 = query("SELECT student_id FROM lc_test_tutors WHERE student_id = '{$row['student_id']}'");
-                confirm($query3);
-
-                if(mysqli_num_rows($query3) == 0)  //es estudiante
-                {
-                    $_SESSION['type'] = "Student";
-                    $_SESSION['name'] = $row['student_name'];
-                    $_SESSION['email'] = $row['student_email'];
-                    $_SESSION["current_date"] = date("Y-m-d");
-                    $_SESSION["current_day_of_the_week"] = date("l");
-                    //echo("Login Successful!");
-                    redirect("student/index.php");
-                }
-                else // es tutor
-                {
-                    $_SESSION['type'] = "Tutor";
-                    $_SESSION['name'] = $row['student_name'];
-                    $_SESSION['email'] = $row['student_email'];
-                    $_SESSION["current_date"] = date("Y-m-d");
-                    $_SESSION["current_day_of_the_week"] = date("l");
-                    redirect("tutor/tutor.php");
-                }
-                
-
             }
         }
         close();
@@ -1006,15 +981,15 @@ function student_view_appointment()
                 $row3 = fetch_array($query3);
                 
                 $app_info[$c-1] = array('f_name' => $row3["student_name"], 'l_name' => $row3["student_first_lastname"], 'course' => $row2["course_id"], 'date' => $row2["DATE_FORMAT(session_date, '%M %d %Y')"], 's_time' => substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5), 'e_time' => substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5));
-            } 
+            }
         }
-        
-        $columns_1 = array_column($app_info, 'date');
-        $columns_2 = array_column($app_info, 's_time');
-        array_multisort($columns_1, SORT_ASC, $columns_2, SORT_ASC, $app_info);
         
         if($c != 0)
         {
+            $columns_1 = array_column($app_info, 'date');
+            $columns_2 = array_column($app_info, 's_time');
+            array_multisort($columns_1, SORT_ASC, $columns_2, SORT_ASC, $app_info);
+            
             echo "
                 <table>
                   <tr>
