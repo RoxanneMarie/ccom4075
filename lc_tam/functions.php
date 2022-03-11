@@ -10,10 +10,9 @@ function top_header_1()
                     <div class="navbar-brand">
                         <span class="navbar-logo">
                             <a href="index.php">
-                                <img src="assets/images/lc-logo1-121x74.png" alt="Mobirise" style="height: 3.8rem;">
+                                <img src="assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
-                        <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="index.php">Tutoring <br>Appointment<br>Manager</a></span>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <div class="hamburger">
@@ -44,10 +43,9 @@ function top_header_2()
                     <div class="navbar-brand">
                         <span class="navbar-logo">
                             <a href="index.php">
-                                <img src="../assets/images/lc-logo1-121x74.png" alt="Mobirise" style="height: 3.8rem;">
+                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
-                        <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="index.php">Tutoring <br>Appointment<br>Manager</a></span>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <div class="hamburger">
@@ -79,10 +77,9 @@ function top_header_3()
                     <div class="navbar-brand">
                         <span class="navbar-logo">
                             <a href="index.php">
-                                <img src="../assets/images/lc-logo1-121x74.png" alt="Mobirise" style="height: 3.8rem;">
+                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
-                        <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="index.php">Tutoring <br>Appointment<br>Manager</a></span>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <div class="hamburger">
@@ -120,10 +117,9 @@ function top_header_4()
                     <div class="navbar-brand">
                         <span class="navbar-logo">
                             <a href="index.php">
-                                <img src="../assets/images/lc-logo1-121x74.png" alt="Mobirise" style="height: 3.8rem;">
+                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
-                        <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="index.php">Tutoring <br>Appointment<br>Manager</a></span>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <div class="hamburger">
@@ -161,10 +157,9 @@ function top_header_5()
                     <div class="navbar-brand">
                         <span class="navbar-logo">
                             <a href="admin.php">
-                                <img src="../assets/images/lc-logo1-121x74.png" alt="Mobirise" style="height: 3.8rem;">
+                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
-                        <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="admin.php">Tutoring <br>Appointment<br>Manager</a></span>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <div class="hamburger">
@@ -391,6 +386,9 @@ function student_select_course()
                             <div class="mbr-section-head align-center mb-4">
                                 <h3 class="mbr-section-title mb-0 mbr-fonts-style display-2"><strong>Tutoring Courses</strong></h3>
                             </div>
+                            <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
+                                Select the course you want to request tutoring for.
+                            </div>
                             <div id="bootstrap-accordion_17" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">';
     
     $query = query("SELECT COUNT(dept_id) FROM lc_departments");
@@ -511,6 +509,9 @@ function student_select_professor()
                         <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
                             <strong>' . $_SESSION['selected_course'] . '</strong>
                         </h3>
+                        <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
+                        Select the Professor giving the class.
+                    </div>
                     </div>';
     
     $x = 1;
@@ -590,7 +591,10 @@ function student_select_tutor()
                         <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
                             <strong>' . $_SESSION['selected_course'] . '</strong>
                         </h3>
-                    </div>';
+                    </div>
+                    <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
+                    Select the tutor you want.
+                </div>';
     
     $x = 1;
     

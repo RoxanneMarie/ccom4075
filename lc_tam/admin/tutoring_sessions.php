@@ -29,70 +29,52 @@
     <style>
         /*----------------------- CSS HOME PAGE*/
 
-        .mcourses{
-        text-align: center;
-        margin: 0 auto;
-        width: 1100px;
-        flex-wrap: none;
-        align-items: stretch; 
-        justify-content:center;
-
-        }
-        .mcourse {
-        flex: 0 0 500px;
-        margin: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-        background-color: white;
-        } 
-        .card img {
-        max-width: 100%;
-        }
-        .card .text {
-        padding: 0 20px 20px;
-        }
-        .card .text > button {
-        background: rgb(196, 127, 0);
-        border: 1;
-        color: white;
-        padding: 10px;
-        width: 100%;
-        }
-
         .tCourses {
         background: rgb(196, 127, 0);
-        table-layout: auto;
-        width: 100%;
         }
 
-        .trCourses {
-        background: white;
-        }
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_2();
-    echo '<input type="hidden" value="student_btn" name="action">
-    <main class="mcourses" style="justify-content:center;">
-        <article class="mcourse">
-        <div class="text">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Sessions</h3>
-            <a href="addsession.php">Add Sessions</a>
-                <table class="tCourses">
-            <tr>
-                <td>Edit</td>
-                <td>Tutoring ID</td>
-                <td>Session ID</td>
-                <td>Appointment Date</td>
-                <td>Tutor</td>
-                <td>Course ID</td>
-                <td>Start time</td>
-                <td>End time</td>
-                <td>Appointment Cancelled?</td>
-                <td>Cancelation Date</td>
-            </tr>';
+            top_header_5();
+    echo '
+    <main class="container">
+        <article>
+        <div class="container-sm">
+            <h3 class = "h3 text-center">Tutoring Sessions</h3>
+            <a class = "btn btn-primary" href="add_tutoring_session.php">Add Tutoring Session</a>
+            '; if(isset($_GET['success'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutoring session updated successfully.</span>
+            </div>'; 
+            }
+             if(isset($_GET['removed'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutoring session removed successfully.</span>
+            </div>
+            ';
+            }
+            if(isset($_GET['Added'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutoring session added successfully.</span>
+            </div>
+            ';
+            } echo '
+                <table class="table table-responsive">
+            <thead class = "tCourses">
+                <th>Edit</th>
+                <th>Tutoring ID</th>
+                <th>Session ID</th>
+                <th>Appointment Date</th>
+                <th>Tutor</th>
+                <th>Course ID</th>
+                <th>Start time</th>
+                <th>End time</th>
+                <th>Appointment Cancelled?</th>
+                <th>Cancelation Date</th>
+            </thead>';
     $query = query("SELECT * FROM lc_tutorings");
     confirm($query);
     while ($row = fetch_array($query)) {

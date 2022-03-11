@@ -31,18 +31,24 @@
     <body>
 
         <?php top_header_1(); ?>
-
-        <div class="card text-center">
-            <div class="card-header">
-                Greetings
+        <div class="bg-image d-flex justify-content-center align-items-center" 
+            style = "background-image: url('https://scontent-mia3-2.xx.fbcdn.net/v/t1.6435-9/51308428_816165355385312_7859383633025433600_n.jpg?stp=cp0_dst-jpg_e15_fr_q65&_nc_cat=102&ccb=1-5&_nc_sid=dd9801&efg=eyJpIjoidCJ9&_nc_ohc=ESoljJ-XbMkAX-CNvKs&_nc_ht=scontent-mia3-2.xx&oh=00_AT-tNDN6DmqgUjFAcXCrrAkgALT-fvHjmweLygJDZ19DvQ&oe=624DEC96');
+                    height: 100vh">
+            <div class="card text-center bg-primary">
+                <div class="card-header">
+                    Welcome
+                </div>
+            <div class="card-body bg-white">
+                <h5 class="card-title">Welcome to Learning Commons: Tutoring Appointment Manager.</h5>
+                <p class="card-text">Here, you will be able to request tutoring sessions.</p>
+                <a href="login.php" class="btn btn-primary">Login</a>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-            <div class="card-footer text-muted">
+            <div class="card-footer bg-light">
+            <blockquote class="blockquote mb-0">
+                <footer class="blockquote-footer">Credits to Learning Commons - UPR Arecibo Facebook Page for image.</footer>
+            </blockquote>
                 <div class = "image-wrap">
+            </div>
         </div>
             </div>
         </div>

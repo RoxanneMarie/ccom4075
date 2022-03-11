@@ -103,9 +103,11 @@
                </article>
                <article class="card">
                <div class="text">
-                   <h3>Tutor</h3>
+                   <h3>Tutors/Assistants</h3>
                    <a class = "home_button" href = "tutors.php">View Tutors</a><br><br>
                    <a class = "home_button" href = "add_tutor.php">Add Tutor</a><br><br>
+                   <a class = "home_button" href = "assistants.php">View Assistants</a><br><br>
+                   <a class = "home_button" href = "add_assistant.php">Add Assistant</a><br><br>
                </div>
                </article>
                <article class="card">
@@ -117,7 +119,7 @@
                </article>
                <article class="card">
                <div class="text">
-                   <h3>Department</h3>
+                   <h3>Department/Course</h3>
                    <a class = "home_button" href = "departments.php">View Departments</a><br><br>
                    <a class = "home_button" href = "add_department.php">Add Department</a><br><br>
                    <a class = "home_button" href = "courses.php">View Courses</a><br><br>

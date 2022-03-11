@@ -63,6 +63,9 @@
                         <label for="Deparment_Name" class= "input-group-text" id = id="inputGroup-sizing-lg">Department Name:</label>
                         </div>
                         <input type="text" class="form-control" id="Department_Name" name="Department_Name" value = "<?php echo $row['dept_name']; ?>" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
+                    </div>
+                    <br>
+                    <div class = "container d-flex justify-content-center">
                         <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
                     </div>
                 <br><br><br>

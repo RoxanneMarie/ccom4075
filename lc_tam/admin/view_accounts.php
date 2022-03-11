@@ -29,69 +29,51 @@
     <style>
         /*----------------------- CSS HOME PAGE*/
 
-        .mcourses{
-        text-align: center;
-        margin: 0 auto;
-        width: 1100px;
-        flex-wrap: none;
-        align-items: stretch; 
-        justify-content:center;
-
-        }
-        .mcourse {
-        flex: 0 0 500px;
-        margin: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-        background-color: white;
-        } 
-        .card img {
-        max-width: 100%;
-        }
-        .card .text {
-        padding: 0 20px 20px;
-        }
-        .card .text > button {
-        background: rgb(196, 127, 0);
-        border: 1;
-        color: white;
-        padding: 10px;
-        width: 100%;
-        }
-
         .tCourses {
         background: #fd8f00;
-        table-layout: auto;
-        width: 100%;
         }
 
-        .trCourses {
-        background: white;
-        }
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_2();
-    echo '<input type="hidden" value="student_btn" name="action">
-    <main class="mcourses" style="justify-content:center;">
-        <article class="mcourse">
-        <div class="text">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">All Accounts</h3>
-           
-                <table class="tCourses">
-            <tr>
-                <td>Student Num</td>
-                <td>Name</td>
-                <td>Initial</td>
-                <td>First Lastname</td>
-                <td>Second Lastname</td>
-                <td>Role</td>
-            </tr>';
+            top_header_5();
+            echo '
+            <main class = "container">
+                <article>
+                <div class = "container">
+                    <h3 class = "h3 text-center">Tutors</h3>
+                    '; if(isset($_GET['success'])){ echo '
+                        <div class="alert alert-success" role="alert">
+                        <span> Tutor updated successfully.</span>
+                    </div>'; 
+                    }
+                     if(isset($_GET['removed'])){ echo '
+                        <div class="alert alert-success" role="alert">
+                        <span> Tutor removed successfully.</span>
+                    </div>
+                    ';
+                    }
+                    if(isset($_GET['Added'])){ echo '
+                        <div class="alert alert-success" role="alert">
+                        <span> Tutor added successfully.</span>
+                    </div>
+                    ';
+                    } echo '
+                        <table class = "table table-responsive">
+                    <thead class = "tCourses">
+                        <th>Student Num</th>
+                        <th>Name</th>
+                        <th>Initial</th>
+                        <th>First Lastname</th>
+                        <th>Second Lastname</th>
+                        <th>Role (WORK IN PROGRESS)</th>
+                    </thead>';
     $query = query("SELECT * FROM lc_test_students");
     confirm($query);
-    $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id ");
+    while($row = fetch_array($query)) {
+    /*$query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id ");
     confirm($query2);
     global $connection;
     $stmt = $pdo->prepare($query2);
@@ -113,7 +95,6 @@
                 }
         }
       
-/* 
         $id =  $row['student_id'];
         //echo'SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id';
         $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = ". $id ."");
@@ -128,7 +109,7 @@
             echo 'entre while /n';
                 $flag = true;
             }
-        } */
+        }
 
         if($flag == true){
             $role = "Tutor";
@@ -137,20 +118,17 @@
         if($flag == false)
         {
             $role = "Student";
-        }
-
-
-
+        }*/
         echo '    
-                <tr class="trCourses">
+                <tr>
                     <td>'. $row['student_id'] .'</td>
                     <td>'. $row['student_name'] .' </td>
                     <td>'. $row['student_initial'] .'</td>
                     <td>'. $row['student_first_lastname'] .' </td>
                     <td>'. $row['student_second_lastname'] .'</td>
-                    <td>'. $role .'</td>
+                    . ';  } echo '
                 </tr>'; 
-    } 
+    //}   //<td>'. $role .'</td>
     echo '   </table><br><br>
                 </div>
                 </article>

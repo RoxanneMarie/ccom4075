@@ -38,12 +38,30 @@
     </head>
     <body>
         <?php 
-            top_header_2();
+            top_header_5();
     echo '<input type="hidden" value="student_btn" name="action">
     <main class="mcourses" style="justify-content:center;">
         <article>
         <div class = "container">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Tutors</h3>
+            <h3 class = "h3 text-center">Tutors</h3>
+            <a class = "btn btn-primary" href="add_tutor.php">Add Tutor</a>
+            '; if(isset($_GET['success'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutor updated successfully.</span>
+            </div>'; 
+            }
+             if(isset($_GET['removed'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutor removed successfully.</span>
+            </div>
+            ';
+            }
+            if(isset($_GET['Added'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutor added successfully.</span>
+            </div>
+            ';
+            } echo '
                 <table class = "table table-responsive">
             <thead class = "tCourses">
                 <th>Edit</th>
@@ -56,19 +74,13 @@
                 <th>Type</th>
                 <th>Status</th>
             </thead>';
-    // $query = query("SELECT * FROM lc_test_students INNER JOIN lc_test_tutors ON lc_test_students.student_id = lc_test_tutors.student_id");
-    // confirm($query);
-    // $query2 = query("SELECT * FROM lc_test_tutors INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id");
-    // confirm($query2);
-    // $query3 = query("SELECT * FROM lc_test_students INNER JOIN lc_account_status ON lc_test_students.acc_stat_id = lc_account_status.acc_stat_id");
-    // confirm($query3);
-    $query = query("SELECT * FROM lc_test_students INNER JOIN lc_test_tutors ON lc_test_students.student_id = lc_test_tutors.student_id 
+    $query = query("SELECT * FROM lc_test_tutors INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
             INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id INNER JOIN lc_account_status 
-            ON lc_test_students.acc_stat_id = lc_account_status.acc_stat_id");
+            ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id");
     while ($row = fetch_array($query)) {
         echo '    
                 <tr>
-                    <td>   <a href="edit_tutor.php?id='. $row['student_id'] .'">Edit</a>
+                    <td>   <a href="edit_tutor.php?id='. $row['student_email'] .'">Edit</a>
                     <td>'.$row['student_id'].'</td>
                     <td>'. $row['student_name'] .'</td>
                     <td>'. $row['student_initial'] .'</td>

@@ -41,14 +41,32 @@
     </head>
     <body>
         <?php 
-            top_header_2();
-    echo '<input type="hidden" value="student_btn" name="action">
-    <main class="mcourses" style="justify-content:center;">
-        <article>
-        <div class="container">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professors</h3>
-            <table class = "table table-responsive">
-            <thead class = "tCourses">
+            top_header_5();
+            echo '<input type="hidden" value="student_btn" name="action">
+            <main class="mcourses" style="justify-content:center;">
+                <article>
+                <div class = "container">
+                    <h3 class = "h3 text-center">Professors</h3>
+                    <a class = "btn btn-primary" href="add_professor.php">Add Professor</a>
+                    '; if(isset($_GET['success'])){ echo '
+                        <div class="alert alert-success" role="alert">
+                        <span> Professor updated successfully.</span>
+                    </div>'; 
+                    }
+                     if(isset($_GET['removed'])){ echo '
+                        <div class="alert alert-success" role="alert">
+                        <span> Professor removed successfully.</span>
+                    </div>
+                    ';
+                    }
+                    if(isset($_GET['Added'])){ echo '
+                        <div class="alert alert-success" role="alert">
+                        <span> Professor added successfully.</span>
+                    </div>
+                    ';
+                    } echo '
+                        <table class = "table table-responsive">
+                    <thead class = "tCourses">
                 <th>Edit</th>
                 <th>Professor ID</th>
                 <th>Course ID</th>
@@ -62,7 +80,8 @@
     while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>   <a href="editprofessor.php?id='. $row['professor_entry_id'] .'">Edit</a>
+                    <td>   <a href="edit_professor.php?id='. $row['professor_entry_id'] .'">Edit</a>
+                            <a href="delete_professor.php?id='. $row['professor_entry_id'] .'"  onclick = "return Func_confirm()">Delete</a></td>
                     <td>'. $row['professor_entry_id'] .'</td>
                     <td>'. $row['course_id'] .'</td>
                     <td>'. $row['professor_name'] .'</td>
@@ -78,5 +97,11 @@
             bottom_footer();
             credit_mobirise_1();
         ?>
+
+    <script>
+        function Func_confirm() {
+        return confirm("Are you sure you wish to delete this value? This cannot be undone.");
+        }
+    </script>        
     </body>
 </html>

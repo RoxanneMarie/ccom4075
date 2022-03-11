@@ -74,7 +74,7 @@
         echo '    
                 <tr class="trCourses">
                     <td>    <a href="edit_semester.php?id='. $row['semester_id'] .'">Edit</a>
-                            <a href="delete_semester.php?id='. $row['semester_id'] .'">Delete</a></td>
+                            <a href="delete_semester.php?id='. $row['semester_id'] .'" onclick = "return Func_confirm()">Delete</a></td>
                     <td>'. $row['semester_id'] .'</td>
                     <td>'. $row['semester_name'] .'</td>
                     </tr>
@@ -86,5 +86,10 @@
             bottom_footer();
             credit_mobirise_1();
         ?>
+    <script>
+    function Func_confirm() {
+        return confirm("Are you sure you wish to delete this value? This cannot be undone.");
+    }
+    </script>
     </body>
 </html>

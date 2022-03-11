@@ -58,11 +58,14 @@
                 $row = fetch_array($query);
                 ?>
                 <form action="edit_semester.php?id=<?php echo $row['semester_id']; ?>" method="POST"><br>
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="Semester_Name" class= "input-group-text" id = id="inputGroup-sizing-lg">Semester Name:</label>
-                        </div>
-                        <input type="text" class="form-control" id = "Semester_Name" name = "Semester_Name" value = "<?php echo $row['semester_name']; ?>" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
+                <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                    <label for="Semester_Name" class= "input-group-text" id= "inputGroup-sizing-lg">Semester Name:</label>
+                    </div>
+                    <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" value = "<?php echo $row['semester_name']; ?>" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
+                </div>
+                    <br>
+                    <div class = "container d-flex justify-content-center">
                         <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
                     </div>
                 <br><br><br>

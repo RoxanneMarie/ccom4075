@@ -2,17 +2,17 @@
     require_once("../functions.php");
     
     if(isset($_POST['submit'])){
-        $date = $_POST['CourseID'];
-        $tutor = $_POST['tutor'];
-        $courseID = $_POST['CourseID'];
+        $date = $_POST['appdate'];
+        $tutor = $_POST['Tutor'];
+        $courseID = $_POST['Course_ID'];
         $start = $_POST['start'];
         $end = $_POST['end'];
 
-    echo $query = query('INSERT INTO lc_tutorings (ID_Tutor, date_appointment)
-    VALUES("' . $tutor . '","' . $date . '"');
+    //echo $query = query('INSERT INTO lc_tutorings (ID_Tutor, date_appointment)
+    //VALUES("' . $tutor . '","' . $date . '"');
 
 echo $query2 = query('INSERT INTO lc_sessions (course_id, start_time, end_time)
-VALUES("' . $courseID . '",' . $start . ',' . $end . ')');
+VALUES("' . $courseID . '","' . $start . '","' . $end . '")');
 }
 ?>
 
@@ -40,110 +40,62 @@ VALUES("' . $courseID . '",' . $start . ',' . $end . ')');
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
-    <style>
-        /*----------------------- CSS HOME PAGE*/
-
-        .mcourses{
-        text-align: center;
-        margin: 0 auto;
-        width: 1100px;
-        flex-wrap: none;
-        align-items: stretch; 
-        justify-content:center;
-
-        }
-        .mcourse {
-        flex: 0 0 500px;
-        margin: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-        background-color: white;
-        } 
-        .card img {
-        max-width: 100%;
-        }
-        .card .text {
-        padding: 0 20px 20px;
-        }
-        .card .text > button {
-        background: rgb(196, 127, 0);
-        border: 1;
-        color: white;
-        padding: 10px;
-        width: 100%;
-        }
-
-        .tCourses {
-        background: rgb(196, 127, 0);
-        table-layout: auto;
-        width: 100%;
-        }
-
-        .trCourses {
-        background: white;
-        }
-
-        .btnt{
-            font-weight: 700;
-            background-color: #fd8f00;
-            color: #ffffff;
-            font-style: normal;
-            cursor: pointer;
-            padding: 0.6rem 1.2rem;
-            margin: 0 auto;
-        }
-    </style>
-
     </head>
     <body>
         <?php 
-            top_header_2(); 
+            top_header_5(); 
             ?>
-    <input type="hidden" value="student_btn" name="action">
-        <main class="mcourses" style="justify-content:center;">
-            <article class="mcourse">
-            <div class="text">
-                <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Add Session</h3>
-            <form action="addsession.php" method="POST"><br>
-                <div>
-                    <label for="appdate">Date of appointment:</label>
+            <main class="container d-flex justify-content-center">
+                <article>
+                    <div>
+                    <h3 class = "h3 d-flex justify-content-center">Add Tutoring Session</h3>
+            <form action="add_tutoring_session.php" method="POST"><br>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="appdate">Date of Appointment:</label>
                     <input id="appdate" type="date" name="appdate"><br><br>
                 </div>
-                <div>
-                    <label for="tutor">Tutor:</label>
-                    <select class="" id="tutor" name="tutor"><br><br>
-                    <option value="">Select a Tutor</option>
-                        <?php 
-                            $query = query("SELECT * FROM lc_test_tutors");
-                            confirm($query);
-                            while($row = fetch_array($query)) {
-                                ?>
-                        <option value=<?php echo $row['tutor_id'] ?> ><?php echo $row['student_id'];  } ?></option>
+            </div>
+
+            <div class="form-group">
+                <label for="Tutor">Tutor:</label>
+                <select class="form-control" id="Tutor" name = "Tutor" required>
+                <option selected value = "" >Select a Tutor</option>
+                <?php 
+                    $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
+                    lc_test_students.student_second_lastname, lc_test_students.student_email 
+                    FROM lc_test_students
+                    INNER JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
+                    WHERE lc_test_tutors.student_email = lc_test_students.student_email");
+                    confirm($query2);
+                    while($row2 = fetch_array($query2)) { ?>
+                    <option value=<?php echo $row2['student_email'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; } ?></option>
                     </select>
-                    <div>
-                        <br>
-                    <label for="CourseID">Course ID:</label>
-                    <select class="" id="CourseID" name="CourseID"><br><br>
-                    </div>
-                    <option value="">Select a Course</option>
-                        <?php 
-                            $query = query("SELECT * FROM lc_courses");
-                            confirm($query);
-                            while($row = fetch_array($query)) {
-                                ?>
-                        <option value=<?php echo $row['course_id'] ?> ><?php echo $row['course_name'];  } ?></option>
+            </div>
+            <div class="form-group">
+                <div class="form-group col-md-6">
+                    <label for="Course_ID">Course ID:</label>
+                <select class="form-control" id="Course_ID" name = "Course_ID" required>
+                <option selected value = "" >Select a Course</option>
+                <?php 
+                    $query3 = query("SELECT * FROM lc_courses");
+                    confirm($query3);
+                    while($row3 = fetch_array($query3)) { ?>
+                    <option value=<?php echo $row3['course_id'] ?> ><?php echo $row3['course_id']; ?> - <?php echo $row3['course_name']; } ?></option>
                     </select>
-                </div>
+            </div>
+
                 <div>
                     <br>
                     <label for="start">Start time:</label>
-                    <input id="start" type="text" name="start"><br><br>
+                    <input id="start" type="time" name="start"><br><br>
                 </div>
                 <div>
                     <label for="end">End time:</label>
-                    <input id="end" type="text" name="end"><br><br>
+                    <input id="end" type="time" name="end"><br><br>
                 </div>
-                <button type="submit" name="submit"  class="btnt btn-primary display-4">Submit</button><br>
+                <button type="submit" name="submit"  class="btn btn-primary display-4">Submit</button><br>
             </form>
             </div>
             </article>
