@@ -327,14 +327,13 @@ function testing()
     $courseName = "COMPUTER PROGRAMMING II";
     $departmentID = 3;
     $tutor_available = 1;
-
+*/
 function last_id()
 {
     global $connection;
     
     return $connection->insert_id;
 }
-*/
 
 function login()
 {
@@ -667,18 +666,19 @@ function student_select_tutor()
     }
     
     echo '
+                            <form id="form">
+                                <input type="hidden" form="form" name="tutor_ready">
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </section>';
 
-
     close();
 }
 
 // Needs Crowd Control.
-// Not let a student have more than one space reserved in the same section.
 // Use appointments already made by student to see what day and time available conflicts with already reserved appointments.
 // How many appointments can a student make per week.
 // How many appointments can a student make on a single department per day.
@@ -699,15 +699,15 @@ function student_select_time()
 
         }while(!isset($_POST["tutor_{$i}"]));
 
-        echo '
-            <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
-                <div class="container-fluid">
-                    <div class="row justify-content-center">
-                        <div class="col-12">
-                            <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                                <strong>' . $_SESSION['selected_tutor'] . '</strong>
+        echo "
+            <section data-bs-version='5.1' class='team1 cid-sO6qmUi7nj' id='team1-1e'>
+                <div class='container-fluid'>
+                    <div class='row justify-content-center'>
+                        <div class='col-12'>
+                            <h3 class='mbr-section-title mbr-fonts-style align-center mb-4 display-2'>
+                                <strong>Tutor's Schedule</strong>
                             </h3>
-                        </div>';
+                        </div>";
 
         $week_name = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 
@@ -756,18 +756,20 @@ function student_select_time()
             echo "You are not suppose to be here!";
             redirect("logout.php");
         }
-
-
+        
+        $flag = false; //If true, there is at least 1 section available for the week
+        
         for ($x = 1; $x <= 5; $x++)
         {
             if($week[$x-1] == "NULL")
                 continue;
 
-            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time FROM lc_tutor_schedule  WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
+            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
             confirm($query2);
 
             if(mysqli_num_rows($query2) != 0)
             {
+                $flag = true;
                 echo '
                     <div class="card mb-3">
                         <div class="card-header" role="tab" id="headingOne">
@@ -785,33 +787,53 @@ function student_select_time()
 
                 while($row2 = fetch_array($query2))
                 {
-
-                    $query3 = query("SELECT max_capacity FROM lc_conditions");
-                    confirm($query3);
-                    $row3 = fetch_array($query3);
-
-                    $flag = false; //flag that, if true, tells if the section was cancelled
-                    $flag2 = false; //flag that, if true, tells if the section was cancelle
-                    
-                    $query3 = query("SELECT * FROM lc_sessions WHERE session_date = '" . $week[$x-1] . "' AND start_time = '" . $row2["start_time"] . "' AND tutor_id = " . $_SESSION['selected_tutor'] . " AND capacity >= " . $row3["max_capacity"]);
-                    confirm($query3);
-
                     $start = substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5);
                     $end = substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5);
-
-                    if(!$flag)
+                    
+                    $flag2 = false; //If true, there already is an appointment made by the student for that section
+                    
+                    $query3 = query("SELECT session_id FROM lc_sessions WHERE session_date = '{$week[$x-1]}' AND course_id = '{$_SESSION["selected_course"]}'");
+                    confirm($query3);
+                    
+                    if(mysqli_num_rows($query3) != 0)
                     {
+                        $row3 = fetch_array($query3);
+                        
+                        $query3 = query("SELECT * FROM lc_appointments WHERE session_id = {$row3["session_id"]} AND student_email = '{$_SESSION["email"]}'");
+                        confirm($query3);
+                        
                         if(mysqli_num_rows($query3) != 0)
-                            echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' FULL </button>';
-                        else
+                                $flag2 = true;
+                    }
+
+                    if(!$flag2)
+                    {
+                        echo "SELECT session_id FROM lc_sessions WHERE session_date = '{$week[$x-1]}' AND start_time = '{$row2["start_time"]}' AND end_time = '{$row2["end_time"]}' AND course_id != '{$_SESSION["selected_course"]}'";
+                        $query3 = query("SELECT session_id FROM lc_sessions WHERE session_date = '{$week[$x-1]}' AND start_time = '{$row2["start_time"]}' AND end_time = '{$row2["end_time"]}' AND course_id != '{$_SESSION["selected_course"]}'");
+                        confirm($query3);
+                        
+                        if(mysqli_num_rows($query3) == 0)
                         {
-                            echo '<button type="submit" form="form' . $x . '" formmethod="POST" formaction="confirm_appointment.php" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '">' . $start . ' - ' . $end . '</button>';
-                            echo '<input type="hidden" form="form' . $x . '" formmethod="POST" formaction="confirm_appointment.php" name="end_time_' . $i . '" value="' . $row2["end_time"] . '">';
-                            print_r($row2["end_time"]);
+                            $query3 = query("SELECT max_capacity FROM lc_conditions");
+                            confirm($query3);
+                            $row3 = fetch_array($query3);
+
+                            $query3 = query("SELECT * FROM lc_sessions WHERE session_date = '" . $week[$x-1] . "' AND start_time = '" . $row2["start_time"] . "' AND tutor_id = " . $_SESSION['selected_tutor'] . " AND capacity >= " . $row3["max_capacity"]);
+                            confirm($query3);
+
+                            if(mysqli_num_rows($query3) != 0)
+                                echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' FULL </button>';
+                            else
+                            {
+                                echo '<button type="submit" form="form' . $x . '" formmethod="POST" formaction="confirm_appointment.php" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '">' . $start . ' - ' . $end . '</button>';
+                                echo '<input type="hidden" form="form' . $x . '" formmethod="POST" formaction="confirm_appointment.php" name="end_time_' . $i . '" value="' . $row2["end_time"] . '">';
+                            }
                         }
+                        else
+                            echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' CONFLICTS</button>';
                     }
                     else
-                        echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' CANCELED</button>';
+                        echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' RESERVED</button>';
 
                     $i++;
                 }
@@ -827,10 +849,11 @@ function student_select_time()
                                     </div>
                                 </div>
                             </div>';
-            }
-            else
-                echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
+            } 
         }
+        
+        if(!$flag)
+            echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
 
         echo '
                     </div>
