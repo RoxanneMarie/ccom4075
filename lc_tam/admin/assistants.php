@@ -13,7 +13,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Departments - LC:TAM</title>
+      <title>Asistants - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -32,6 +32,7 @@
         .tCourses {
         background: #fd8f00;
         }
+
     </style>
 
     </head>
@@ -39,43 +40,52 @@
         <?php 
             top_header_5();
     echo '
-    <main class="container">
+    <main class="mcourses" style="justify-content:center;">
         <article>
-        <div class="container-sm">
-            <h3 class = "h3 text-center">Departments</h3>
-            <a class = "btn btn-primary" href="add_department.php">Add Department</a>
+        <div class = "container">
+            <h3 class = "h3 text-center">Assistants</h3>
+            <a class = "btn btn-primary" href="add_assistant.php">Add Assistant</a>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Department updated successfully.</span>
+                <span> Assistant updated successfully.</span>
             </div>'; 
             }
              if(isset($_GET['removed'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Department removed successfully.</span>
+                <span> Assistant removed successfully.</span>
             </div>
             ';
             }
             if(isset($_GET['Added'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Department added successfully.</span>
+                <span> Assistant added successfully.</span>
             </div>
             ';
             } echo '
-                <table class="table table-responsive">
+                <table class = "table table-responsive">
             <thead class = "tCourses">
                 <th>Edit</th>
-                <th>Department ID</th>
-                <th>Department Name</th>
+                <th>Student Num</th>
+                <th>Name</th>
+                <th>Initial</th>
+                <th>First Last Name</th>
+                <th>Second Last name</th>
+                <th>Email</th>
+                <th>Status</th>
             </thead>';
-    $query = query("SELECT * FROM lc_departments");
-    confirm($query);
+    $query = query("SELECT * FROM lc_test_assistants INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_assistants.student_email 
+            INNER JOIN lc_account_status ON lc_test_assistants.acc_stat_id = lc_account_status.acc_stat_id");
     while ($row = fetch_array($query)) {
         echo '    
-                <tr class="trCourses">
-                    <td>    <a href="edit_department.php?id='. $row['dept_id'] .'">Edit</a>
-                            <a href="delete_department.php?id='. $row['dept_id'] .'" onclick = "return Func_confirm()">Delete</a></td>
-                    <td>'. $row['dept_id'] .'</td>
-                    <td>'. $row['dept_name'] .'</td>
+                <tr>
+                    <td>   <a href="edit_assistant.php?id='. $row['student_email'] .'">Edit</a>
+                    <td>'.$row['student_id'].'</td>
+                    <td>'. $row['student_name'] .'</td>
+                    <td>'. $row['student_initial'] .'</td>
+                    <td>'. $row['student_first_lastname'] .'</td>
+                    <td>'. $row['student_second_lastname'] .'</td>
+                    <td>'. $row['student_email'] .'</td>
+                    <td>'. $row['acc_stat_name'] .'</td>
                     </tr>
                     '; } echo '
                 </table><br><br>
@@ -85,10 +95,5 @@
             bottom_footer();
             credit_mobirise_1();
         ?>
-    <script>
-    function Func_confirm() {
-        return confirm("Are you sure you wish to delete this value? This cannot be undone.");
-        }
-    </script>    
     </body>
 </html>

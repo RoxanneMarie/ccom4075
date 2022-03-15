@@ -10,7 +10,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Accounts - LC:TAM</title>
@@ -43,7 +43,7 @@
             <main class = "container">
                 <article>
                 <div class = "container">
-                    <h3 class = "h3 text-center">Tutors</h3>
+                    <h3 class = "h3 text-center">Accounts</h3>
                     '; if(isset($_GET['success'])){ echo '
                         <div class="alert alert-success" role="alert">
                         <span> Tutor updated successfully.</span>
@@ -68,12 +68,42 @@
                         <th>Initial</th>
                         <th>First Lastname</th>
                         <th>Second Lastname</th>
-                        <th>Role (WORK IN PROGRESS)</th>
+                        <th>Role</th>
                     </thead>';
     $query = query("SELECT * FROM lc_test_students");
     confirm($query);
+
     while($row = fetch_array($query)) {
-    /*$query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id ");
+        $Student = false;
+        $Tutor = false;
+        $Assistant = false;
+    $id = $row['student_email'];
+    
+    $SQuery = query("SELECT count(student_email) as Student FROM lc_test_students WHERE student_email = '$id'");
+    confirm($SQuery);
+    $SRes = fetch_array($SQuery);
+    //print_r($Sres['Student']);
+    if ($SRes['Student'] == '1') {
+        $Student = true;
+    }
+
+    $TQuery = query("SELECT COUNT(student_email) as Tutor FROM lc_test_tutors WHERE student_email = '$id'");
+    confirm($TQuery);
+    $TRes = fetch_array($TQuery);
+    //print_r($TRes['T']);
+    if ($TRes['Tutor'] == '1') {
+        $Tutor = true;
+    }
+
+    $AsQuery = query("SELECT COUNT(student_email) as Assist FROM lc_test_assistants WHERE student_email = '$id'");
+    $AsRes = fetch_array($AsQuery);
+    if ($AsRes['Assist'] == '1') {
+        $Assistant = true;
+    }
+    //print_r($AsRes['Assist']);
+    //$TRes2 = array_shift($TRes);
+    //print_r($TRes2);
+    /*$query2 = query("SELECT COUNT(student_email) FROM lc_test_tutors WHERE student_email = $id ");
     confirm($query2);
     global $connection;
     $stmt = $pdo->prepare($query2);
@@ -84,26 +114,26 @@
     {
         $role = "";
         $flag = false;
-        $id =  $row['student_id'];
+        $id =  $row['student_email'];
 
         foreach($row2 as $rowTutor)
         {
-            if($row['student_id']== $rowTutor['student_id'])
+            if($row['student_email']== $rowTutor['student_email'])
                 {
                 echo 'entre while /n';
                     $flag = true;
                 }
         }
       
-        $id =  $row['student_id'];
-        //echo'SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id';
-        $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = ". $id ."");
+        $id =  $row['student_email'];
+        echo 'SELECT COUNT(student_email) FROM lc_test_tutors WHERE student_email = $id';
+        $query2 = query("SELECT COUNT(student_email) FROM lc_test_tutors WHERE student_email = ". $id ."");
         confirm($query2);
         
         $row2= fetch_All($query2);
-        for($x =1; $x <= $row2["COUNT(student_id)"]; $x++)
+        for($x =1; $x <= $row2["COUNT(student_email)"]; $x++)
         {
-            if($row['student_id']== $row2['student_id'])
+            if($row['student_email']== $row2['student_email'])
             {
                 
             echo 'entre while /n';
@@ -118,18 +148,25 @@
         if($flag == false)
         {
             $role = "Student";
-        }*/
-        echo '    
+        }
+        */ echo '    
                 <tr>
                     <td>'. $row['student_id'] .'</td>
                     <td>'. $row['student_name'] .' </td>
                     <td>'. $row['student_initial'] .'</td>
                     <td>'. $row['student_first_lastname'] .' </td>
                     <td>'. $row['student_second_lastname'] .'</td>
-                    . ';  } echo '
-                </tr>'; 
-    //}   //<td>'. $role .'</td>
-    echo '   </table><br><br>
+                    <td>'; 
+                    if ($Student == '1') {
+                        echo 'Student ';
+                    } if ($Tutor == '1') {
+                        echo 'Tutor ';
+                    } if ($Assistant == '1') {
+                        echo 'Assistant ';
+                    } '</td>   
+                </tr> 
+                '; } echo '
+                    </table><br><br>
                 </div>
                 </article>
             </main>';

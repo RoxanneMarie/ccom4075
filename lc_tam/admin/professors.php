@@ -10,7 +10,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Professors - LC:TAM</title>
@@ -28,13 +28,8 @@
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
     <style>
         /*----------------------- CSS HOME PAGE*/
-
         .tCourses {
-        background: rgb(196, 127, 0);
-        }
-
-        .trCourses {
-        background: white;
+        background: #fd8f00;
         }
     </style>
 
@@ -67,14 +62,14 @@
                     } echo '
                         <table class = "table table-responsive">
                     <thead class = "tCourses">
-                <th>Edit</th>
-                <th>Professor ID</th>
-                <th>Course ID</th>
-                <th>Name</th>
-                <th>Initial</th>
-                <th>First Last Name</th>
-                <th>Second Last name</th>
-            </tr>';
+                        <th>Edit</th>
+                        <th>Professor ID</th>
+                        <th>Course ID</th>
+                        <th>Name</th>
+                        <th>Initial</th>
+                        <th>First Last Name</th>
+                        <th>Second Last name</th>
+                    </thead>';
     $query = query("SELECT * FROM lc_professors");
     confirm($query);
     while ($row = fetch_array($query)) {

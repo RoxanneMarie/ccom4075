@@ -10,7 +10,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Tutoring Sessions - LC:TAM</title>
@@ -30,7 +30,7 @@
         /*----------------------- CSS HOME PAGE*/
 
         .tCourses {
-        background: rgb(196, 127, 0);
+        background: #fd8f00;
         }
 
     </style>
@@ -78,24 +78,23 @@
     $query = query("SELECT * FROM lc_tutorings");
     confirm($query);
     while ($row = fetch_array($query)) {
-        $query2 = query("SELECT * FROM lc_test_tutors WHERE tutor_id = '" . $row['ID_Tutor'] ." ' ");
+        $query2 = query("SELECT * FROM lc_test_tutors WHERE tutor_id = '" . $row['tutor_id'] ." ' ");
         confirm($query2); 
         $row2 = fetch_array($query2);
-        $query2 = query("SELECT * FROM lc_sessions WHERE session_id = '" . $row['ID_Session'] ." ' ");
+        $query2 = query("SELECT * FROM lc_sessions WHERE session_id = '" . $row['session_id'] ." ' ");
         confirm($query2); 
         $row2 = fetch_array($query2);
+
         echo '    
                 <tr class="trCourses">
-                    <td>   <a href="#'. $row['ID_Session'] .'">Edit</a>
-                    <td>'. $row['ID_Tutoring'] .'</td>
-                    <td>'. $row['ID_Session'] .'</td>
+                    <td>   <a href="#'. $row['session_id'] .'">Edit</a>
+                    <td>'. $row['tutoring_id'] .'</td>
+                    <td>'. $row['session_id'] .'</td>
                     <td>'. $row['date_appointment'] .'</td>
                     <td>'. $row['student_id'] .'</td>
                     <td>'. $row2['course_id'] .'</td>
                     <td>'. $row2['start_time'] .'</td>
                     <td>'. $row2['end_time'] .'</td>
-                    <td>'. $row['dept_name'] .'</td>
-                    <td>'. $row['dept_id'] .'</td>
                     <td>'. $row['Cancel_appointment'] .'</td>
                     <td>'. $row['Cancel_date'] .'</td>
                     </tr>

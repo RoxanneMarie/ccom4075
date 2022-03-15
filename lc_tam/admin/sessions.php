@@ -13,7 +13,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Departments - LC:TAM</title>
+      <title>Appointments</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -27,57 +27,62 @@
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
     <style>
+        
         /*----------------------- CSS HOME PAGE*/
-
         .tCourses {
         background: #fd8f00;
         }
+
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_5();
-    echo '
-    <main class="container">
-        <article>
-        <div class="container-sm">
-            <h3 class = "h3 text-center">Departments</h3>
-            <a class = "btn btn-primary" href="add_department.php">Add Department</a>
-            '; if(isset($_GET['success'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Department updated successfully.</span>
-            </div>'; 
-            }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Department removed successfully.</span>
-            </div>
-            ';
-            }
-            if(isset($_GET['Added'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Department added successfully.</span>
-            </div>
-            ';
-            } echo '
-                <table class="table table-responsive">
-            <thead class = "tCourses">
-                <th>Edit</th>
-                <th>Department ID</th>
-                <th>Department Name</th>
-            </thead>';
-    $query = query("SELECT * FROM lc_departments");
+            top_header_2();
+    echo '<input type="hidden" value="student_btn" name="action">
+    <main class="mcourses" style="justify-content:center;">
+        <article class="mcourse">
+        <div class="text">
+            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Sessions</h3>
+            <a href="addsession.php">Add Sessions</a>
+                <table class="tCourses">
+            <tr>
+                <td>Edit</td>
+                <td>Tutoring ID</td>
+                <td>Session ID</td>
+                <td>Appointment Date</td>
+                <td>Tutor</td>
+                <td>Course ID</td>
+                <td>Start time</td>
+                <td>End time</td>
+                <td>Appointment Cancelled?</td>
+                <td>Cancelation Date</td>
+            </tr>';
+    $query = query("SELECT * FROM lc_tutorings");
     confirm($query);
     while ($row = fetch_array($query)) {
+        $query2 = query("SELECT * FROM lc_test_tutors WHERE tutor_id = '" . $row['ID_Tutor'] ." ' ");
+        confirm($query2); 
+        $row2 = fetch_array($query2);
+        $query2 = query("SELECT * FROM lc_sessions WHERE session_id = '" . $row['ID_Session'] ." ' ");
+        confirm($query2); 
+        $row2 = fetch_array($query2);
         echo '    
                 <tr class="trCourses">
-                    <td>    <a href="edit_department.php?id='. $row['dept_id'] .'">Edit</a>
-                            <a href="delete_department.php?id='. $row['dept_id'] .'" onclick = "return Func_confirm()">Delete</a></td>
-                    <td>'. $row['dept_id'] .'</td>
+                    <td>   <a href="#'. $row['ID_Session'] .'">Edit</a>
+                    <td>'. $row['ID_Tutoring'] .'</td>
+                    <td>'. $row['ID_Session'] .'</td>
+                    <td>'. $row['date_appointment'] .'</td>
+                    <td>'. $row['student_id'] .'</td>
+                    <td>'. $row2['course_id'] .'</td>
+                    <td>'. $row2['start_time'] .'</td>
+                    <td>'. $row2['end_time'] .'</td>
                     <td>'. $row['dept_name'] .'</td>
+                    <td>'. $row['dept_id'] .'</td>
+                    <td>'. $row['Cancel_appointment'] .'</td>
+                    <td>'. $row['Cancel_date'] .'</td>
                     </tr>
-                    '; } echo '
+                   '; } echo '
                 </table><br><br>
                 </div>
                 </article>
@@ -85,10 +90,5 @@
             bottom_footer();
             credit_mobirise_1();
         ?>
-    <script>
-    function Func_confirm() {
-        return confirm("Are you sure you wish to delete this value? This cannot be undone.");
-        }
-    </script>    
     </body>
 </html>

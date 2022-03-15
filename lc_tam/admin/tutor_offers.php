@@ -1,5 +1,9 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php"); 
+
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+    }
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +17,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Tutors - LC:TAM</title>
+      <title>Tutor Offers - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -39,58 +43,73 @@
     <body>
         <?php 
             top_header_5();
-    echo '<input type="hidden" value="student_btn" name="action">
+    echo '
     <main class="mcourses" style="justify-content:center;">
         <article>
         <div class = "container">
-            <h3 class = "h3 text-center">Tutors</h3>
-            <a class = "btn btn-primary" href="add_tutor.php">Add Tutor</a>
+            <h3 class = "h3 text-center">Tutor Offers</h3>
+            <a class = "btn btn-primary" href="add_tutor_offer.php">Add Tutor Offer</a>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutor updated successfully.</span>
+                <span> Tutor Offer updated successfully.</span>
             </div>'; 
             }
              if(isset($_GET['removed'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutor removed successfully.</span>
+                <span> Tutor Offer removed successfully.</span>
             </div>
             ';
             }
             if(isset($_GET['Added'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutor added successfully.</span>
+                <span> Tutor Offer added successfully.</span>
             </div>
             ';
             } echo '
                 <table class = "table table-responsive">
             <thead class = "tCourses">
                 <th>Edit</th>
-                <th>Offers</th>
                 <th>Student Num</th>
                 <th>Name</th>
                 <th>Initial</th>
                 <th>First Last Name</th>
                 <th>Second Last name</th>
                 <th>Email</th>
-                <th>Type</th>
-                <th>Status</th>
+                <th>Course</th>
+                <th>Professor</th>
             </thead>';
-    $query = query("SELECT * FROM lc_test_tutors INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
-            INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id INNER JOIN lc_account_status 
-            ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id");
-    while ($row = fetch_array($query)) {
+            /*
+                $query = query("SELECT * FROM lc_tutor_offers
+                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
+                INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id 
+                INNER JOIN lc_account_status ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id
+                INNER JOIN lc_tutor_offers ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
+                INNER JOIN lc_professors ON lc_professors.professor_entry_id = lc_tutor_offers.professor_entry_id");
+            */
+            $query = query("SELECT * FROM lc_test_tutors
+            WHERE lc_test_tutors.student_email = '$id'");
+            $row = fetch_array($query);
+            $TutID = $row['tutor_id'];
+            $Oquery = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, 
+            lc_test_students.student_email, lc_tutor_offers.course_id, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
+            lc_professors.professor_second_lastname
+            FROM lc_tutor_offers
+            INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
+            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
+            INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id
+            WHERE lc_tutor_offers.tutor_id = '$TutID'");
+    while ($row2 = fetch_array($Oquery)) {
         echo '    
                 <tr>
-                    <td>   <a href = "edit_tutor.php?id='. $row['student_email'] .'">Edit</a> </td>
-                    <td>   <a href = "tutor_offers.php?id='. $row['student_email'] .'">View</a> </td>
-                    <td>'.$row['student_id'].'</td>
-                    <td>'. $row['student_name'] .'</td>
-                    <td>'. $row['student_initial'] .'</td>
-                    <td>'. $row['student_first_lastname'] .'</td>
-                    <td>'. $row['student_second_lastname'] .'</td>
-                    <td>'. $row['student_email'] .'</td>
-                    <td>'. $row['tutor_type_name'].'</td>
-                    <td>'. $row['acc_stat_name'] .'</td>
+                    <td>   <a href="edit_tutor.php?id='. $row['student_email'] .'">Edit</a>
+                    <td>'. $row2['student_id'].'</td>
+                    <td>'. $row2['student_name'] .'</td>
+                    <td>'. $row2['student_initial'] .'</td>
+                    <td>'. $row2['student_first_lastname'] .'</td>
+                    <td>'. $row2['student_second_lastname'] .'</td>
+                    <td>'. $row2['student_email'] .'</td>
+                    <td>'. $row2['course_id'].'</td>
+                    <td>'. $row2['professor_name'].' '. $row2['professor_initial'] . ' ' . $row2['professor_first_lastname'] . ' ' . $row2['professor_second_lastname'].'</td>
                     </tr>
                     '; } echo '
                 </table><br><br>

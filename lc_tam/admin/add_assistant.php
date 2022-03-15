@@ -3,13 +3,12 @@
 
     if(isset($_POST['submit'])){
         $Studentemail = $_POST['Student_email'];
-        $TutorType = $_POST['Tutor_Type'];
         $AccStatus = $_POST['Acc_Status'];
-        $query = query('INSERT INTO lc_test_tutors (student_email, tutor_type_id, acc_stat_id) 
-        VALUES ("' . $Studentemail . '" , "' . $TutorType . '" , "' . $AccStatus . '")');
+        $query = query('INSERT INTO lc_test_assistants (student_email, acc_stat_id) 
+        VALUES ("' . $Studentemail . '" , "' . $AccStatus . '")');
 
     if($query) {
-        header('location:tutors.php?Added');
+        header('location:assistants.php?Added');
     }
 }
 ?>
@@ -22,10 +21,10 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Add Tutor - LC:TAM</title>
+      <title>Add Assistant - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -43,7 +42,7 @@
         <?php 
             top_header_5(); 
             ?>
-            <h3 class = "h3 text-center">Add Tutor</h3>
+            <h3 class = "h3 text-center">Add Assistant</h3>
             <main class = "container d-flex justify-content-center">
                 <?php 
                 $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
@@ -53,36 +52,24 @@
                 confirm($query);
                 $row = fetch_array($query);
                 ?>
-            <form action="add_tutor.php" method="POST">     
+            <form action="add_assistant.php" method="POST">     
                     <div class="form-row">
 
                         <div class="form-group col">
                             <label for="Student_ID">Student Email</label>
                             <select class="form-control" id="Student_email" name = "Student_email">
-                            <option selected value = "" required >Select a Student</option>
+                            <option selected required >Select a Student</option>
                             <?php 
                             $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_email, lc_test_students.student_name, 
                             lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname
                             FROM lc_test_students
-                            LEFT JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
-                            WHERE lc_test_tutors.student_email IS NULL");
+                            LEFT JOIN lc_test_assistants ON lc_test_students.student_email = lc_test_assistants.student_email
+                            WHERE lc_test_assistants.student_email IS NULL");
                             confirm($query2);
                             while($row2 = fetch_array($query2)) { ?>
                             <option value="<?php echo $row2['student_email']; ?>"> <?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?>  <?php echo $row2['student_initial']; ?>  <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; ?> <?php echo $row2['student_email']; } ?></option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="form-group col">
-                        <label for="Tutor_Type">Tutor Type:</label>
-                        <select class="form-control" id="Tutor_Type" name = "Tutor_Type">
-                        <option selected value = "1" >Journal</option>
-                        <?php 
-                        $query2 = query("SELECT * FROM lc_tutor_type");
-                        confirm($query2);
-                        while($row2 = fetch_array($query2)) { ?>
-                        <option value="<?php echo $row2['tutor_type_id']; ?>"><?php echo $row2['tutor_type_name'];  } ?></option>
-                        </select>
                     </div>
 
                     <div class="form-group col">
