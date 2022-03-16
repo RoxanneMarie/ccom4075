@@ -13,14 +13,7 @@
       <link rel="shortcut icon" href="assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-<<<<<<< Updated upstream
-      <title>Home</title>
-      <link rel="stylesheet" href="assets/web/assets/mobirise-icons2/mobirise2.css">
-      <link rel="stylesheet" href="assets/web/assets/mobirise-icons/mobirise-icons.css">
-=======
-
       <title>Learning Commons: Tutoring Appointment Manager</title>
->>>>>>> Stashed changes
       <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
       <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
       <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
@@ -61,19 +54,8 @@
                 </div>
             </div>
         </div>
-<<<<<<< Updated upstream
-
-        <section data-bs-version="5.1" class="content16 cid-sO0lfEsMNZ" id="content16-t">
-            <div class="container">
-
-            </div>
-        </section>
-
-        <?php 
-=======
         <br>
         <?php
->>>>>>> Stashed changes
             bottom_footer();
             credit_mobirise_1();
         ?>
