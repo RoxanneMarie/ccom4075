@@ -51,6 +51,7 @@ function top_header_1()
                     </div>
                 </div>
             </nav>
+
         </section>';
 }
 
@@ -84,6 +85,7 @@ function top_header_2()
                     </div>
                 </div>
             </nav>
+
         </section>';
 }
 
@@ -119,6 +121,7 @@ function top_header_3()
                     </div>
                 </div>
             </nav>
+
         </section>';
 }
 
@@ -156,6 +159,7 @@ function top_header_4()
                     </div>
                 </div>
             </nav>
+
         </section>';
 }
 
@@ -186,9 +190,12 @@ function top_header_5()
                             <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="admin.php">Home</a></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="#">View<br></a><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
                         </ul>
+
+
                     </div>
                 </div>
             </nav>
+
         </section>';
 }
 
@@ -201,10 +208,12 @@ function bottom_footer()
                 <div class="media-container-row align-center mbr-white">
                     <div class="row row-links">
                         <ul class="foot-menu">
+
                         <li class="foot-menu-item mbr-fonts-style display-7"><a href="tel:787-815-0000" class="text-success text-primary">Call Us</a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="mailto:learningcommons.arecibo@upr.edu" class="text-success text-primary">Email Us</a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="https://upra.edu" class="text-success text-primary">Upra.edu</a></li></ul>
                     </div>
                     <div class="row social-row">
                         <div class="social-list align-right pb-2">
+
                             <div class="soc-item">
                                 <a href="https://www.facebook.com/learningcommonsUPRA/" target="_blank">
                                     <span class="mbr-iconfont mbr-iconfont-social socicon-facebook socicon" style="font-size: 50px;"></span>
@@ -252,7 +261,9 @@ function credit_mobirise_2()
 
 /*
 defined("DB_HOST") ? null : define("DB_HOST" , "localhost");
+
 defined("DB_USER") ? null : define("DB_USER", "root");
+
 defined("DB_PASS") ? null : define("DB_PASS", "");
 defined("DB_NAME") ? null : define("DB_NAME", "lc_tam");
 */
