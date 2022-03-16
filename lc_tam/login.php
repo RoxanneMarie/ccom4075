@@ -55,7 +55,7 @@
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="email">
                                     <input type="password" name="password" placeholder="Password" data-form-field="email" class="form-control" value="" id="email-form6-u" required>
                                 </div>
-                                <div class="col-auto mbr-section-btn align-center"><button type="submit" name="submit" class="btn btn-primary display-4">Submit</button></div>
+                                <div class="col-auto mbr-section-btn align-center"><button type="submit" name="login" class="btn btn-primary display-4">Submit</button></div>
                             </div>
                         </form>
                     </div>

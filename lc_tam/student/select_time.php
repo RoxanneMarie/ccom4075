@@ -1,6 +1,5 @@
-<?php
+<?php 
     require_once("../functions.php");
-    professor_available();
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +13,7 @@
       <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Professors</title>
+      <title>Schedule</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -29,11 +28,14 @@
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
 
     </head>
+    
+    <p></p>
+    
     <body>
 
         <?php 
-            select_header($_SESSION['type']);
-            student_select_professor();
+            top_header_2();
+            student_select_time();
             bottom_footer();
             credit_mobirise_1();
         ?>

@@ -265,6 +265,7 @@ defined("DB_HOST") ? null : define("DB_HOST" , "localhost");
 defined("DB_USER") ? null : define("DB_USER", "root");
 
 defined("DB_PASS") ? null : define("DB_PASS", "");
+
 defined("DB_NAME") ? null : define("DB_NAME", "lc_tam");
 */
 
@@ -682,6 +683,7 @@ function student_select_tutor()
 // How many appointments can a student make per week.
 // How many appointments can a student make on a single department per day.
 // How many weeks can the student see to make appointments in?
+
 function student_select_time()
 {   
     if(isset($_POST['tutor_ready']))

@@ -1,5 +1,5 @@
 <?php 
-    require_once("../functions.php")
+    require_once("../functions.php") 
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +10,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Admin Home - LC:TAM</title>
@@ -65,6 +65,7 @@
             padding: 15px;
             width: 100%;
             }
+
             .home_button {
                 font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
                 border: 4px solid #fd8f00;
@@ -89,11 +90,12 @@
     <body>
 
         <?php
-            top_header_5();
+            //top_header_1();
+            top_header_2();
+           // top_header_5();
             echo'
-            <br>
-            <h4 class = "h3 text-center">Admin Menu</h4>
             <div class = "container">
+           <input type="hidden" value="student_btn" name="action">
            <main class="cards" style="justify-content:center;">
                <article class="card">
                <div class="text">
@@ -103,11 +105,9 @@
                </article>
                <article class="card">
                <div class="text">
-                   <h3>Tutors/Assistants</h3>
+                   <h3>Tutor</h3>
                    <a class = "home_button" href = "tutors.php">View Tutors</a><br><br>
                    <a class = "home_button" href = "add_tutor.php">Add Tutor</a><br><br>
-                   <a class = "home_button" href = "assistants.php">View Assistants</a><br><br>
-                   <a class = "home_button" href = "add_assistant.php">Add Assistant</a><br><br>
                </div>
                </article>
                <article class="card">
@@ -119,7 +119,7 @@
                </article>
                <article class="card">
                <div class="text">
-                   <h3>Department/Course</h3>
+                   <h3>Department</h3>
                    <a class = "home_button" href = "departments.php">View Departments</a><br><br>
                    <a class = "home_button" href = "add_department.php">Add Department</a><br><br>
                    <a class = "home_button" href = "courses.php">View Courses</a><br><br>
@@ -128,16 +128,15 @@
                </article>
                <article class="card">
                <div class="text">
-                   <h3>Tutoring Offers</h3>
-                   <a class = "home_button" href = "tutoring_courses.php">My Courses</a><br><br>
-                   <a class = "home_button" href = "tutor_offers.php">Tutor Offers</a><br><br>
+                   <h3>Tutoring Course</h3>
+                   <input class = "home_button" type="submit" name="btn_student" value="My Courses"><br><br>
+                   <input class = "home_button" type="submit"  name="btn_student" value="View Courses">
                </div>
                </article>
                <article class="card">
                <div class="text">
                    <h3>Tutoring Session</h3>
                    <a class = "home_button" href = "tutoring_sessions.php">View Tutoring Sessions</a><br><br>
-                   <a class = "home_button" href = "add_tutoring_session.php">Add Tutoring Sessions</a><br><br>
                </div>
                </article>
                <article class="card">
@@ -145,24 +144,11 @@
                    <h3>Semester</h3>
                    <a class = "home_button" href = "semesters.php">View Semester</a><br><br>
                    <a class = "home_button" href = "add_semester.php">Add Semester</a><br><br>
-               </div>
-               </article>
-               ' /*
-               <article class="card">
-               <div class="text">
-                   <h3>Grades</h3>
-                   <a class = "home_button" href = "#">View Grades</a><br><br>
-               </div>
-               </article>
-               */; echo '
-               <article class="card">
-               <div class="text">
-                   <h3>Reports</h3>
-                   <a class = "home_button" href = "#">Reports</a><br><br>
+
+
                </div>
                </article>
            </main>
-           <br>
            </div>
            ';
         ?>
