@@ -17,7 +17,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Tutor Offers - LC:TAM</title>
+      <title>Tutor Schedule - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -47,76 +47,63 @@
     <main class="mcourses" style="justify-content:center;">
         <article>
         <div class = "container">
-            <h3 class = "h3 text-center">Tutor Offers</h3>
-            <a class = "btn btn-primary" href="add_tutor_offer.php">Add Tutor Offer</a>
+            <h3 class = "h3 text-center">Tutor Schedule</h3>
+            <a class = "btn btn-primary" href="add_tutor_schedule.php">Add Tutor Schedule</a>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutor Offer updated successfully.</span>
+                <span> Tutor Schedule updated successfully.</span>
             </div>'; 
             }
              if(isset($_GET['removed'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutor Offer removed successfully.</span>
+                <span> Tutor Schedule removed successfully.</span>
             </div>
             ';
             }
             if(isset($_GET['Added'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutor Offer added successfully.</span>
+                <span> Tutor Schedule added successfully.</span>
             </div>
             ';
             } echo '
                 <table class = "table table-responsive">
             <thead class = "tCourses">
-                '; /*<th>Edit</th>*/ echo '
-                <th>Student Num</th>
+                <th>Edit</th>
                 <th>Name</th>
                 <th>Initial</th>
                 <th>First Last Name</th>
                 <th>Second Last name</th>
-                <th>Email</th>
-                <th>Course</th>
-                <th>Professor</th>
+                <th>Day</th>
+                <th>Start Time</th>
+                <th>End Time</th>
             </thead>';
-            /*
-                $query = query("SELECT * FROM lc_tutor_offers
-                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
-                INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id 
-                INNER JOIN lc_account_status ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id
-                INNER JOIN lc_tutor_offers ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
-                INNER JOIN lc_professors ON lc_professors.professor_entry_id = lc_tutor_offers.professor_entry_id");
-            */
             if(isset($_GET['id'])){
-                $query = query("SELECT * FROM lc_test_tutors
-                WHERE lc_test_tutors.student_email = '$id'");
-                $row = fetch_array($query);
-                $TutID = $row['tutor_id'];
-                $Oquery = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, 
-                lc_test_students.student_email, lc_tutor_offers.course_id, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
-                lc_professors.professor_second_lastname
-                FROM lc_tutor_offers
-                INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
-                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
-                INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id
-                WHERE lc_tutor_offers.tutor_id = '$TutID'");
+            $query = query("SELECT * FROM lc_test_tutors
+            WHERE lc_test_tutors.student_email = '$id'");
+            $row = fetch_array($query);
+            $TutID = $row['tutor_id'];
+            $Squery = query("SELECT lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, 
+            lc_test_students.student_email, lc_tutor_schedule.schedule_id, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time
+            FROM lc_tutor_schedule
+            INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
+            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
+            WHERE lc_tutor_schedule.tutor_id = '$TutID'");
             } else {
-                $Oquery = query("SELECT * FROM lc_tutor_offers
-                INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
-                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
-                INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id");
-                }
-    while ($row2 = fetch_array($Oquery)) {
+            $Squery = query("SELECT * FROM lc_tutor_schedule
+            INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
+            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email");
+            }
+    while ($row2 = fetch_array($Squery)) {
         echo '    
                 <tr>
-                    ';/*<td>   <a href="edit_tutor_offer.php?id='. $row[''] .'">Edit</a>*/ echo '
-                    <td>'. $row2['student_id'].'</td>
+                    <td>   <a href="edit_tutor_schedule.php?id='. $row2['schedule_id'] .'">Edit</a></td>
                     <td>'. $row2['student_name'] .'</td>
                     <td>'. $row2['student_initial'] .'</td>
                     <td>'. $row2['student_first_lastname'] .'</td>
                     <td>'. $row2['student_second_lastname'] .'</td>
-                    <td>'. $row2['student_email'] .'</td>
-                    <td>'. $row2['course_id'].'</td>
-                    <td>'. $row2['professor_name'].' '. $row2['professor_initial'] . ' ' . $row2['professor_first_lastname'] . ' ' . $row2['professor_second_lastname'].'</td>
+                    <td>'. $row2['day'] .'</td>
+                    <td>'. $row2['start_time'].'</td>
+                    <td>'. $row2['end_time'].'</td>
                     </tr>
                     '; } echo '
                 </table><br><br>

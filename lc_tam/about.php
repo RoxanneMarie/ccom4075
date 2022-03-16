@@ -55,7 +55,7 @@
             <span class="sr-only">Next</span>
         </a> -->
         <br>
-        <div class = "container">
+        <div class = "container border">
             <h3 class = "h3 text-center">About Us</h3>
         </div>
         <?php

@@ -128,9 +128,10 @@
                </article>
                <article class="card">
                <div class="text">
-                   <h3>Tutoring Offers</h3>
-                   <a class = "home_button" href = "tutoring_courses.php">My Courses</a><br><br>
+                   <h3>Tutoring Offers/Schedule</h3>
+                   <a class = "home_button" href = "tutor_schedule.php">Tutor Schedules</a><br><br>
                    <a class = "home_button" href = "tutor_offers.php">Tutor Offers</a><br><br>
+                   '; /*<a class = "home_button" href = "tutoring_courses.php">Tutoring Courses</a><br><br>*/ echo '
                </div>
                </article>
                <article class="card">

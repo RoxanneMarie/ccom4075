@@ -63,9 +63,10 @@
             ';
             } echo '
                 <table class = "table table-responsive">
-            <thead class = "tCourses">
+            <thead class = "tCourses text-center">
                 <th>Edit</th>
                 <th>Offers</th>
+                <th>Schedule</th>
                 <th>Student Num</th>
                 <th>Name</th>
                 <th>Initial</th>
@@ -81,9 +82,10 @@
     while ($row = fetch_array($query)) {
         echo '    
                 <tr>
-                    <td>   <a href = "edit_tutor.php?id='. $row['student_email'] .'">Edit</a> </td>
-                    <td>   <a href = "tutor_offers.php?id='. $row['student_email'] .'">View</a> </td>
-                    <td>'.$row['student_id'].'</td>
+                    <td>   <a href = "edit_tutor.php?id='. $row['student_email'] .'">Edit Tutor</a> </td>
+                    <td>   <a href = "tutor_offers.php?id='. $row['student_email'] .'">View Offer</a> </td>
+                    <td>   <a href = "tutor_schedule.php?id='. $row['student_email'] .'">View Schedule</a> </td>
+                    <td>'. $row['student_id'].'</td>
                     <td>'. $row['student_name'] .'</td>
                     <td>'. $row['student_initial'] .'</td>
                     <td>'. $row['student_first_lastname'] .'</td>
