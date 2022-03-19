@@ -80,6 +80,7 @@
     $id = $row['student_email'];
     
     $SQuery = query("SELECT count(student_email) as Student FROM lc_test_students WHERE student_email = '$id'");
+    //print_r($SQuery);
     confirm($SQuery);
     $SRes = fetch_array($SQuery);
     //print_r($Sres['Student']);
@@ -88,6 +89,7 @@
     }
 
     $TQuery = query("SELECT COUNT(student_email) as Tutor FROM lc_test_tutors WHERE student_email = '$id'");
+
     confirm($TQuery);
     $TRes = fetch_array($TQuery);
     //print_r($TRes['T']);
@@ -158,11 +160,11 @@
                     <td>'. $row['student_second_lastname'] .'</td>
                     <td>'; 
                     if ($Student == '1') {
-                        echo 'Student ';
+                        echo 'Student';
                     } if ($Tutor == '1') {
-                        echo 'Tutor ';
+                        echo ', Tutor';
                     } if ($Assistant == '1') {
-                        echo 'Assistant ';
+                        echo ', Assistant ';
                     } '</td>   
                 </tr> 
                 '; } echo '
