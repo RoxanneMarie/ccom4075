@@ -68,7 +68,7 @@
             } echo '
                 <table class = "table table-responsive">
             <thead class = "tCourses">
-                '; /*<th>Edit</th>*/ echo '
+                <th>Edit</th>
                 <th>Student Num</th>
                 <th>Name</th>
                 <th>Initial</th>
@@ -92,7 +92,7 @@
                 $row = fetch_array($query);
                 $TutID = $row['tutor_id'];
                 $Oquery = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, 
-                lc_test_students.student_email, lc_tutor_offers.course_id, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
+                lc_test_students.student_email, lc_tutor_offers.offer_id, lc_tutor_offers.course_id, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
                 lc_professors.professor_second_lastname
                 FROM lc_tutor_offers
                 INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
@@ -100,7 +100,10 @@
                 INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id
                 WHERE lc_tutor_offers.tutor_id = '$TutID'");
             } else {
-                $Oquery = query("SELECT * FROM lc_tutor_offers
+                $Oquery = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, 
+                lc_test_students.student_email, lc_tutor_offers.offer_id, lc_tutor_offers.course_id, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
+                lc_professors.professor_second_lastname
+                FROM lc_tutor_offers
                 INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
                 INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
                 INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id");
@@ -108,7 +111,7 @@
     while ($row2 = fetch_array($Oquery)) {
         echo '    
                 <tr>
-                    ';/*<td>   <a href="edit_tutor_offer.php?id='. $row[''] .'">Edit</a>*/ echo '
+                    <td> <a href="edit_tutor_offer.php?id='. $row2['offer_id'] .'">Edit</a>
                     <td>'. $row2['student_id'].'</td>
                     <td>'. $row2['student_name'] .'</td>
                     <td>'. $row2['student_initial'] .'</td>
