@@ -39,23 +39,21 @@
         <?php 
             top_header_5(); 
             ?>
-    <input type="hidden" value="student_btn" name="action">
         <main class="container">
             <article>
             <div class="container-sm">
                 <h3 class = "h3 text-center">Add Department</h3>
-            <form action="add_department.php" method="POST"><br>
-            <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="Deparment_Name" class= "input-group-text" id = id="inputGroup-sizing-lg">Department Name:</label>
+                <form action="add_department.php" method="POST"><br>
+                    <div class="form-group col">
+                        <div class="form-row">
+                        <label for="Deparment_Name">Department Name:</label>
+                        <input type="text" class="form-control" id="Department_Name" name="Department_Name" required>
                         </div>
-                        <input type="text" class="form-control" id="Department_Name" name="Department_Name" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
                     </div>
-                    <br>
                     <div class = "container d-flex justify-content-center">
                         <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
                     </div>
-                    <br><br><br>
+                    <br>
             </form>
             </div>
             </article>

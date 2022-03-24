@@ -53,8 +53,8 @@
 
                     <div class="form-group">
                         <label for="tutor">Tutor:</label>
-                        <select class="form-control" id="tutor" name = "tutor">
-                        <option selected>Select a Tutor</option>
+                        <select class="form-control" id="tutor" name = "tutor" required>
+                        <option selected value = "">Select a Tutor.</option>
                         <?php 
                             $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
                             lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id
@@ -63,15 +63,14 @@
                             WHERE lc_test_tutors.student_email = lc_test_students.student_email");
                             confirm($query2);
                             while($row2 = fetch_array($query2)) { ?>
-                            <option value = <?php echo $row2['tutor_id'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; } ?></option>
+                            <option value = <?php echo $row2['tutor_id'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; ?> <?php echo $row2['student_email']; } ?></option>
                             </select>
                     </div>
-
                     <br>
                     <div class="form-group">
                         <label for="day">Day: </label>
-                        <select class="form-control" id="day" name = "day">
-                        <option selected>Select a Day</option>
+                        <select class="form-control" id="day" name = "day" required>
+                        <option selected value = "">Select a Day.</option>
                             <option value="Monday">Monday</option>
                             <option value="Tuesday">Tuesday</option>
                             <option value="Wednesday">Wednesday</option>
@@ -81,18 +80,19 @@
                     </div>
 
                     <div class="form-row">
-                    <br>
-                    <label for="start">Start time:</label>
-                    <input id="start" type="time" name="start"><br><br>
-                </div>
+                        <label for="start">Start time:</label>
+                        <input id="start" type="time" name="start" required><br><br>
+                    </div>
 
-                <div class="form-row">
-                    <label for="end">End time:</label>
-                    <input id="end" type="time" name="end"><br><br>
-                </div>
-                
+                    <div class="form-row">
+                        <label for="end">End time:</label>
+                        <input id="end" type="time" name="end" required><br><br>
+                    </div>
                     <br>
-                <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button><br>
+                    <div class = "container d-flex justify-content-center">
+                    <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button>
+                    </div>
+                    <br>
             </form>
             </div>
             </article>

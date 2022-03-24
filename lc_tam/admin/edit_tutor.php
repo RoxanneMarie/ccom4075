@@ -145,8 +145,11 @@
                         <option value= "<?php echo $row3['acc_stat_id'] ?>" > <?php echo $row3['acc_stat_name'];  } ?></option>
                         </select>
                     </div>
-            <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button><br>
-            </form>
+                    <div class = "container d-flex justify-content-center">
+                    <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
+                    </div>
+                    <br>
+                </form>
             </div>
         </main>
 

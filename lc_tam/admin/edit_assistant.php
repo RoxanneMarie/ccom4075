@@ -72,6 +72,8 @@
             ?>
             <h3 class = "h3 text-center">Edit Assistant</h3>
             <main class = "container d-flex justify-content-center">
+            <article>
+            <div class="container-sm>">
                 <?php 
                 $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
                 lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_assistants.student_email, 
@@ -88,7 +90,7 @@
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="Student_ID">Student ID:</label>
-                            <input type="Student_ID" class="form-control" id="Student_ID" name = "Student_ID" value = "<?php echo $row['student_id']; ?>" disabled>
+                            <input type="Student_ID" class="form-control" id="Student_ID" name = "Student_ID" value = "<?php echo $row['student_id']; ?> - <?php echo $row['student_name']; ?> <?php echo $row['student_initial']; ?> <?php echo $row['student_first_lastname']; ?> <?php echo $row['student_second_lastname']; ?>" disabled>
                         </div>
                         <div class="form-group col">
                             <label for="Student_Name">Student Name:</label>
@@ -129,8 +131,13 @@
                         <option value= "<?php echo $row3['acc_stat_id'] ?>" > <?php echo $row3['acc_stat_name'];  } ?></option>
                         </select>
                     </div>
-            <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button><br>
-            </form>
+                    <div class = "container d-flex justify-content-center">
+                        <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
+                    </div>
+                    <br>
+                    </form>
+                </div>
+            </article>
             </div>
         </main>
 

@@ -51,8 +51,8 @@
 
                     <div class="form-group">
                         <label for="tutor">Tutor: </label>
-                        <select class="form-control" id="tutor" name = "tutor">
-                        <option selected>Select a Tutor</option>
+                        <select class="form-control" id="tutor" name = "tutor" required>
+                        <option selected value = "">Select a Tutor.</option>
                         <?php 
                             $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
                             lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id
@@ -67,8 +67,8 @@
                     <br>
                     <div class="form-group">
                         <label for="course">Course: </label>
-                        <select class="form-control" id="course" name = "course">
-                        <option selected>Select a Course</option>
+                        <select class="form-control" id="course" name = "course" required>
+                        <option selected value = "">Select a Course.</option>
                             <?php 
                             $query = query("SELECT * FROM lc_courses");
                             confirm($query);
@@ -80,8 +80,8 @@
                     <br>
                     <div class="form-group">
                         <label for="tutor">Professor: </label>
-                        <select class="form-control" id="professor" name = "professor">
-                        <option selected>Select a Professor</option>
+                        <select class="form-control" id="professor" name = "professor" required>
+                        <option selected value = "">Select a Professor.</option>
                         <?php 
                             $query3 = query("SELECT * FROM lc_professors");
                             confirm($query3);
@@ -89,7 +89,10 @@
                             <option value = <?php echo $row3['professor_entry_id'] ?> > <?php echo $row3['professor_name']; ?> <?php echo $row3['professor_initial']; ?> <?php echo $row3['professor_first_lastname']; ?> <?php echo $row3['professor_second_lastname']; } ?></option>
                             </select>
                     </div>
-                <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button><br>
+                    <div class = "container d-flex justify-content-center">
+                <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button>
+                </div>
+            <br>
             </form>
             </div>
             </article>

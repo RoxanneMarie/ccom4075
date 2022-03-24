@@ -83,12 +83,17 @@
                     <option value=<?php echo $row2['dept_id'] ?> ><?php echo $row2['dept_name'];  } ?></option>
                     </select>
             </div>
+            
             <div class="form-group col-md-6">
                     <label for="Tutor_Available">Tutor's Available: </label>
                     <input type="number" class="form-control" id="Tutor_Available" name = "Tutor_Available" value = "<?php echo $row['tutor_available']; ?>" min = "1" max = "10" required>
             </div>
-            <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button><br>
+
+            <div class = "container d-flex justify-content-center">
+                <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
+            </div>
             </form>
+            <br>
             </div>
             </article>
         </main>

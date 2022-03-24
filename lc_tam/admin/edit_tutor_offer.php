@@ -64,24 +64,13 @@
             <form action="edit_tutor_offer.php?id=<?php echo $row['offer_id']; ?>" method="POST"><br>
                     <div class="form-group">
                         <label for="tutor">Tutor: </label>
-                        <select class="form-control" id="tutor" name = "tutor">
-                        <option selected value = <?php echo $row['tutor_id']; ?> ><?php echo $row['student_id']; ?> - <?php echo $row['student_name']; ?> <?php echo $row['student_initial']; ?> <?php echo $row['student_first_lastname']; ?> <?php echo $row['student_second_lastname']; ?> </option>
-                        <?php 
-                            $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
-                            lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id
-                            FROM lc_test_students
-                            INNER JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
-                            WHERE lc_test_tutors.student_email = lc_test_students.student_email");
-                            confirm($query2);
-                            while($row2 = fetch_array($query2)) { ?>
-                            <option value = <?php echo $row2['tutor_id'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; } ?></option>
-                            </select>
+                        <input class="form-control" id="tutor" name = "tutor"  type = "text" value = "<?php echo $row['student_id']; ?> - <?php echo $row['student_name']; ?> <?php echo $row['student_initial']; ?> <?php echo $row['student_first_lastname']; ?> <?php echo $row['student_second_lastname']; ?>" disabled>
                     </div>
                     <br>
 
                     <div class="form-group">
                         <label for="course">Course: </label>
-                        <select class="form-control" id="course" name = "course">
+                        <select class="form-control" id="course" name = "course" required>
                         <option selected value = <?php echo $row['course_id']; ?> > <?php echo $row['course_id']; ?> - <?php echo $row['course_name']; ?> </option>
                             <?php 
                             $query4 = query("SELECT * FROM lc_courses");
@@ -95,7 +84,7 @@
 
                     <div class="form-group">
                         <label for="tutor">Professor: </label>
-                        <select class="form-control" id="professor" name = "professor">
+                        <select class="form-control" id="professor" name = "professor" required>
                         <option selected value = <?php echo $row['professor_entry_id']; ?> > <?php echo $row['professor_name']; ?> <?php echo $row['professor_initial']; ?> <?php echo $row['professor_first_lastname']; ?> <?php echo $row['professor_second_lastname']; ?></option>
                         <?php 
                             $query3 = query("SELECT * FROM lc_professors");
@@ -105,7 +94,9 @@
                             </select>
                     </div>
                     <br>
-                <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button><br>
+                    <div class = "container d-flex justify-content-center">
+                        <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button>
+                    </div><br>
             </form>
             </div>
             </article>

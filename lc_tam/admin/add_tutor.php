@@ -58,8 +58,8 @@
 
                         <div class="form-group col">
                             <label for="Student_ID">Student Email</label>
-                            <select class="form-control" id="Student_email" name = "Student_email">
-                            <option selected value = "" required >Select a Student</option>
+                            <select class="form-control" id="Student_email" name = "Student_email" required>
+                            <option selected value = "" >Select a Student.</option>
                             <?php 
                             $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_email, lc_test_students.student_name, 
                             lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname
@@ -96,7 +96,10 @@
                         <option value= "<?php echo $row3['acc_stat_id'] ?>" > <?php echo $row3['acc_stat_name'];  } ?></option>
                         </select>
                     </div>
-            <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button><br>
+                    <div class = "container d-flex justify-content-center">
+                    <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
+                    </div>
+                    <br>
             </form>
             </div>
         </main>

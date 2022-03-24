@@ -54,7 +54,7 @@
             <article>
             <div class="container-sm>">
                 <h3 class = "h3 d-flex justify-content-center">Edit Tutor Schedule</h3>
-            <form action="edit_tutor_schedule.php?id=<?php echo $id?>" method="POST"><br>
+            <form action="edit_tutor_schedule.php?id=<?php echo $id ?>" method="POST"><br>
                 <?php 
                 $query = query("SELECT * FROM lc_tutor_schedule WHERE schedule_id = '$id'");
                 confirm($query);
@@ -66,24 +66,12 @@
                 ?>
                     <div class="form-group">
                         <label for="tutor">Tutor:</label>
-                        <select class="form-control" id="tutor" name = "tutor">
-                        <option selected value = <?php echo $row['tutor_id']; ?>><?php echo $Trow['student_id']; ?> - <?php echo $Trow['student_name']?> <?php echo $Trow['student_initial']; ?> <?php echo $Trow['student_first_lastname']; ?> <?php echo $Trow['student_second_lastname']; ?></option>
-                        <?php 
-                            $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
-                            lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id
-                            FROM lc_test_students
-                            INNER JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
-                            WHERE lc_test_tutors.student_email = lc_test_students.student_email");
-                            confirm($query2);
-                            while($row2 = fetch_array($query2)) { ?>
-                            <option value = <?php echo $row2['tutor_id'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; } ?></option>
-                            </select>
+                        <input class="form-control" id="tutor" name = "tutor" type = "text" disabled value = "<?php echo $Trow['student_id']; ?> - <?php echo $Trow['student_name']; ?> <?php echo $Trow['student_initial']; ?> <?php echo $Trow['student_first_lastname']; ?> <?php echo $Trow['student_second_lastname']; ?>">
                     </div>
-
                     <br>
                     <div class="form-group">
                         <label for="day">Day: </label>
-                        <select class="form-control" id="day" name = "day">
+                        <select class="form-control" id="day" name = "day" required>
                         <option selected value = <?php echo $row['day']; ?> ><?php echo $row['day']; ?></option>
                             <option value="Monday">Monday</option>
                             <option value="Tuesday">Tuesday</option>
@@ -96,16 +84,17 @@
                     <div class="form-row">
                     <br>
                     <label for="start">Start time:</label>
-                    <input id="start" type="time" name="start" value = <?php echo $row['start_time']; ?> ><br><br>
+                    <input id="start" type="time" name="start" value = <?php echo $row['start_time']; ?> required><br><br>
                 </div>
 
                 <div class="form-row">
                     <label for="end">End time:</label>
-                    <input id="end" type="time" name="end" value = <?php echo $row['end_time']; ?> ><br><br>
+                    <input id="end" type="time" name="end" value = <?php echo $row['end_time']; ?> required><br><br>
                 </div>
-                
-                    <br>
-                <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button><br>
+                <div class = "container d-flex justify-content-center">
+                <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button>
+                </div>
+                <br>
             </form>
             </div>
             </article>

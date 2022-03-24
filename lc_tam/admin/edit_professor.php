@@ -60,12 +60,10 @@
                 confirm($query);
                 $row = fetch_array($query); ?>
                 <h3 class = "h3 d-flex justify-content-center">Edit Professor</h3>
-                <form action="edit_professor.php?id=<?php echo $row['professor_entry_id']; ?>" method="POST"><br>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="Course_ID">Course ID:</label>
-                        </div>
-                        <select class="custom-select" id = "Course_ID" name = "Course_ID">
+                <form action="edit_professor.php?id=<?php echo $row['professor_entry_id']; ?>" method="POST">
+                    <div class="form-group col">
+                        <label for="Course_ID">Course ID:</label>
+                        <select class="form-control" id = "Course_ID" name = "Course_ID" required>
                             <option selected value = "<?php echo $row['course_id']; ?>"><?php echo $row['course_id']; ?> - </option>
                             <?php 
                             $Cquery = query("SELECT * FROM lc_courses");
@@ -76,36 +74,32 @@
                         </select>
                     </div>
 
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="professor_name" class= "input-group-text" id= "inputGroup-sizing-lg">Professor Name:</label>
-                        </div>
-                        <input type="text" class="form-control" id="professor_name" name="professor_name" aria-label="Default" aria-describedby="inputGroup-sizing-sm" value = "<?php echo $row['professor_name']; ?>" required>
+                    <div class = "form-row">
+                        <div class="form-group col">
+                        <label for="professor_name">Professor Name:</label>
+                        <input type="text" class="form-control" id="professor_name" name="professor_name" value = "<?php echo $row['professor_name']; ?>" required>
                     </div>
-                    <br>
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="professor_initial" class= "input-group-text" id = "inputGroup-sizing-lg">Professor Initial:</label>
-                        </div>
-                        <input type="text" class="form-control" id="professor_initial" name="professor_initial" aria-label="Default" aria-describedby="inputGroup-sizing-sm" value = "<?php echo $row['professor_initial']; ?>">
-                    </div>
-                    <br>
 
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="professor_flname" class= "input-group-text" id= "inputGroup-sizing-lg">Professor First Last Name:</label>
-                        </div>
-                        <input type="text" class="form-control" id="professor_flname" name="professor_flname" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required value = "<?php echo $row['professor_first_lastname']; ?>">
+                    <div class = "form-row">
+                        <div class = "form-group col">
+                        <label for="professor_initial">Professor Initial:</label>
+                        <input type="text" class="form-control" id="professor_initial" name="professor_initial" value = "<?php echo $row['professor_initial']; ?>">
                     </div>
-                    <br>
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="professor_slname" class= "input-group-text" id = "inputGroup-sizing-lg">Professor Second Last name:</label>
+
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="professor_flname">Professor First Last Name:</label>
+                            <input type="text" class="form-control" id="professor_flname" name="professor_flname" aria-label="Default" required value = "<?php echo $row['professor_first_lastname']; ?>">
                         </div>
-                        <input type="text" class="form-control" id="professor_slname" name="professor_slname" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required value = "<?php echo $row['professor_second_lastname']; ?>">
+                        <div class="form-group col">
+                            <label for="professor_slname">Professor Second Last name:</label>
+                            <input type="text" class="form-control" id="professor_slname" name="professor_slname" aria-label="Default" required value = "<?php echo $row['professor_second_lastname']; ?>">
+                        </div>
+                        <div class = "container d-flex justify-content-center">
+                            <button type="submit" name="submit" class="btn btn-primary display-4">Submit</button>
+                        </div>
                     </div>
-                    <br>
-                    <button type="submit" name="submit"  class="btn btn-primary display-4">Submit</button><br>
+                <br>
             </form>
             </div>
             </article>

@@ -60,8 +60,8 @@ redirect('tutoring_sessions.php?Added');
 
             <div class="form-group">
                 <label for="tutor">Tutor:</label>
-                <select class="form-control" id="tutor" name = "tutor">
-                <option selected>Select a Tutor</option>
+                <select class="form-control" id="tutor" name = "tutor" required>
+                <option selected value = "">Select a Tutor</option>
                 <?php 
                     $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
                     lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id
@@ -88,27 +88,29 @@ redirect('tutoring_sessions.php?Added');
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="appdate">Date of Appointment:</label>
-                        <input id="appdate" type="date" name="appdate"><br><br>
+                        <input id="appdate" type="date" name="appdate" required><br><br>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <br>
                     <label for="start">Start time:</label>
-                    <input id="start" type="time" name="start"><br><br>
+                    <input id="start" type="time" name="start" required><br><br>
                 </div>
 
                 <div class="form-row">
                     <label for="end">End time:</label>
-                    <input id="end" type="time" name="end"><br><br>
+                    <input id="end" type="time" name="end" required><br><br>
                 </div>
 
                 <div class="form-group col-md-6">
                     <label for="capacity">Capacity: </label>
                     <input type="number" class="form-control" id="capacity" name = "capacity" min = "1" max = "5" value = "1" required>
                 </div>
-
-                <button type="submit" name="submit"  class="btn btn-primary display-4">Submit</button><br>
+                <div class = "container d-flex justify-content-center">
+                <button type="submit" name="submit"  class="btn btn-primary display-4">Submit</button>
+                </div>
+                <br>
             </form>
             </div>
             </article>

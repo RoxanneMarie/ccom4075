@@ -50,13 +50,12 @@
             <article>
             <div class="container-sm>">
                 <h3 class = "h3 d-flex justify-content-center">Add Professor</h3>
-                <form action="add_professor.php" method="POST"><br>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="Course_ID">Course ID:</label>
-                        </div>
-                        <select class="custom-select" id = "Course_ID" name = "Course_ID">
-                            <option selected>Select a Course</option>
+                <form action="add_professor.php" method="POST">
+
+                    <div class="form-group col">
+                        <label for="Course_ID">Course ID:</label>
+                        <select class="form-control" id = "Course_ID" name = "Course_ID" required>
+                            <option selected value = "">Select a Course.</option>
                             <?php 
                             $query = query("SELECT * FROM lc_courses");
                             confirm($query);
@@ -66,36 +65,31 @@
                         </select>
                     </div>
 
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="professor_name" class= "input-group-text" id= "inputGroup-sizing-lg">Professor Name:</label>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="professor_name">Professor Name:</label>
+                            <input type="text" class="form-control" id="professor_name" name="professor_name"required>
                         </div>
-                        <input type="text" class="form-control" id="professor_name" name="professor_name" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
-                    </div>
-                    <br>
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="professor_initial" class= "input-group-text" id = "inputGroup-sizing-lg">Professor Initial:</label>
+                        <div class = "form-group col">
+                            <label for="professor_initial">Professor Initial:</label>
+                            <input type="text" class="form-control" id="professor_initial" name="professor_initial">
                         </div>
-                        <input type="text" class="form-control" id="professor_initial" name="professor_initial" aria-label="Default" aria-describedby="inputGroup-sizing-sm">
                     </div>
-                    <br>
 
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="professor_flname" class= "input-group-text" id= "inputGroup-sizing-lg">Professor First Last Name:</label>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="professor_flname">Professor First Last Name:</label>
+                            <input type="text" class="form-control" id="professor_flname" name="professor_flname" required>
                         </div>
-                        <input type="text" class="form-control" id="professor_flname" name="professor_flname" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
+                        <div class="form-group col">
+                            <label for="professor_slname">Professor Second Last name:</label>
+                            <input type="text" class="form-control" id="professor_slname" name="professor_slname" required>
+                        </div>
+                    </div>
+                    <div class = "container d-flex justify-content-center">
+                        <button type="submit" name="submit"  class="btn btn-primary display-4">Submit</button>
                     </div>
                     <br>
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="professor_slname" class= "input-group-text" id = "inputGroup-sizing-lg">Professor Second Last name:</label>
-                        </div>
-                        <input type="text" class="form-control" id="professor_slname" name="professor_slname" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
-                    </div>
-                    <br>
-                    <button type="submit" name="submit"  class="btn btn-primary display-4">Submit</button><br>
             </form>
             </div>
             </article>
