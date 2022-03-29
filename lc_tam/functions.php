@@ -335,6 +335,77 @@ function last_id()
     return $connection->insert_id;
 }
 
+function conv_month($m)
+{
+    switch($m)
+    {
+        case '01':
+            return "January";
+        case '02':
+            return "February";
+        case '03':
+            return "March";
+        case '04':
+            return "April";
+        case '05':
+            return "May";
+        case '06':
+            return "June";
+        case '07':
+            return "July";
+        case '08':
+            return "August";
+        case '09':
+            return "September";
+        case '10':
+            return "October";
+        case '11':
+            return "November";
+        case '12':
+            return "December";
+    }
+}
+
+function conv_date($d)
+{
+    if(substr($d,0,1) == "0")
+        $d = substr($d,1,1);
+    
+    switch($d)
+    {
+        case '1':
+            $d .= "st";
+        case '2':
+            $d .= "nd";
+        case '3':
+            $d .= "rd";
+        default:
+            $d .= "th";    
+    }
+    
+    return $d;
+}
+
+function conv_time($t)
+{
+    $t = number_format($t);
+    
+    if($t > 12)
+        $t = $t - 12;
+    
+    return $t;
+}
+
+function ampm($t)
+{
+    $t = number_format($t);
+    
+    if($t >= 12)
+        return "pm";
+    else
+        return "am";
+}
+
 function login()
 {
     if(isset($_POST['login']))
@@ -768,12 +839,14 @@ function student_select_time()
 
             if(mysqli_num_rows($query2) != 0)
             {
+                $date = conv_month(substr($week[$x-1],5,2)) . " " . conv_date(substr($week[$x-1],8,2)) . ", " . substr($week[$x-1],0,4);
+                
                 $flag = true;
                 echo '
                     <div class="card mb-3">
                         <div class="card-header" role="tab" id="headingOne">
                             <a role="button" class="panel-title collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-core="" href="#collapse' . $x . '_17" aria-expanded="false" aria-controls="collapse' . $x . '">
-                                <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>' . $week_name[$x-1] . ' ' . $week[$x-1] . '</strong></h6>
+                                <h6 class="panel-title-edit mbr-fonts-style mb-0 display-7"><strong>(' . $week_name[$x-1] . ') ' . $date . '</strong></h6>
                                 <span class="sign mbr-iconfont mbri-arrow-down"></span>
                             </a>
                         </div>
@@ -787,6 +860,9 @@ function student_select_time()
 
                 while($row2 = fetch_array($query2))
                 {
+                    $start = conv_time(substr($_SESSION["selected_start_time"],0,2)) . substr($_SESSION["selected_start_time"],2,3) . ampm(substr($_SESSION["selected_start_time"],0,2));
+                    $end = conv_time(substr($_SESSION["selected_end_time"],0,2)) . substr($_SESSION["selected_end_time"],2,3) . ampm(substr($_SESSION["selected_end_time"],0,2));
+                    
                     $start = substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5);
                     $end = substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5);
                     
@@ -889,23 +965,66 @@ function confirm_app()
 
         }while(!isset($_POST["start_time_{$i}"]));
         
+        $query = query("SELECT student_email FROM lc_test_tutors WHERE tutor_id = {$_SESSION['selected_tutor']}");
+        confirm($query);
+        $row = fetch_array($query);
+        
+        $query = query("SELECT student_name, student_first_lastname FROM lc_test_students WHERE student_email = '{$row['student_email']}'");
+        confirm($query);
+        $row = fetch_array($query);
+        
+        $date = conv_month(substr($_SESSION["selected_date"],5,2)) . " " . conv_date(substr($_SESSION["selected_date"],8,2)) . ", " . substr($_SESSION["selected_date"],0,4);
+        $start = conv_time(substr($_SESSION["selected_start_time"],0,2)) . substr($_SESSION["selected_start_time"],2,3) . ampm(substr($_SESSION["selected_start_time"],0,2));
+        $end = conv_time(substr($_SESSION["selected_end_time"],0,2)) . substr($_SESSION["selected_end_time"],2,3) . ampm(substr($_SESSION["selected_end_time"],0,2));
+        
         echo '
             <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="col-12">
                             <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                                <strong>Do you confirm the information of your chosen appointment?</strong>
+                                <strong>Appointment Confirmation</strong>
                             </h3>
-                        </div>';
-         echo '<button type="submit" form="form" formmethod="POST" formaction="create_appointment.php" class="btn btn-success display-4" name="">Confirm</button>';
-        echo '
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="card-wrap">
+                                <div class="content-wrap">
+                                    <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
+                                        <strong>Do you confirm the information of your chosen appointment?</strong>
+                                    </h5>
+                                    <div class="mbr-section-btn card-btn align-center">
+                                        <table class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="text-align: right;"><strong>Course:</strong></td>
+                                                    <td>' . $_SESSION["selected_course"] . '</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align: right;"><strong>Tutor:</strong></td>
+                                                    <td>' . $row["student_name"] . ' ' . $row["student_first_lastname"] . '</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align: right;"><strong>Date:</strong></td>
+                                                    <td>' . $date . '</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align: right;"><strong>Time:</strong></td>
+                                                    <td>' . $start . ' - ' . $end . '</td>
+                                                </tr>
+                                        </table>
+                                        <button type="submit" form="form" formmethod="POST" formaction="create_appointment.php" class="btn btn-primary display-4" name="">Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <form id="form">
                             <input type="hidden" name="confirm_app">
                         </form>
                     </div>
                 </div>
             </section>';
+        
+        close();
     }
     else
         redirect("../logout.php");
@@ -922,8 +1041,6 @@ function create_app()
         {
             $query = query('INSERT INTO lc_sessions (tutor_id, session_date, start_time, end_time, capacity) VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION["selected_date"] . '","' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '", 1)');
             confirm($query);
-
-            print_r($query);
 
             $id = last_id();
 
@@ -976,6 +1093,8 @@ function create_app()
     else
         redirect("../logout.php");
 }
+
+//lc_sessions ya no tiene course_id
 
 function student_view_appointment()
 {
