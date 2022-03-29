@@ -679,10 +679,6 @@ function student_select_tutor()
 }
 
 // Needs Crowd Control.
-// Use appointments already made by student to see what day and time available conflicts with already reserved appointments.
-// How many appointments can a student make per week.
-// How many appointments can a student make on a single department per day.
-// How many weeks can the student see to make appointments in?
 
 function student_select_time()
 {   
@@ -699,15 +695,18 @@ function student_select_time()
 
         }while(!isset($_POST["tutor_{$i}"]));
 
-        echo "
-            <section data-bs-version='5.1' class='team1 cid-sO6qmUi7nj' id='team1-1e'>
-                <div class='container-fluid'>
+         echo "
+            <section data-bs-version='5.1' class='content16 cid-sO0lfEsMNZ' id='content16-t'>
+                <div class='container'>
                     <div class='row justify-content-center'>
-                        <div class='col-12'>
-                            <h3 class='mbr-section-title mbr-fonts-style align-center mb-4 display-2'>
-                                <strong>Tutor's Schedule</strong>
-                            </h3>
-                        </div>";
+                        <div class='col-12 col-md-4'>
+                            <div class='mbr-section-head align-center mb-4'>
+                                <h3 class='mbr-section-title mb-0 mbr-fonts-style display-2'><strong>Tutor's Schedule Courses</strong></h3>
+                            </div>
+                            <div class='alert alert-primary' style = 'background: #fd8f00;' role='alert'>
+                                Select the course you want to request tutoring for.
+                            </div>
+                            <div id='bootstrap-accordion_17' class='panel-group accordionStyles accordion' role='tablist' aria-multiselectable='true'>";
 
         $week_name = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 
@@ -782,6 +781,7 @@ function student_select_time()
                             <div class="panel-body">
                                 <p class="mbr-fonts-style panel-text display-4">
                                     <div class="mbr-section-btn mt-3">';
+                
 
                 $i = 1;
 
@@ -856,6 +856,8 @@ function student_select_time()
             echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
 
         echo '
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>';
@@ -918,7 +920,7 @@ function create_app()
 
         if(mysqli_num_rows($query) == 0)
         {
-            $query = query('INSERT INTO lc_sessions (tutor_id, course_id, session_date, start_time, end_time, capacity) VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION['selected_course'] . '","' . $_SESSION["selected_date"] . '","' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '", 1)');
+            $query = query('INSERT INTO lc_sessions (tutor_id, session_date, start_time, end_time, capacity) VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION["selected_date"] . '","' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '", 1)');
             confirm($query);
 
             print_r($query);
@@ -929,7 +931,7 @@ function create_app()
             confirm($query);
             $row = fetch_array($query);
 
-            $query = query('INSERT INTO lc_appointments (student_email, session_id) VALUES("' . $row["student_email"] . '", ' . $id . ')');
+            $query = query('INSERT INTO lc_appointments (student_email, session_id, course_id) VALUES("' . $row["student_email"] . '", ' . $id . ', "' . $_SESSION['selected_course'] . '")');
             confirm($query);
 
             unset($_SESSION["selected_course"], $_SESSION["selected_professor"], $_SESSION["selected_tutor"], $_SESSION["selected_date"], $_SESSION["selected_start_time"], $_SESSION["selected_end_time"]);
