@@ -1,6 +1,10 @@
 <?php 
     require_once("../functions.php");
     
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+    }
+
     if(isset($_POST['submit'])){
         $date = $_POST['appdate'];
         $tutor = $_POST['tutor'];
@@ -16,7 +20,7 @@ VALUES("' . $tutor . '","' . $courseID . '","' . $start . '","' . $end . '","' .
 //$sessionid = mysqli_insert_id(DB_HOST,DB_USER,DB_PASS,DB_NAME); 
 
 //$query = query('INSERT INTO lc_tutorings (ID_Tutor,')
-redirect('tutoring_sessions.php?Added');
+redirect('tutoring_sessions.php?Success');
 }
 
 ?>
@@ -32,7 +36,7 @@ redirect('tutoring_sessions.php?Added');
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Add Tutoring Sessions - LC:TAM</title>
+      <title>Edit Tutoring Sessions - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -53,13 +57,21 @@ redirect('tutoring_sessions.php?Added');
             <main class="container d-flex justify-content-center">
                 <article>
                     <div>
-                    <h3 class = "h3 d-flex justify-content-center">Add Tutoring Session</h3>
-            <form action="add_tutoring_session.php" method="POST"><br>
-
+                    <h3 class = "h3 d-flex justify-content-center">Edit Tutoring Session</h3>
+            <form action="edit_tutoring_session.php?id=<?php echo $id ?>" method="POST"><br>
+            <?php 
+            $query = query("SELECT * FROM lc_sessions
+            INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
+            INNER JOIN lc_test_students ON lc_test_tutors.student_email = lc_test_students.student_email
+            WHERE lc_sessions.session_id = '$id'");
+            confirm($query);
+            $row = fetch_array($query);
+            
+            ?>
             <div class="form-group">
                 <label for="tutor">Tutor:</label>
                 <select class="form-control" id="tutor" name = "tutor" required>
-                <option selected value = "">Select a Tutor</option>
+                <option selected value = "<?php echo $row['tutor_id']?>"><?php echo $row['student_id']; ?> - <?php echo $row['student_name']; ?> <?php echo $row['student_initial']; ?> <?php echo $row['student_first_lastname']; ?> <?php echo $row['student_second_lastname']; ?></option>
                 <?php 
                     $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
                     lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id
@@ -74,7 +86,7 @@ redirect('tutoring_sessions.php?Added');
             <div class="form-group">
                     <label for="Course_ID">Course ID:</label>
                 <select class="form-control" id="Course_ID" name = "Course_ID" required>
-                <option selected value = "" >Select a Course</option>
+                <option selected value = "<?php echo $row['course_id'] ?>" ><?php echo $row['course_id']; ?> - </option>
                 <?php 
                     $query3 = query("SELECT * FROM lc_courses");
                     confirm($query3);

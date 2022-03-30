@@ -65,38 +65,34 @@
                 <table class="table table-responsive">
             <thead class = "tCourses">
                 <th>Edit</th>
-                <th>Tutoring ID</th>
                 <th>Session ID</th>
-                <th>Appointment Date</th>
-                <th>Tutor</th>
+                <th>Tutor Email</th>
                 <th>Course ID</th>
-                <th>Start time</th>
-                <th>End time</th>
-                <th>Appointment Cancelled?</th>
-                <th>Cancelation Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Session Date</th>
+                <th>Capacity</th>
+                <th>Appointed Students</th>
             </thead>';
-    $query = query("SELECT * FROM lc_tutorings");
+    $query = query("SELECT * FROM lc_sessions 
+    INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
+    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email");
     confirm($query);
     while ($row = fetch_array($query)) {
-        $query2 = query("SELECT * FROM lc_test_tutors WHERE tutor_id = '" . $row['tutor_id'] ." ' ");
-        confirm($query2); 
-        $row2 = fetch_array($query2);
-        $query2 = query("SELECT * FROM lc_sessions WHERE session_id = '" . $row['session_id'] ." ' ");
-        confirm($query2); 
-        $row2 = fetch_array($query2);
+
+
 
         echo '    
                 <tr class="trCourses">
-                    <td>   <a href="#'. $row['session_id'] .'">Edit</a>
-                    <td>'. $row['tutoring_id'] .'</td>
+                    <td>   <a href="edit_tutoring_session.php?id='. $row['session_id'] .'">Edit</a>
                     <td>'. $row['session_id'] .'</td>
-                    <td>'. $row['date_appointment'] .'</td>
-                    <td>'. $row['student_id'] .'</td>
-                    <td>'. $row2['course_id'] .'</td>
-                    <td>'. $row2['start_time'] .'</td>
-                    <td>'. $row2['end_time'] .'</td>
-                    <td>'. $row['Cancel_appointment'] .'</td>
-                    <td>'. $row['Cancel_date'] .'</td>
+                    <td>'. $row['student_email'] .'</td>
+                    <td>'. $row['course_id'] .'</td>
+                    <td>'. $row['start_time'] .'</td>
+                    <td>'. $row['end_time'] .'</td>
+                    <td>'. $row['session_date'] .'</td>
+                    <td>'. $row['capacity'] .'</td>
+                    <td> Test</td>
                     </tr>
                    '; } echo '
                 </table><br><br>
