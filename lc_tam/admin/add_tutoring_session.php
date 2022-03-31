@@ -4,14 +4,13 @@
     if(isset($_POST['submit'])){
         $date = $_POST['appdate'];
         $tutor = $_POST['tutor'];
-        $courseID = $_POST['Course_ID'];
         $start = $_POST['start'];
         $end = $_POST['end'];
         $capacity = $_POST['capacity'];
 
 
-$query2 = query('INSERT INTO lc_sessions (tutor_id, course_id, start_time, end_time, session_date, capacity)
-VALUES("' . $tutor . '","' . $courseID . '","' . $start . '","' . $end . '","' . $date . '","' . $capacity . '")');
+$query2 = query('INSERT INTO lc_sessions (tutor_id, start_time, end_time, session_date, capacity)
+VALUES("' . $tutor . '","' . $start . '","' . $end . '","' . $date . '","' . $capacity . '")');
 
 //$sessionid = mysqli_insert_id(DB_HOST,DB_USER,DB_PASS,DB_NAME); 
 
@@ -71,18 +70,6 @@ redirect('tutoring_sessions.php?Added');
                     <option value = <?php echo $row2['tutor_id'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; } ?></option>
                     </select>
             </div>
-            <div class="form-group">
-                    <label for="Course_ID">Course ID:</label>
-                <select class="form-control" id="Course_ID" name = "Course_ID" required>
-                <option selected value = "" >Select a Course</option>
-                <?php 
-                    $query3 = query("SELECT * FROM lc_courses");
-                    confirm($query3);
-                    while($row3 = fetch_array($query3)) { ?>
-                    <option value=<?php echo $row3['course_id'] ?> ><?php echo $row3['course_id']; ?> - <?php echo $row3['course_name']; } ?></option>
-                    </select>
-            </div>
-
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="appdate">Date of Appointment:</label>

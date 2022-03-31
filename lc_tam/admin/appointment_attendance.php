@@ -1,9 +1,18 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php"); 
+
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+    }
 ?>
 
 <!DOCTYPE html>
 <html>
+    <?php
+    $query = query("SELECT * FROM lc_appointments WHERE session_id = $id");
+    confirm($query);
+    $row = fetch_array($query);
+    ?>
     <head>
       <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
@@ -13,7 +22,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Tutoring Sessions - LC:TAM</title>
+      <title>Appointments of Session #<?php echo $row['session_id']; ?> - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -42,57 +51,55 @@
     <main class="container">
         <article>
         <div class="container-sm">
-            <h3 class = "h3 text-center">Tutoring Sessions</h3>
-            <a class = "btn btn-primary" href="add_tutoring_session.php">Add Tutoring Session</a>
+            <h3 class = "h3 text-center">Attendance of Session #'; echo $row['session_id']; echo '</h3>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutoring session updated successfully.</span>
+                <span> Attendance updated successfully.</span>
             </div>'; 
             }
-             if(isset($_GET['removed'])){ echo '
+            if(isset($_GET['added'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutoring session removed successfully.</span>
-            </div>
-            ';
-            }
-            if(isset($_GET['Added'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutoring session added successfully.</span>
+                <span> Attendance added successfully.</span>
             </div>
             ';
             } echo '
                 <table class="table table-responsive">
             <thead class = "tCourses">
-                <th>Edit</th>
-                <th>Session ID</th>
-                <th>Tutor Email</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Session Date</th>
-                <th>Capacity</th>
-                <th>Appointed Students</th>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <th>Student Email</th>
+                <th>Status</th>
             </thead>';
-    $query = query("SELECT * FROM lc_sessions 
-    INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
-    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email");
-    confirm($query);
-    while ($row = fetch_array($query)) {
-
-
-
+            $query = query("SELECT CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
+            lc_test_students.student_second_lastname) AS 'student_full_name', lc_test_students.student_id, lc_test_students.student_email
+            FROM lc_appointments
+            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_appointments.student_email
+            WHERE lc_appointments.session_id = '$id'");
+            confirm($query);
+            while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>   <a href="edit_tutoring_session.php?id='. $row['session_id'] .'">Edit</a>
-                    <td>'. $row['session_id'] .'</td>
+                    <td>'. $row['student_full_name'] .'</td>
+                    <td>'. $row['student_id'] .'</td>
                     <td>'. $row['student_email'] .'</td>
-                    <td>'. $row['start_time'] .'</td>
-                    <td>'. $row['end_time'] .'</td>
-                    <td>'. $row['session_date'] .'</td>
-                    <td>'. $row['capacity'] .'</td>
-                    <td> <a href="tutoring_appointments.php?id='. $row['session_id'] .'">View</td>
+                    <td>                     
+                    <div class="form-group col">
+                    <select class="form-control" id="attendance_status" name = "attendance_status" required>
+                    <option selected value = ""> Select a value. </option>';
+                    $query2 = query("SELECT * FROM lc_attendance_status");
+                    confirm($query2);
+                    while($row2 = fetch_array($query2)) { echo '
+                    <option value = "'; echo $row2['att_stat_id']; echo '"> '; echo $row2['att_stat_name']; }  echo'</option>
+                        </select>
+                        </div> 
+                    </td>
                     </tr>
                    '; } echo '
-                </table><br><br>
+                </table>
+                <div class = "container d-flex justify-content-center">
+                <btn class = "btn btn-primary display-4" type = "submit name = "submit">Submit Attendance.</a>
+                </div>
+                </form>
                 </div>
                 </article>
             </main>';

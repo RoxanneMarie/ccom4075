@@ -7,20 +7,22 @@
 
     if(isset($_POST['submit'])){
         $date = $_POST['appdate'];
-        $tutor = $_POST['tutor'];
-        $courseID = $_POST['Course_ID'];
         $start = $_POST['start'];
         $end = $_POST['end'];
         $capacity = $_POST['capacity'];
 
+        $Uquery = "UPDATE lc_sessions
+        SET start_time = '$start', 
+        end_time = '$end', 
+        session_date = '$date',
+        capacity = '$capacity'
+        WHERE session_id = '$id'";
 
-$query2 = query('INSERT INTO lc_sessions (tutor_id, course_id, start_time, end_time, session_date, capacity)
-VALUES("' . $tutor . '","' . $courseID . '","' . $start . '","' . $end . '","' . $date . '","' . $capacity . '")');
-
+        $res = query($Uquery);
 //$sessionid = mysqli_insert_id(DB_HOST,DB_USER,DB_PASS,DB_NAME); 
 
 //$query = query('INSERT INTO lc_tutorings (ID_Tutor,')
-redirect('tutoring_sessions.php?Success');
+redirect('tutoring_sessions.php?success');
 }
 
 ?>
@@ -70,52 +72,32 @@ redirect('tutoring_sessions.php?Success');
             ?>
             <div class="form-group">
                 <label for="tutor">Tutor:</label>
-                <select class="form-control" id="tutor" name = "tutor" required>
+                <select class="form-control" id="tutor" name = "tutor" disabled>
                 <option selected value = "<?php echo $row['tutor_id']?>"><?php echo $row['student_id']; ?> - <?php echo $row['student_name']; ?> <?php echo $row['student_initial']; ?> <?php echo $row['student_first_lastname']; ?> <?php echo $row['student_second_lastname']; ?></option>
-                <?php 
-                    $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
-                    lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id
-                    FROM lc_test_students
-                    INNER JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
-                    WHERE lc_test_tutors.student_email = lc_test_students.student_email");
-                    confirm($query2);
-                    while($row2 = fetch_array($query2)) { ?>
-                    <option value = <?php echo $row2['tutor_id'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; } ?></option>
-                    </select>
-            </div>
-            <div class="form-group">
-                    <label for="Course_ID">Course ID:</label>
-                <select class="form-control" id="Course_ID" name = "Course_ID" required>
-                <option selected value = "<?php echo $row['course_id'] ?>" ><?php echo $row['course_id']; ?> - </option>
-                <?php 
-                    $query3 = query("SELECT * FROM lc_courses");
-                    confirm($query3);
-                    while($row3 = fetch_array($query3)) { ?>
-                    <option value=<?php echo $row3['course_id'] ?> ><?php echo $row3['course_id']; ?> - <?php echo $row3['course_name']; } ?></option>
                     </select>
             </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="appdate">Date of Appointment:</label>
-                        <input id="appdate" type="date" name="appdate" required><br><br>
+                        <input id="appdate" type="date" name="appdate" value = "<?php echo $row['session_date']; ?>" required><br><br>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <br>
                     <label for="start">Start time:</label>
-                    <input id="start" type="time" name="start" min = "08:00" max = "15:00" required><br><br>
+                    <input id="start" type="time" name="start" min = "08:00" max = "15:00" value = "<?php echo $row['start_time']; ?>" required><br><br>
                 </div>
 
                 <div class="form-row">
                     <label for="end">End time:</label>
-                    <input id="end" type="time" name="end" min = "09:00" max = "16:00" required><br><br>
+                    <input id="end" type="time" name="end" min = "09:00" max = "16:00" value = "<?php echo $row['end_time']; ?>" required><br><br>
                 </div>
 
                 <div class="form-group col-md-6">
                     <label for="capacity">Capacity: </label>
-                    <input type="number" class="form-control" id="capacity" name = "capacity" min = "1" max = "5" value = "1" required>
+                    <input type="number" class="form-control" id="capacity" name = "capacity" min = "1" max = "5" value = "<?php echo $row['capacity']; ?>" required>
                 </div>
                 <div class = "container d-flex justify-content-center">
                 <button type="submit" name="submit"  class="btn btn-primary display-4">Submit</button>
