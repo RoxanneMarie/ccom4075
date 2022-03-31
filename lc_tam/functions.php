@@ -1108,7 +1108,7 @@ function student_view_appointment()
     {
         while($row = fetch_array($query))
         {
-            $query2 = query("SELECT tutor_id, course_id, TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), DATE_FORMAT(session_date, '%M %d %Y') FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND session_date >= '" . $_SESSION["current_date"] . "'");
+            $query2 = query("SELECT tutor_id, /*course_id,*/ TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), DATE_FORMAT(session_date, '%M %d %Y') FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND session_date >= '" . $_SESSION["current_date"] . "'");
             confirm($query2);
 
             if(mysqli_num_rows($query2) != 0)
@@ -1124,7 +1124,7 @@ function student_view_appointment()
                 confirm($query3);
                 $row3 = fetch_array($query3);
                 
-                $app_info[$c-1] = array('f_name' => $row3["student_name"], 'l_name' => $row3["student_first_lastname"], 'course' => $row2["course_id"], 'date' => $row2["DATE_FORMAT(session_date, '%M %d %Y')"], 's_time' => substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5), 'e_time' => substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5));
+                $app_info[$c-1] = array('f_name' => $row3["student_name"], 'l_name' => $row3["student_first_lastname"], /*'course' => $row2["course_id"],*/ 'date' => $row2["DATE_FORMAT(session_date, '%M %d %Y')"], 's_time' => substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5), 'e_time' => substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5));
             }
         }
         
@@ -1135,37 +1135,66 @@ function student_view_appointment()
             array_multisort($columns_1, SORT_ASC, $columns_2, SORT_ASC, $app_info);
             
             echo "
-                <table>
-                  <tr>
+            <div class = 'container-sm'>
+            <br>
+            <h1 class = 'h1 text-center'>Appointments </h1>
+                <table class = 'table table-sm'>
+                <caption> Current registered appointments. Appointments past current date will not be shown.</caption>
+                  <thead style = 'background: #fd8f00;'>
                     <th>Tutor</th>
-                    <th>Course</th>
+                    "; /*<th>Course</th>*/ echo "
                     <th>Date</th>
                     <th>Start</th>
                     <th>End</th>
-                  </tr>";
+                  </thead>";
             
             for($i=1; $i <= $c; $i++)
             {
                 echo "
-                      <tr>
+                      <tbody>
                         <td>" . $app_info[0]["f_name"] . " " . $app_info[$i-1]["l_name"] . "</td>
-                        <td>" . $app_info[$i-1]["course"] . "</td>
+                       "; /* <td>" . $app_info[$i-1]["course"] . "</td> */ echo "
                         <td>" . $app_info[$i-1]["date"] . "</td>
                         <td>" . $app_info[$i-1]["s_time"] . "</td>
                         <td>" . $app_info[$i-1]["e_time"] . "</td>
-                      </tr>";
+                      </tbody>";
             }
 
-            echo "</table>";
+            echo "</table> 
+            <div class = 'd-flex justify-content-center'>
+            <a class = 'btn btn-primary' href = 'select_course.php'>Create Appointment</a>
+            </div>
+            <br>
+            </div>";
         }
         else
         {
-            echo "You don't have any appointments.";
+            echo "
+            <br><br>
+            <div class = 'container-sm border rounded'>
+                 <br>
+                 <h1 class = 'h1 text-center'>Appointments </h1>
+                 <p class = 'lead text-center'>You don't have any appointments. Would you like to create one?</p>
+                 <div class = 'd-flex justify-content-center'>
+                     <a class = 'btn btn-primary' href = 'select_course.php'>Create Appointment</a>
+                 </div>
+             </div>
+            <br>";
         }
     }
     else
     {
-       echo "You don't have any appointments.";
+       echo "
+       <br><br>
+       <div class = 'container-sm border rounded'>
+            <br>
+            <h1 class = 'h1 text-center'>Appointments </h1>
+            <p class = 'lead text-center'>You don't have any appointments. Would you like to create one?</p>
+            <div class = 'd-flex justify-content-center'>
+                <a class = 'btn btn-primary' href = 'select_course.php'>Create Appointment</a>
+            </div>
+        </div>
+       <br>";
     }
     close();
 
