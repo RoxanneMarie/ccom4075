@@ -783,7 +783,15 @@ function student_select_time()
 
         $week = array("NULL", "NULL", "NULL", "NULL", "NULL");
 
-        if($_SESSION["current_day_of_the_week"] == "Sunday")
+        if($_SESSION["current_day_of_the_week"] == "Saturday")
+        {
+            $week[0] = date("Y-m-d", strtotime("+2 day"));
+            $week[1] = date("Y-m-d", strtotime("+3 day"));
+            $week[2] = date("Y-m-d", strtotime("+4 day"));
+            $week[3] = date("Y-m-d", strtotime("+5 day"));
+            $week[4] = date("Y-m-d", strtotime("+6 day"));
+        }
+        else if($_SESSION["current_day_of_the_week"] == "Sunday")
         {
             $week[0] = date("Y-m-d", strtotime("+1 day"));
             $week[1] = date("Y-m-d", strtotime("+2 day"));
@@ -824,6 +832,7 @@ function student_select_time()
         else
         {
             echo "You are not suppose to be here!";
+            exit;
             redirect("logout.php");
         }
         
@@ -860,54 +869,67 @@ function student_select_time()
 
                 while($row2 = fetch_array($query2))
                 {
-                    $start = conv_time(substr($_SESSION["selected_start_time"],0,2)) . substr($_SESSION["selected_start_time"],2,3) . ampm(substr($_SESSION["selected_start_time"],0,2));
-                    $end = conv_time(substr($_SESSION["selected_end_time"],0,2)) . substr($_SESSION["selected_end_time"],2,3) . ampm(substr($_SESSION["selected_end_time"],0,2));
-                    
                     $start = substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5);
                     $end = substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5);
                     
                     $flag2 = false; //If true, there already is an appointment made by the student for that section
+                    $flag3 = false; //If true, there is a pre-existing appointment made by the student that conflicts time-wise with the section
                     
-                    $query3 = query("SELECT session_id FROM lc_sessions WHERE session_date = '{$week[$x-1]}' AND course_id = '{$_SESSION["selected_course"]}'");
+                    $query3 = query("SELECT session_id FROM lc_appointments WHERE course_id = '{$_SESSION["selected_course"]}' AND student_email = '{$_SESSION["email"]}'");
                     confirm($query3);
                     
                     if(mysqli_num_rows($query3) != 0)
                     {
-                        $row3 = fetch_array($query3);
-                        
-                        $query3 = query("SELECT * FROM lc_appointments WHERE session_id = {$row3["session_id"]} AND student_email = '{$_SESSION["email"]}'");
-                        confirm($query3);
-                        
-                        if(mysqli_num_rows($query3) != 0)
-                                $flag2 = true;
-                    }
-
-                    if(!$flag2)
-                    {
-                        echo "SELECT session_id FROM lc_sessions WHERE session_date = '{$week[$x-1]}' AND start_time = '{$row2["start_time"]}' AND end_time = '{$row2["end_time"]}' AND course_id != '{$_SESSION["selected_course"]}'";
-                        $query3 = query("SELECT session_id FROM lc_sessions WHERE session_date = '{$week[$x-1]}' AND start_time = '{$row2["start_time"]}' AND end_time = '{$row2["end_time"]}' AND course_id != '{$_SESSION["selected_course"]}'");
-                        confirm($query3);
-                        
-                        if(mysqli_num_rows($query3) == 0)
+                        while($row3 = fetch_array($query3))
                         {
-                            $query3 = query("SELECT max_capacity FROM lc_conditions");
-                            confirm($query3);
-                            $row3 = fetch_array($query3);
-
-                            $query3 = query("SELECT * FROM lc_sessions WHERE session_date = '" . $week[$x-1] . "' AND start_time = '" . $row2["start_time"] . "' AND tutor_id = " . $_SESSION['selected_tutor'] . " AND capacity >= " . $row3["max_capacity"]);
+                            $query3 = query("SELECT * FROM lc_sessions WHERE session_id = {$row3["session_id"]} AND session_date = '{$week[$x-1]}' AND (start_time < '{$row2["start_time"]}' AND end_time > '{$row2["start_time"]}' OR start_time < '{$row2["end_time"]}' AND end_time > '{$row2["end_time"]}' OR start_time = '{$row2["start_time"]}' OR end_time = '{$row2["end_time"]}')");
                             confirm($query3);
 
                             if(mysqli_num_rows($query3) != 0)
-                                echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' FULL </button>';
-                            else
                             {
-                                echo '<button type="submit" form="form' . $x . '" formmethod="POST" formaction="confirm_appointment.php" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '">' . $start . ' - ' . $end . '</button>';
-                                echo '<input type="hidden" form="form' . $x . '" formmethod="POST" formaction="confirm_appointment.php" name="end_time_' . $i . '" value="' . $row2["end_time"] . '">';
+                                $flag2 = true;
+                                break;
                             }
                         }
-                        else
-                            echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' CONFLICTS</button>';
                     }
+                    
+                    $query3 = query("SELECT session_id FROM lc_appointments WHERE course_id != '{$_SESSION["selected_course"]}' AND student_email = '{$_SESSION["email"]}'");
+                    confirm($query3);
+                    
+                    if(mysqli_num_rows($query3) != 0)
+                    {
+                        while($row3 = fetch_array($query3))
+                        {
+                            $query3 = query("SELECT * FROM lc_sessions WHERE session_id = {$row3["session_id"]} AND session_date = '{$week[$x-1]}' AND (start_time < '{$row2["start_time"]}' AND end_time > '{$row2["start_time"]}' OR start_time < '{$row2["end_time"]}' AND end_time > '{$row2["end_time"]}' OR start_time = '{$row2["start_time"]}' OR end_time = '{$row2["end_time"]}')");
+                            confirm($query3);
+
+                            if(mysqli_num_rows($query3) != 0)
+                            {
+                                $flag3 = true;
+                                break;
+                            }
+                        }
+                    }
+                        
+                    if(!$flag2 && !$flag3)
+                    {
+                        $query3 = query("SELECT max_capacity FROM lc_conditions");
+                        confirm($query3);
+                        $row3 = fetch_array($query3);
+
+                        $query3 = query("SELECT * FROM lc_sessions WHERE session_date = '" . $week[$x-1] . "' AND start_time = '" . $row2["start_time"] . "' AND tutor_id = " . $_SESSION['selected_tutor'] . " AND capacity >= " . $row3["max_capacity"]);
+                        confirm($query3);
+
+                        if(mysqli_num_rows($query3) != 0)
+                            echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' FULL </button>';
+                        else
+                        {
+                            echo '<button type="submit" form="form' . $x . '" formmethod="POST" formaction="confirm_appointment.php" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '">' . $start . ' - ' . $end . '</button>';
+                            echo '<input type="hidden" form="form' . $x . '" formmethod="POST" formaction="confirm_appointment.php" name="end_time_' . $i . '" value="' . $row2["end_time"] . '">';
+                        }
+                    }
+                    else if($flag3)
+                        echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' CONFLICTS</button>';
                     else
                         echo '<button type="" class="btn btn-success display-4" name="start_time_' . $i . '" value="' . $row2["start_time"] . '" disabled>' . $start . ' - ' . $end . ' RESERVED</button>';
 
@@ -1108,7 +1130,7 @@ function student_view_appointment()
     {
         while($row = fetch_array($query))
         {
-            $query2 = query("SELECT tutor_id, /*course_id,*/ TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), DATE_FORMAT(session_date, '%M %d %Y') FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND session_date >= '" . $_SESSION["current_date"] . "'");
+            $query2 = query("SELECT tutor_id, TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), DATE_FORMAT(session_date, '%M %d %Y') FROM lc_sessions WHERE session_id = " . $row["session_id"] . " AND session_date >= '" . $_SESSION["current_date"] . "'");
             confirm($query2);
 
             if(mysqli_num_rows($query2) != 0)
@@ -1124,7 +1146,11 @@ function student_view_appointment()
                 confirm($query3);
                 $row3 = fetch_array($query3);
                 
-                $app_info[$c-1] = array('f_name' => $row3["student_name"], 'l_name' => $row3["student_first_lastname"], /*'course' => $row2["course_id"],*/ 'date' => $row2["DATE_FORMAT(session_date, '%M %d %Y')"], 's_time' => substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5), 'e_time' => substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5));
+                $query3 = query("SELECT course_id FROM lc_appointments WHERE session_id = " . $row["session_id"]);
+                confirm($query3);
+                $row4 = fetch_array($query3);
+                
+                $app_info[$c-1] = array('f_name' => $row3["student_name"], 'l_name' => $row3["student_first_lastname"], 'course' => $row4["course_id"], 'date' => $row2["DATE_FORMAT(session_date, '%M %d %Y')"], 's_time' => substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5), 'e_time' => substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5));
             }
         }
         
@@ -1142,7 +1168,7 @@ function student_view_appointment()
                 <caption> Current registered appointments. Appointments past current date will not be shown.</caption>
                   <thead style = 'background: #fd8f00;'>
                     <th>Tutor</th>
-                    "; /*<th>Course</th>*/ echo "
+                    <th>Course</th>
                     <th>Date</th>
                     <th>Start</th>
                     <th>End</th>
@@ -1153,7 +1179,7 @@ function student_view_appointment()
                 echo "
                       <tbody>
                         <td>" . $app_info[0]["f_name"] . " " . $app_info[$i-1]["l_name"] . "</td>
-                       "; /* <td>" . $app_info[$i-1]["course"] . "</td> */ echo "
+                       <td>" . $app_info[$i-1]["course"] . "</td>
                         <td>" . $app_info[$i-1]["date"] . "</td>
                         <td>" . $app_info[$i-1]["s_time"] . "</td>
                         <td>" . $app_info[$i-1]["e_time"] . "</td>
