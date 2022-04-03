@@ -750,6 +750,7 @@ function student_select_tutor()
 }
 
 // Needs Crowd Control.
+// Section Confliction needs simplification (Key: course_id)
 
 function student_select_time()
 {   
@@ -875,37 +876,23 @@ function student_select_time()
                     $flag2 = false; //If true, there already is an appointment made by the student for that section
                     $flag3 = false; //If true, there is a pre-existing appointment made by the student that conflicts time-wise with the section
                     
-                    $query3 = query("SELECT session_id FROM lc_appointments WHERE course_id = '{$_SESSION["selected_course"]}' AND student_email = '{$_SESSION["email"]}'");
+                    $query3 = query("SELECT session_id, course_id FROM lc_appointments WHERE student_email = '{$_SESSION["email"]}'");
                     confirm($query3);
                     
                     if(mysqli_num_rows($query3) != 0)
                     {
                         while($row3 = fetch_array($query3))
                         {
-                            $query3 = query("SELECT * FROM lc_sessions WHERE session_id = {$row3["session_id"]} AND session_date = '{$week[$x-1]}' AND (start_time < '{$row2["start_time"]}' AND end_time > '{$row2["start_time"]}' OR start_time < '{$row2["end_time"]}' AND end_time > '{$row2["end_time"]}' OR start_time = '{$row2["start_time"]}' OR end_time = '{$row2["end_time"]}')");
-                            confirm($query3);
+                            $query4 = query("SELECT * FROM lc_sessions WHERE session_id = {$row3["session_id"]} AND session_date = '{$week[$x-1]}' AND (start_time < '{$row2["start_time"]}' AND end_time > '{$row2["start_time"]}' OR start_time < '{$row2["end_time"]}' AND end_time > '{$row2["end_time"]}' OR start_time = '{$row2["start_time"]}' OR end_time = '{$row2["end_time"]}')");
+                            confirm($query4);
 
-                            if(mysqli_num_rows($query3) != 0)
+                            if(mysqli_num_rows($query4) != 0)
                             {
-                                $flag2 = true;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    $query3 = query("SELECT session_id FROM lc_appointments WHERE course_id != '{$_SESSION["selected_course"]}' AND student_email = '{$_SESSION["email"]}'");
-                    confirm($query3);
-                    
-                    if(mysqli_num_rows($query3) != 0)
-                    {
-                        while($row3 = fetch_array($query3))
-                        {
-                            $query3 = query("SELECT * FROM lc_sessions WHERE session_id = {$row3["session_id"]} AND session_date = '{$week[$x-1]}' AND (start_time < '{$row2["start_time"]}' AND end_time > '{$row2["start_time"]}' OR start_time < '{$row2["end_time"]}' AND end_time > '{$row2["end_time"]}' OR start_time = '{$row2["start_time"]}' OR end_time = '{$row2["end_time"]}')");
-                            confirm($query3);
-
-                            if(mysqli_num_rows($query3) != 0)
-                            {
-                                $flag3 = true;
+                                if($row3["course_id"] == $_SESSION["selected_course"])
+                                    $flag2 = true;
+                                else
+                                    $flag3 = true;
+                                
                                 break;
                             }
                         }
