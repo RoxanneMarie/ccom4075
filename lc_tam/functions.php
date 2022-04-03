@@ -883,12 +883,14 @@ function student_select_time()
                     {
                         while($row3 = fetch_array($query3))
                         {
-                            $query4 = query("SELECT * FROM lc_sessions WHERE session_id = {$row3["session_id"]} AND session_date = '{$week[$x-1]}' AND (start_time < '{$row2["start_time"]}' AND end_time > '{$row2["start_time"]}' OR start_time < '{$row2["end_time"]}' AND end_time > '{$row2["end_time"]}' OR start_time = '{$row2["start_time"]}' OR end_time = '{$row2["end_time"]}')");
+                            $query4 = query("SELECT tutor_id FROM lc_sessions WHERE session_id = {$row3["session_id"]} AND session_date = '{$week[$x-1]}' AND (start_time < '{$row2["start_time"]}' AND end_time > '{$row2["start_time"]}' OR start_time < '{$row2["end_time"]}' AND end_time > '{$row2["end_time"]}' OR start_time = '{$row2["start_time"]}' OR end_time = '{$row2["end_time"]}')");
                             confirm($query4);
 
                             if(mysqli_num_rows($query4) != 0)
                             {
-                                if($row3["course_id"] == $_SESSION["selected_course"])
+                                $row4 = fetch_array($query4);
+                                
+                                if($row3["course_id"] == $_SESSION["selected_course"] && $row4["tutor_id"] == $_SESSION["selected_tutor"])
                                     $flag2 = true;
                                 else
                                     $flag3 = true;
