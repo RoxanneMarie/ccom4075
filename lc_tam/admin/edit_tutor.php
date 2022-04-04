@@ -125,24 +125,22 @@
                     <div class="form-group col">
                         <label for="Tutor_Type">Tutor Type:</label>
                         <select class="form-control" id="Tutor_Type" name = "Tutor_Type">
-                        <option selected value = "<?php echo $row['tutor_type_id']; ?> " ><?php echo $row['tutor_type_name']; ?></option>
                         <?php 
                         $query2 = query("SELECT * FROM lc_tutor_type");
                         confirm($query2);
                         while($row2 = fetch_array($query2)) { ?>
-                        <option value="<?php echo $row2['tutor_type_id']; ?>"><?php echo $row2['tutor_type_name'];  } ?></option>
+                        <option value = <?php echo $row2['tutor_type_id']; ?> <?php if ( $row2['tutor_type_id'] == $row['tutor_type_id']) { echo "selected"; } ?> ><?php echo $row2['tutor_type_name'];  } ?></option>
                         </select>
                     </div>
 
                     <div class="form-group col">
                         <label for="Acc_Status">Account Status:</label>
                         <select class="form-control" id="Acc_Status" name = "Acc_Status">
-                        <option selected value = "<?php echo $row['acc_stat_id']; ?> " ><?php echo $row['acc_stat_name']; ?></option>
                         <?php 
                         $query3 = query("SELECT * FROM lc_account_status");
                         confirm($query3);
                         while($row3 = fetch_array($query3)) { ?>
-                        <option value= "<?php echo $row3['acc_stat_id'] ?>" > <?php echo $row3['acc_stat_name'];  } ?></option>
+                        <option value= "<?php echo $row3['acc_stat_id'] ?>" <?php if ( $row3['acc_stat_id'] == $row['acc_stat_id']) { echo "selected"; } ?> > <?php echo $row3['acc_stat_name'];  } ?></option>
                         </select>
                     </div>
                     <div class = "container d-flex justify-content-center">

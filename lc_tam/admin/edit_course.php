@@ -75,12 +75,11 @@
            <div class="form-group">
                 <label for="Department_ID">Department:</label>
                 <select class="form-control" id="Department_ID" name = "Department_ID">
-                <option selected value = "<?php echo $row['dept_id']; ?> " ><?php echo $row['dept_name']; ?></option>
                 <?php 
                     $query2 = query("SELECT * FROM lc_departments");
                     confirm($query2);
                     while($row2 = fetch_array($query2)) { ?>
-                    <option value=<?php echo $row2['dept_id'] ?> ><?php echo $row2['dept_name'];  } ?></option>
+                    <option value=<?php echo $row2['dept_id'] ?> <?php if ( $row2['dept_id'] == $row['dept_id']) { echo "selected"; } ?> ><?php echo $row2['dept_name'];  } ?></option>
                     </select>
             </div>
             

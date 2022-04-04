@@ -72,12 +72,11 @@
                     <div class="form-group">
                         <label for="day">Day: </label>
                         <select class="form-control" id="day" name = "day" required>
-                        <option selected value = <?php echo $row['day']; ?> ><?php echo $row['day']; ?></option>
-                            <option value="Monday">Monday</option>
-                            <option value="Tuesday">Tuesday</option>
-                            <option value="Wednesday">Wednesday</option>
-                            <option value="Thursday">Thursday</option>
-                            <option value="Friday">Friday</option>
+                            <option value="Monday" <?php if ( $row['day'] == "Monday") { echo "selected"; } ?> >Monday</option>
+                            <option value="Tuesday"<?php if ( $row['day'] == "Tuesday") { echo "selected"; } ?> >Tuesday</option>
+                            <option value="Wednesday" <?php if ( $row['day'] == "Wednesday") { echo "selected"; } ?> >Wednesday</option>
+                            <option value="Thursday" <?php if ( $row['day'] == "Thursday") { echo "selected"; } ?> >Thursday</option>
+                            <option value="Friday" <?php if ( $row['day'] == "Friday") { echo "selected"; } ?> >Friday</option>
                         </select>
                     </div>
 

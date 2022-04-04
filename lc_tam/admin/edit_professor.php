@@ -64,13 +64,11 @@
                     <div class="form-group col">
                         <label for="Course_ID">Course ID:</label>
                         <select class="form-control" id = "Course_ID" name = "Course_ID" required>
-                            <option selected value = "<?php echo $row['course_id']; ?>"><?php echo $row['course_id']; ?> - </option>
                             <?php 
                             $Cquery = query("SELECT * FROM lc_courses");
                             confirm($Cquery);
-                            while($Crow = fetch_array($Cquery)) {
-                                ?>
-                        <option value="<?php echo $Crow['course_id'] ?>"><?php echo $Crow['course_id'] ?> - <?php echo $Crow['course_name'];  } ?></option>
+                            while($Crow = fetch_array($Cquery)) { ?>
+                        <option value="<?php echo $Crow['course_id'] ?>" <?php if ( $Crow['course_id'] == $row['course_id']) { echo "selected"; } ?> ><?php echo $Crow['course_id'] ?> - <?php echo $Crow['course_name'];  } ?></option>
                         </select>
                     </div>
 
