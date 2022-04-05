@@ -61,13 +61,13 @@ redirect('tutoring_sessions.php?Added');
                 <option selected value = "">Select a Tutor</option>
                 <?php 
                     $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
-                    lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id
+                    lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id, lc_test_tutors.acc_stat_id
                     FROM lc_test_students
                     INNER JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
                     WHERE lc_test_tutors.student_email = lc_test_students.student_email");
                     confirm($query2);
                     while($row2 = fetch_array($query2)) { ?>
-                    <option value = <?php echo $row2['tutor_id'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; } ?></option>
+                    <option value = <?php echo $row2['tutor_id'] ?> <?php if ($row2['acc_stat_id'] == '0' OR $row2['acc_stat_id'] == '2') { echo "disabled"; } ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; } ?></option>
                     </select>
             </div>
                 <div class="form-row">

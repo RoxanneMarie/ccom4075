@@ -188,7 +188,45 @@ function top_header_5()
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
                             <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="admin.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="#">View<br></a><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
+                        </ul>
+
+
+                    </div>
+                </div>
+            </nav>
+
+        </section>';
+}
+
+/* Space for top_header6 and top_header7 until top header 9*/
+
+function top_header_9() //header for assistant menu.
+{
+  echo '
+        <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
+    
+            <nav class="navbar navbar-dropdown navbar-expand-lg">
+                <div class="container-fluid">
+                    <div class="navbar-brand">
+                        <span class="navbar-logo">
+                            <a href="index.php">
+                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
+                            </a>
+                        </span>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <div class="hamburger">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
                         </ul>
 
 
