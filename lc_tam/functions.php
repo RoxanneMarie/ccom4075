@@ -270,7 +270,7 @@ function bottom_footer()
 function credit_mobirise_1()
 {
     echo '
-        <section style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
+        <section style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Robot, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
             <a href="https://mobirise.site/u" style="flex: 1 1; height: 3rem; padding-left: 1rem;"></a>
             <p style="flex: 0 0 auto; margin:0; padding-right:1rem;">Page was <a href="https://mobirise.site/h" style="color:#aaa;">designed with</a> Mobirise</p>
         </section>
@@ -1035,32 +1035,35 @@ function confirm_app()
                                 <strong>Appointment Confirmation</strong>
                             </h3>
                         </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card-wrap">
-                                <div class="content-wrap">
+                        <div class="container d-flex-justify-content-center">
+                            <div class="container container-lg">
+                                <div class="row justify-content-center">
                                     <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
                                         <strong>Do you confirm the information of your chosen appointment?</strong>
                                     </h5>
-                                    <div class="mbr-section-btn card-btn align-center">
-                                        <table class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
-                                            <tbody>
-                                                <tr>
-                                                    <td style="text-align: right;"><strong>Course:</strong></td>
-                                                    <td>' . $_SESSION["selected_course"] . '</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align: right;"><strong>Tutor:</strong></td>
-                                                    <td>' . $row["student_name"] . ' ' . $row["student_first_lastname"] . '</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align: right;"><strong>Date:</strong></td>
-                                                    <td>' . $date . '</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="text-align: right;"><strong>Time:</strong></td>
-                                                    <td>' . $start . ' - ' . $end . '</td>
-                                                </tr>
-                                        </table>
+                                    <div class="container container-lg">
+                                        <div class="container d-flex justify-content-center">
+                                            <h3> Course: 
+                                            <small class="text-muted">' . $_SESSION["selected_course"] . '</small>
+                                            </h3>
+                                        </div>
+                                        <div class = "container d-flex justify-content-center">
+                                            <h3> Tutor: 
+                                            <small class="text-muted">' . $row["student_name"] . ' ' . $row["student_first_lastname"] . '</small>
+                                            </h3>
+                                        </div>
+                                        <div class = "container d-flex justify-content-center">
+                                            <h3> Date: 
+                                            <small class="text-muted">' . $date . '</small>
+                                            </h3>
+                                        </div>
+                                        <div class = "container d-flex justify-content-center">
+                                            <h3> Time: 
+                                            <small class="text-muted">' . $start . ' - ' . $end . '</small>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class = "container d-flex justify-content-center">
                                         <button type="submit" form="form" formmethod="POST" formaction="create_appointment.php" class="btn btn-primary display-4" name="">Confirm</button>
                                     </div>
                                 </div>

@@ -139,6 +139,7 @@
                    <h3>Tutoring Session</h3>
                    <a class = "home_button" href = "tutoring_sessions.php">View Tutoring Sessions</a><br><br>
                    <a class = "home_button" href = "add_tutoring_session.php">Add Tutoring Sessions</a><br><br>
+                   <a class = "home_button" href = "change_tutoring_capacity.php">Change Session Capacity</a><br><br>
                </div>
                </article>
                <article class="card">

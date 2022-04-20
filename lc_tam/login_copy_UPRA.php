@@ -1,7 +1,7 @@
 <?php	
 include "common_db.inc";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+/*if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	IF ((isset($_REQUEST['login'])) && (!empty($_POST['email'])) && (!empty($_POST['password'])))
 	{
 		$user1=$_POST['email'];
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		error_message('Usted ha dejado algún dato en blanco. Favor completar los datos requeridos.');
 	}
 }
-else {
+else {*/
 
       require_once("functions.php");
       //login();
@@ -78,21 +78,21 @@ else {
                   </div>
                   <div class="row justify-content-center mt-4">
                       <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
-                          <form action="login_copy_upra.php" method="POST" class="mbr-form form-with-styler mx-auto" data-form-title="Form Name">
-                              <!-- <input type="hidden" name="email" data-form-email="true" value="qEQkUZCrQV0jr3m7VxTivJu/7YR7JO7sqhde/qdpvDpts06yWNd/vJUYUsoNSK4Z+UioUOHdxBjPEBJTN4N6mgVq4kn330NZGvXg7oSdLvjTJe+dzIPufSvwIdwj2lg2">
+                          <form action="login_copy_upra.php" method="POST" class="mbr-form form-with-styler mx-auto" data-form-title="Form Name">';
+                              /*<!-- <input type="hidden" name="email" data-form-email="true" value="qEQkUZCrQV0jr3m7VxTivJu/7YR7JO7sqhde/qdpvDpts06yWNd/vJUYUsoNSK4Z+UioUOHdxBjPEBJTN4N6mgVq4kn330NZGvXg7oSdLvjTJe+dzIPufSvwIdwj2lg2">
                               <div class="row">
                                   <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Login Successful!</div>
                                   <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">Oops...! Try Again!</div>
-                              </div> -->
+                              </div> -->*/ echo '
                               <div class="dragArea row">';
                               if($alert){ echo '
                                   <div class = "alert alert-primary" role = "alert"> Invalid Login. Please try again. </div>
                                   '; } echo '
-                                  <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="name">
-                                      <input type="text" name="email" placeholder="Email without @upr.edu" data-form-field="email" class="form-control" value="" id="name-form6-u" required>
-                                  </div>
                                   <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="email">
-                                      <input type="password" name="password" placeholder="Password" data-form-field="password" class="form-control" value="" id="email-form6-u" required>
+                                      <input type="text" name="email" placeholder="Email without @upr.edu" data-form-field="email" class="form-control" id="email" required>
+                                  </div>
+                                  <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="password">
+                                      <input type="password" name="password" placeholder="Password" data-form-field="password" class="form-control" id="password" required>
                                   </div>
                                   <div class="col-auto mbr-section-btn align-center"><button type="submit" name="login" class="btn btn-primary display-4">Submit</button></div>
                               </div>
@@ -110,6 +110,6 @@ else {
       </body>
   </html>
   ';
-}
+//}
 
 ?>

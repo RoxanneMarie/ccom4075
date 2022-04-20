@@ -61,22 +61,21 @@
                             <select class="form-control" id="Student_email" name = "Student_email" required>
                             <option selected value = "" >Select a Student.</option>
                             <?php 
-                            $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_email, lc_test_students.student_name, 
-                            lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname
+                            $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_email, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) As 'tutor_name'
                             FROM lc_test_students
                             LEFT JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
                             WHERE lc_test_tutors.student_email IS NULL");
                             confirm($query2);
                             while($row2 = fetch_array($query2)) { ?>
-                            <option value="<?php echo $row2['student_email']; ?>"> <?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?>  <?php echo $row2['student_initial']; ?>  <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; ?> <?php echo $row2['student_email']; } ?></option>
+                            <option value="<?php echo $row2['student_email']; ?>"><?php echo $row2['tutor_name']; ?> ( <?php echo $row2['student_id']; ?> ) - <?php echo $row2['student_email']; } ?></option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group col">
                         <label for="Tutor_Type">Tutor Type:</label>
-                        <select class="form-control" id="Tutor_Type" name = "Tutor_Type">
-                        <option selected value = "1" >Journal</option>
+                        <select class="form-control" id="Tutor_Type" name = "Tutor_Type" required>
+                        <option selected value = "" >Select a tutor type.</option>
                         <?php 
                         $query2 = query("SELECT * FROM lc_tutor_type");
                         confirm($query2);
@@ -87,8 +86,8 @@
 
                     <div class="form-group col">
                         <label for="Acc_Status">Account Status:</label>
-                        <select class="form-control" id="Acc_Status" name = "Acc_Status">
-                        <option selected value = "1" >Active</option>
+                        <select class="form-control" id="Acc_Status" name = "Acc_Status" required>
+                        <option selected value = "" >Select an account status.</option>
                         <?php 
                         $query3 = query("SELECT * FROM lc_account_status");
                         confirm($query3);
