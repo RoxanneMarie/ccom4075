@@ -45,16 +45,8 @@
                         <a href="about.php" class="btn btn-primary">About us</a>
                     </div>
                 </div>
-                <div class="card-footer bg-light">
-                <blockquote class="blockquote mb-0">
-                    <footer class="blockquote-footer">Credits to Learning Commons - UPR Arecibo Facebook Page for image.</footer>
-                </blockquote>
-                    <div class = "image-wrap">
-                    </div>
-                </div>
             </div>
         </div>
-        <br>
         <?php
             bottom_footer();
             credit_mobirise_1();

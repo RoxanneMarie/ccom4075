@@ -25,6 +25,9 @@ function select_header($choice)
 function top_header_1()
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -58,6 +61,9 @@ function top_header_1()
 function top_header_2()
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -92,6 +98,9 @@ function top_header_2()
 function top_header_3()
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -128,6 +137,9 @@ function top_header_3()
 function top_header_4()
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -166,6 +178,9 @@ function top_header_4()
 function top_header_5()
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -204,6 +219,9 @@ function top_header_5()
 function top_header_9() //header for assistant menu.
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -270,7 +288,7 @@ function bottom_footer()
 function credit_mobirise_1()
 {
     echo '
-        <section style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Robot, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
+        <section id="hide-footer" style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Robot, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
             <a href="https://mobirise.site/u" style="flex: 1 1; height: 3rem; padding-left: 1rem;"></a>
             <p style="flex: 0 0 auto; margin:0; padding-right:1rem;">Page was <a href="https://mobirise.site/h" style="color:#aaa;">designed with</a> Mobirise</p>
         </section>
@@ -285,7 +303,7 @@ function credit_mobirise_1()
 function credit_mobirise_2()
 {
     echo '
-        <section style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
+        <section id="hide-footer" style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
             <a href="https://mobirise.site/c" style="flex: 1 1; height: 3rem; padding-left: 1rem;"></a>
             <p style="flex: 0 0 auto; margin:0; padding-right:1rem;">The <a href="https://mobirise.site/e" style="color:#aaa;">site</a> was started with Mobirise</p>
         </section>
