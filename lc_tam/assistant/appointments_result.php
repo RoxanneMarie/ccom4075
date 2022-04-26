@@ -1,6 +1,14 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php");
+    
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+    }else{
+        redirect('index.php');
+    }
 ?>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -13,7 +21,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Semesters - LC:TAM</title>
+      <title>Appointments Found - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -31,53 +39,61 @@
         .tCourses {
         background: #fd8f00;
         }
+
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_5();
+            top_header_9();
     echo '
     <main class="container">
         <article>
         <div class="container-sm">
-            <h3 class = "h3 text-center">Semesters</h3>
-            <a class = "btn btn-primary" href="add_semester.php">Add Semester</a>
+            <h3 class = "h3 text-center">Appointments of '; echo $id; echo '</h3><br>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Semester updated successfully.</span>
+                <span> Tutoring session updated successfully.</span>
             </div>'; 
-            }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Semester removed successfully.</span>
-            </div>
-            ';
-            }
-            if(isset($_GET['Added'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Semester added successfully.</span>
-            </div>
-            ';
             } echo '
                 <table class="table table-responsive">
-            <thead class = "tCourses">
-                <th>Edit</th>
-                <th>Semester ID</th>
-                <th>Semester Term</th>
+            <thead class = "tCourses text-center">
+                <th>Student full name</th>
+                <th>Student email</th>
+                <th>course ID</th>
+                <th>course name</th>
                 <th>Semester Name</th>
+                <th>Session Date</th>
+                <th>Start time</th>
+                <th>End time</th>
+                <th>Cancel</th>
             </thead>';
-    $query = query("SELECT * FROM lc_semester");
+    $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial,
+    lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'student_fullname', lc_appointments.student_email, 
+    lc_appointments.course_id, lc_courses.course_name, lc_semester.semester_name, lc_sessions.start_time, lc_sessions.end_time, 
+    lc_sessions.session_date
+    FROM lc_appointments
+    INNER JOIN lc_test_students ON lc_appointments.student_email = lc_test_students.student_email
+    INNER JOIN lc_courses ON lc_appointments.course_id = lc_courses.course_id
+    INNER JOIN lc_semester ON lc_semester.semester_id = lc_appointments.semester_id
+    INNER JOIN lc_sessions ON lc_appointments.session_id = lc_sessions.session_id    
+    WHERE lc_appointments.student_email = '$id'");
     confirm($query);
     while ($row = fetch_array($query)) {
+
         echo '    
-                <tr class="trCourses">
-                    <td>    <a href="edit_semester.php?id='. $row['semester_id'] .'">Edit</a></td>
-                    <td>'. $row['semester_id'] .'</td>
-                    <td>'. $row['semester_term'] .'</td>
+                <tr class="text-center">
+                    <td>'. $row['student_fullname'] .'</td>
+                    <td>'. $row['student_email'] .'</td>
+                    <td>'. $row['course_id'] .'</td>
+                    <td>'. $row['course_name'] .'</td>
                     <td>'. $row['semester_name'] .'</td>
+                    <td>'. $row['session_date'] .'</td>
+                    <td>'. $row['start_time'] .'</td>
+                    <td>'. $row['end_time'] .'</td>
+                    <td> <a href="cancel_appointment.php?id='. $row['app_id'] .'">Cancel</td>
                     </tr>
-                    '; } echo '
+                   '; } echo '
                 </table><br><br>
                 </div>
                 </article>

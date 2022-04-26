@@ -69,11 +69,7 @@
                 <table class = "table table-responsive">
             <thead class = "tCourses">
                 <th>Edit</th>
-                <th>Student Num</th>
-                <th>Name</th>
-                <th>Initial</th>
-                <th>First Last Name</th>
-                <th>Second Last name</th>
+                <th>Tutor full name</th>
                 <th>Email</th>
                 <th>Course</th>
                 <th>Professor</th>
@@ -91,7 +87,7 @@
                 WHERE lc_test_tutors.student_email = '$id'");
                 $row = fetch_array($query);
                 $TutID = $row['tutor_id'];
-                $Oquery = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, 
+                $Oquery = query("SELECT lc_test_students.student_id, CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name',
                 lc_test_students.student_email, lc_tutor_offers.offer_id, lc_tutor_offers.course_id, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
                 lc_professors.professor_second_lastname
                 FROM lc_tutor_offers
@@ -100,7 +96,7 @@
                 INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id
                 WHERE lc_tutor_offers.tutor_id = '$TutID'");
             } else {
-                $Oquery = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, 
+                $Oquery = query("SELECT lc_test_students.student_id, CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', 
                 lc_test_students.student_email, lc_tutor_offers.offer_id, lc_tutor_offers.course_id, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
                 lc_professors.professor_second_lastname
                 FROM lc_tutor_offers
@@ -112,11 +108,7 @@
         echo '    
                 <tr>
                     <td> <a href="edit_tutor_offer.php?id='. $row2['offer_id'] .'">Edit</a>
-                    <td>'. $row2['student_id'].'</td>
-                    <td>'. $row2['student_name'] .'</td>
-                    <td>'. $row2['student_initial'] .'</td>
-                    <td>'. $row2['student_first_lastname'] .'</td>
-                    <td>'. $row2['student_second_lastname'] .'</td>
+                    <td>'. $row2['tutor_name'] .'</td>
                     <td>'. $row2['student_email'] .'</td>
                     <td>'. $row2['course_id'].'</td>
                     <td>'. $row2['professor_name'].' '. $row2['professor_initial'] . ' ' . $row2['professor_first_lastname'] . ' ' . $row2['professor_second_lastname'].'</td>

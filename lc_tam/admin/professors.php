@@ -48,12 +48,6 @@
                         <span> Professor updated successfully.</span>
                     </div>'; 
                     }
-                     if(isset($_GET['removed'])){ echo '
-                        <div class="alert alert-success" role="alert">
-                        <span> Professor removed successfully.</span>
-                    </div>
-                    ';
-                    }
                     if(isset($_GET['Added'])){ echo '
                         <div class="alert alert-success" role="alert">
                         <span> Professor added successfully.</span>
@@ -63,26 +57,18 @@
                         <table class = "table table-responsive">
                     <thead class = "tCourses">
                         <th>Edit</th>
-                        <th>Professor ID</th>
+                        <th>Professor full name</th>
                         <th>Course ID</th>
-                        <th>Name</th>
-                        <th>Initial</th>
-                        <th>First Last Name</th>
-                        <th>Second Last name</th>
                     </thead>';
-    $query = query("SELECT * FROM lc_professors");
+    $query = query("SELECT lc_professors.professor_entry_id, lc_professors.course_id, CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial,
+    lc_professors.professor_first_lastname, lc_professors.professor_second_lastname) AS 'professor_name' FROM lc_professors");
     confirm($query);
     while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>   <a href="edit_professor.php?id='. $row['professor_entry_id'] .'">Edit</a>
-                            <a href="delete_professor.php?id='. $row['professor_entry_id'] .'"  onclick = "return Func_confirm()">Delete</a></td>
-                    <td>'. $row['professor_entry_id'] .'</td>
-                    <td>'. $row['course_id'] .'</td>
+                    <td>   <a href="edit_professor.php?id='. $row['professor_entry_id'] .'">Edit</a></td>
                     <td>'. $row['professor_name'] .'</td>
-                    <td>'. $row['professor_initial'] .'</td>
-                    <td>'. $row['professor_first_lastname'] .'</td>
-                    <td>'. $row['professor_second_lastname'] .'</td>
+                    <td>'. $row['course_id'] .'</td>
                     </tr>
                     '; } echo '
                 </table><br><br>
@@ -91,12 +77,6 @@
             </main>';
             bottom_footer();
             credit_mobirise_1();
-        ?>
-
-    <script>
-        function Func_confirm() {
-        return confirm("Are you sure you wish to delete this value? This cannot be undone.");
-        }
-    </script>        
+        ?>      
     </body>
 </html>

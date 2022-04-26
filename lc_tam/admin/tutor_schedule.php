@@ -69,10 +69,8 @@
                 <table class = "table table-responsive">
             <thead class = "tCourses">
                 <th>Edit</th>
-                <th>Name</th>
-                <th>Initial</th>
-                <th>First Last Name</th>
-                <th>Second Last name</th>
+                <th>Tutor full name</th>
+                <th>Tutor email</th>
                 <th>Day</th>
                 <th>Start Time</th>
                 <th>End Time</th>
@@ -82,14 +80,14 @@
             WHERE lc_test_tutors.student_email = '$id'");
             $row = fetch_array($query);
             $TutID = $row['tutor_id'];
-            $Squery = query("SELECT lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, 
-            lc_test_students.student_email, lc_tutor_schedule.schedule_id, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time
+            $Squery = query("SELECT CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_test_students.student_email, lc_tutor_schedule.schedule_id, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time
             FROM lc_tutor_schedule
             INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
             INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
             WHERE lc_tutor_schedule.tutor_id = '$TutID'");
             } else {
-            $Squery = query("SELECT * FROM lc_tutor_schedule
+            $Squery = query("SELECT CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_test_students.student_email, lc_tutor_schedule.schedule_id, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time 
+            FROM lc_tutor_schedule
             INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
             INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email");
             }
@@ -97,10 +95,8 @@
         echo '    
                 <tr>
                     <td>   <a href="edit_tutor_schedule.php?id='. $row2['schedule_id'] .'">Edit</a></td>
-                    <td>'. $row2['student_name'] .'</td>
-                    <td>'. $row2['student_initial'] .'</td>
-                    <td>'. $row2['student_first_lastname'] .'</td>
-                    <td>'. $row2['student_second_lastname'] .'</td>
+                    <td>'. $row2['tutor_name'] .'</td>
+                    <td>'. $row2['student_email'] .'</td>
                     <td>'. $row2['day'] .'</td>
                     <td>'. $row2['start_time'].'</td>
                     <td>'. $row2['end_time'].'</td>

@@ -7,8 +7,9 @@
         redirect('semesters.php');
     }
     if(isset($_POST) & !empty($_POST)){
+        $SemesterTermName = $_POST['Semester_Term_Name'];
         $SemesterName = $_POST['Semester_Name'];
-        $query = "UPDATE lc_semester SET semester_name = '$SemesterName' WHERE semester_id = '$id'";
+        $query = "UPDATE lc_semester SET semester_term = '$SemesterTermName', semester_name = '$SemesterName' WHERE semester_id = '$id'";
         //print_r($query);
         $res = query($query);
         //print_r($query);
@@ -58,10 +59,18 @@
                 $row = fetch_array($query);
                 ?>
                 <form action="edit_semester.php?id=<?php echo $row['semester_id']; ?>" method="POST"><br>
+
+                <div class="form-group col">
+                    <div class="form-row">
+                        <label for="Semester_Name">Semester Term Name:</label>
+                        <input type="text" class="form-control" id="Semester_Term_Name" name="Semester_Term_Name" value = "<?php echo $row['semester_term']; ?>" placeholder="Second Semester 2021-2022" maxlength="30" required>
+                    </div>
+                </div>
+
                 <div class="form-group col">
                     <div class="form-row">
                         <label for="Semester_Name">Semester Name:</label>
-                        <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" value = "<?php echo $row['semester_name']; ?>" required>
+                        <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" value = "<?php echo $row['semester_name']; ?>" placeholder="Second Semester 2021-2022" maxlength="30" required>
                     </div>
                 </div>
                 <br>

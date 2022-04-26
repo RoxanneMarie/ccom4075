@@ -101,6 +101,7 @@
                    <a class = "home_button" href = "view_accounts.php">View All Accounts</a><br><br>
                </div>
                </article>
+               
                <article class="card">
                <div class="text">
                    <h3>Tutors/Assistants</h3>
@@ -117,6 +118,7 @@
                    <a class = "home_button" href = "add_professor.php">Add Professor</a><br><br>
                </div>
                </article>
+
                <article class="card">
                <div class="text">
                    <h3>Department/Course</h3>
@@ -126,6 +128,7 @@
                    <a class = "home_button" href = "add_course.php">Add Course</a><br><br>
                </div>
                </article>
+
                <article class="card">
                <div class="text">
                    <h3>Tutoring Offers/Schedule</h3>
@@ -134,6 +137,7 @@
                    '; /*<a class = "home_button" href = "tutoring_courses.php">Tutoring Courses</a><br><br>*/ echo '
                </div>
                </article>
+
                <article class="card">
                <div class="text">
                    <h3>Tutoring Session</h3>
@@ -142,21 +146,16 @@
                    <a class = "home_button" href = "change_tutoring_capacity.php">Change Session Capacity</a><br><br>
                </div>
                </article>
+
                <article class="card">
                <div class="text">
                    <h3>Semester</h3>
                    <a class = "home_button" href = "semesters.php">View Semester</a><br><br>
                    <a class = "home_button" href = "add_semester.php">Add Semester</a><br><br>
+                   <a class = "home_button" href = "select_semester.php">Set Active Semester</a><br><br>
                </div>
                </article>
-               ' /*
-               <article class="card">
-               <div class="text">
-                   <h3>Grades</h3>
-                   <a class = "home_button" href = "#">View Grades</a><br><br>
-               </div>
-               </article>
-               */; echo '
+
                <article class="card">
                <div class="text">
                    <h3>Reports</h3>

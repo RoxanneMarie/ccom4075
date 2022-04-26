@@ -122,13 +122,6 @@
 
                <article class="card">
                <div class="text">
-                   <h3>Reports</h3>
-                   <a class = "home_button" href = "#">Reports</a><br><br>
-               </div>
-               </article>
-
-               <article class="card">
-               <div class="text">
                    <h3>Appointment</h3>
                    '; /* <a class = "home_button" href = "#">Create an appointment for student.</a><br><br> */ echo '
 

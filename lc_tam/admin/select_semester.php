@@ -1,14 +1,15 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_POST['submit'])){
-        $SemesterTermName = $_POST['Semester_Term_Name'];
-        $SemesterName = $_POST['Semester_Name'];
+  require_once("../functions.php");    
 
-    echo $query = query('INSERT INTO lc_semester (semester_term, semester_name)
-    VALUES("' . $SemesterTermName . '" , "' . $SemesterName . '")');
-    header('location:semesters.php?Added');
+    if(isset($_POST['submit'])){
+        $Studentemail = $_POST['Student_email'];
+        $query = query('INSERT INTO lc_test_tutors (student_email, tutor_type_id, acc_stat_id) 
+        VALUES ("' . $Studentemail . '" , "' . $TutorType . '" , "' . $AccStatus . '")');
+
+    if($query) {
+        header('location:tutors.php?Added');
     }
+}
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +23,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Add Semester - LC:TAM</title>
+      <title>Add Tutor - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -34,40 +35,39 @@
       <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
-      <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+    <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
     </head>
     <body>
         <?php 
             top_header_5(); 
             ?>
-        <main class="container">
-            <article>
-            <div class="container-sm">
-                <h3 class = "h3 text-center">Add Semester</h3>
-            <form action="add_semester.php" method="POST"><br>
-
-            <div class="form-group col">
-                    <div class="form-row">
-                        <label for="Semester_Name">Semester Term Name:</label>
-                        <input type="text" class="form-control" id="Semester_Term_Name" name="Semester_Term_Name" placeholder="Ex: C12" maxlength="3" required>
+            <h3 class = "h3 text-center">Add Tutor</h3>
+            <main class = "container d-flex justify-content-center">
+                <?php 
+                $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
+                lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_students.student_email
+                FROM lc_test_students");
+                $query = query($query);
+                confirm($query);
+                $row = fetch_array($query);
+                ?>
+            <form action="add_tutor.php" method="POST">     
+            <div class="form-group">
+                <label for="Department_ID">Department:</label>
+                <select class="form-control" id="Department_ID" name = "Department_ID">
+                <?php 
+                    $query2 = query("SELECT * FROM lc_departments");
+                    confirm($query2);
+                    while($row2 = fetch_array($query2)) { ?>
+                    <option value=<?php echo $row2['dept_id'] ?> <?php if ( $row2['dept_id'] == $row['dept_id']) { echo "selected"; } ?> ><?php echo $row2['dept_name'];  } ?></option>
+                    </select>
+            </div>
+            <div class = "container d-flex justify-content-center">
+                    <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
                     </div>
-                </div>
-
-                <div class="form-group col">
-                    <div class="form-row">
-                        <label for="Semester_Name">Semester Name:</label>
-                        <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" placeholder="Second Semester 2021-2022" maxlength="30" required>
-                    </div>
-                </div>
-                <br>
-                    <div class = "container d-flex justify-content-center">
-                        <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
-                    </div>
-                </div>
-                    <br><br><br>
+                    <br>
             </form>
             </div>
-            </article>
         </main>
         <?php
             bottom_footer();

@@ -2,12 +2,8 @@
     require_once("../functions.php");
 
     $search_r = $_GET['id'];
-    $CountQuery = query("SELECT COUNT(lc_appointments.student_email) As 'counter' FROM lc_appointments
-    INNER JOIN lc_sessions ON lc_sessions.session_id = lc_appointments.session_id
-    INNER JOIN lc_courses ON lc_courses.course_id = lc_appointments.course_id
-    INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_sessions.tutor_id
-    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
-    WHERE lc_appointments.student_email LIKE '%$search_r%'");
+    $CountQuery = query("SELECT COUNT(lc_test_students.student_email) As 'counter' FROM lc_test_students
+    WHERE lc_test_students.student_email LIKE '%$search_r%'");
     confirm($CountQuery);
     $Count_r = fetch_array($CountQuery);
 
@@ -52,41 +48,40 @@
                 <article>
                 <div class="container-sm">
                     <h3 class = "h3 text-center">Search Results:</h3>
-                    <h2 class = "h2 text-center">Found '; echo $Count_r['counter']; echo ' Results.</h2>
-                    <table class="table table-responsive">
+                    <h2 class = "h2 text-center">Found '; echo $Count_r['counter']; echo ' Results.</h2>';
+                    if ($Count_r['counter'] > '0') {
+                        echo '
+                        <table class="table table-responsive">
                         <thead class = "tCourses">
-                            <th>Session #</th>
-                            <th>Course </th>
-                            <th>Tutor</th>
-                            <th>Student Registered</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Session Date</th>
-                            <th>Cancel Appointment</th>
+                            <th>Student full name</th>
+                            <th>Student Email</th>
+                            <th>View Appointments</th>
+                            <th>Create Appointment</th>
                         </thead>';
-                            $query = query("SELECT lc_appointments.session_id, lc_appointments.app_id, lc_appointments.course_id, lc_courses.course_name, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial,
-                            lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'Tutor_Name', lc_appointments.student_email AS 'student_registered', lc_sessions.start_time, 
-                            lc_sessions.end_time, lc_sessions.session_date
-                            FROM lc_appointments
-                            INNER JOIN lc_sessions ON lc_sessions.session_id = lc_appointments.session_id
-                            INNER JOIN lc_courses ON lc_courses.course_id = lc_appointments.course_id
-                            INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_sessions.tutor_id
-                            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
-                            WHERE lc_appointments.student_email LIKE '%$search_r%'");
+                            $query = query("SELECT CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
+                            lc_test_students.student_second_lastname) AS 'Student_name', lc_test_students.student_email
+                            FROM lc_test_students
+                            WHERE lc_test_students.student_email LIKE '%$search_r%'");
                             confirm($query);
                             while ($row = fetch_array($query)) {
                             echo ' 
                         <tr>
-                            <td>'. $row['session_id'] .'</td>
-                            <td>'. $row['course_id'] .' - '. $row['course_name'] .'</td>
-                            <td>'. $row['Tutor_Name'] .'</td>
-                            <td>'. $row['student_registered'] .'</td>
-                            <td>'. conv_time(substr($row['start_time'],0,2)) . substr($row['start_time'],2,3) . ampm(substr($row["start_time"],0,2)) .'</td>
-                            <td>'. conv_time(substr($row['end_time'],0,2)) . substr($row['end_time'],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
-                            <td>'. $row['session_date'] .'</td>
-                            <td> <a href = "cancel_appointment.php?id='. $row['app_id'] .'">Cancel</a></td> '; } echo '
+                        <td>'. $row['Student_name'] .'</td>
+                        <td>'. $row['student_email'] .'</td>
+                        <td> <a href = "appointments_result.php?id='. $row['student_email'] .'">View</a></td>
+                        <td> <a href = "cancel_appointment.php?id='. $row['student_email'] .'">Create</a></td>'; } echo '
                         </tr>
-                        </table>
+                        </table>';
+                    } else {
+                        echo '<div class = "alert" style = "background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;" role="alert">
+                <span> Student was not found within our system.</span>
+            </div>
+            <div class = "container d-flex justify-content-center">
+                <a class = "btn btn-primary" href="index.php">Go back</a>
+            </div>
+            ';
+                    } echo '
+                    
                 </div>
                 </article>
             </main> <br><br>

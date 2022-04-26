@@ -44,7 +44,7 @@
                 <article>
                 <div class = "container">
                     <h3 class = "h3 text-center">Accounts</h3>
-                    '; if(isset($_GET['success'])){ echo '
+                    ';/* if(isset($_GET['success'])){ echo '
                         <div class="alert alert-success" role="alert">
                         <span> Tutor updated successfully.</span>
                     </div>'; 
@@ -60,17 +60,17 @@
                         <span> Tutor added successfully.</span>
                     </div>
                     ';
-                    } echo '
+                    }*/ echo '
                         <table class = "table table-responsive">
                     <thead class = "tCourses">
                         <th>Student Num</th>
-                        <th>Name</th>
-                        <th>Initial</th>
-                        <th>First Lastname</th>
-                        <th>Second Lastname</th>
+                        <th>Student Name</th>
+                        <th>Student Email</th>
                         <th>Role</th>
                     </thead>';
-    $query = query("SELECT * FROM lc_test_students");
+    $query = query("SELECT lc_test_students.student_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
+    lc_test_students.student_second_lastname) AS student_fullname, lc_test_students.student_email
+    FROM lc_test_students");
     confirm($query);
 
     while($row = fetch_array($query)) {
@@ -154,10 +154,8 @@
         */ echo '    
                 <tr>
                     <td>'. $row['student_id'] .'</td>
-                    <td>'. $row['student_name'] .' </td>
-                    <td>'. $row['student_initial'] .'</td>
-                    <td>'. $row['student_first_lastname'] .' </td>
-                    <td>'. $row['student_second_lastname'] .'</td>
+                    <td>'. $row['student_fullname'] .' </td>
+                    <td>'. $row['student_email'] .'</td>
                     <td>'; 
                     if ($Student == '1') {
                         echo 'Student';

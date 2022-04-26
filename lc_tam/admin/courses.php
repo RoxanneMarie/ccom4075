@@ -50,12 +50,6 @@
                 <span> Course updated successfully.</span>
             </div>'; 
             }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Course removed successfully.</span>
-            </div>
-            ';
-            }
             if(isset($_GET['Added'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Course added successfully.</span>
@@ -81,9 +75,7 @@
         $row3 = fetch_array($query3);
         echo '    
                 <tr class="trCourses">
-                    <td> <a href="edit_course.php?id='. $row['course_id'] .'">Edit</a>
-                    <a href="delete_course.php?id='. $row['course_id'] .'" onclick = "return Func_confirm()">Delete</a>
-                    </td>
+                    <td> <a href="edit_course.php?id='. $row['course_id'] .'">Edit</a></td>
                     <td>'. $row['course_id'] .'</td>
                     <td>'. $row['course_name'] .'</td>
                     <td>'. $row3['dept_name'] .'</td>
@@ -97,10 +89,5 @@
             bottom_footer();
             credit_mobirise_1();
         ?>
-    <script>
-        function Func_confirm() {
-        return confirm("Are you sure you wish to delete this value? This cannot be undone.");
-        }
-    </script>
     </body>
 </html>
