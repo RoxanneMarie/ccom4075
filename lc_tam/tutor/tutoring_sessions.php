@@ -1,6 +1,6 @@
 <?php 
-    require_once("../functions.php");
-    require_once("functions.php"); 
+    require_once("../functions.php"); 
+    require_once("functions.php") 
 ?>
 
 <!DOCTYPE html>
@@ -11,10 +11,10 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Tutor Attendance - LC:TAM</title>
+      <title>My Tutoring Sessions - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -23,107 +23,96 @@
       <link rel="stylesheet" href="../assets/dropdown/css/style.css">
       <link rel="stylesheet" href="../assets/socicon/css/styles.css">
       <link rel="stylesheet" href="../assets/theme/css/style.css">
+      <script src="../assets/bootstrap/js/fontawesome.js"></script>
       <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
     <style>
         /*----------------------- CSS HOME PAGE*/
-
         .tCourses {
-        background: rgb(196, 127, 0);
+        background: #fd8f00;
         }
 
+        /* btn-warning {
+	color: #fff;
+	background-color: #ff8800;
+	border-color: #ff8800
+}
+.btn-warning:hover {
+	color: #fff;
+	background-color: #e67c02;
+	border-color: #e67c02
+} */
     </style>
 
     </head>
     <body>
         <?php 
             top_header_6();
-
-  echo '<input type="hidden" value="student_btn" name="action">
-    <main class="mcourses" style="justify-content:center;">
+    echo '
+    <main class="container">
         <article>
-        <div class = "container">
-            <h3 class = "h3 text-center">Sessions Attendance</h3>'; 
-            
-            if(isset($_GET['success'])){ echo '
+        <div class="container-sm">
+            <h3 class = "h3 text-center">My Tutoring Sessions</h3>
+            <a class = "btn btn-primary" href="add_tutoring_session.php">Add Tutoring Session</a>
+            '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Attendance updated successfully.</span>
+                <span> Tutoring session updated successfully.</span>
             </div>'; 
             }
              if(isset($_GET['removed'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Attendance removed successfully.</span>
+                <span> Tutoring session removed successfully.</span>
             </div>
             ';
             }
             if(isset($_GET['Added'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Attendance added successfully.</span>
+                <span> Tutoring session added successfully.</span>
             </div>
             ';
-            } 
-            echo '
-                <table class = "table table-responsive">
+            } echo '
+                <table class="table table-responsive">
             <thead class = "tCourses">
-                <th>Sesion Date</th>
+                <th>Edit</th>
+                <th>Session ID</th>
+               
+                <th>Course ID</th>
                 <th>Start Time</th>
                 <th>End Time</th>
-                <th>Enrolled</th>
-                <th>Attendance</th>
+                <th>Session Date</th>
+                <th>Capacity</th>
+                <th>Appointed Students</th>
             </thead>';
-            
-    $query = query("SELECT session_id, session_date, start_time, end_time, capacity FROM lc_sessions JOIN `lc_test_tutors` ON lc_sessions.tutor_id = lc_test_tutors.tutor_id WHERE student_email = '".$_SESSION['email']."'");
+    $query = query("SELECT * FROM lc_sessions 
+    INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
+    INNER JOIN lc_test_students ON lc_test_students.student_email = '" .$_SESSION['email']."'");
     confirm($query);
-    while($row = fetch_array($query)){
+    while ($row = fetch_array($query)) {
+
+
+
         echo '    
-        <tr>
-           
-            <td>'. $row['session_date'] .'</td>
-            <td>'. $row['start_time'] .'</td>
-            <td>'. $row['end_time'] .'</td>
-            <td>'. $row['capacity'] .'</td>
-            <td><a class = "btn btn-primary" href="attendance_sessions.php">Take</a></td>
-            </tr>
-            '; } 
-            
-
-/*
-Query de Attendence list
-
-
-SELECT * FROM lc_sessions
-INNER JOIN lc_courses ON lc_sessions.course_id = lc_courses.course_id
-INNER JOIN `lc_test_tutors` ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
-WHERE student_email = "pedro.nosabe@upr.edu"*/
-
-
-
-   /*  while ($row = fetch_array($query2)) {
-        echo '    
-                <tr>
-                    <td>   <a href="edit_tutor.php?id='. $row['student_email'] .'">Edit</a>
-                    <td>'..'</td>
-                    <td>'. $row[''] .'</td>
-                    <td>'. $row[''] .'</td>
-                    <td>'. $row[''] .'</td>
-                    <td>'. $row[''] .'</td>
-                    <td>'. $row[''] .'</td>
-                    <td>'. $row[''].'</td>
-                    <td>'. $row[''] .'</td>
+                <tr class="trCourses">
+                    <td>   <a class="btn btn-outline-warning" href="edit_tutoring_session.php?id='. $row['session_id'] .'"><i class="fa fa-pencil"></i></a>
+                    <td>'. $row['session_id'] .'</td>
+                    
+                    <td>'. $row['course_id'] .'</td>
+                    <td>'. $row['start_time'] .'</td>
+                    <td>'. $row['end_time'] .'</td>
+                    <td>'. $row['session_date'] .'</td>
+                    <td>'. $row['capacity'] .'</td>
+                    <td> <a class="btn btn-outline-info" href="tutoring_appointments.php?id='. $row['session_id'] .'"><i class="fa-solid fa-eye"></i></td>
                     </tr>
-                    '; } */ 
-            echo '
+                   '; } echo '
                 </table><br><br>
                 </div>
                 </article>
             </main>';
-
-
-            
             bottom_footer();
             credit_mobirise_1();
         ?>
+        
     </body>
 </html>
