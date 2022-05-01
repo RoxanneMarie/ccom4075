@@ -1,161 +1,163 @@
 <?php 
-       require_once("../functions.php"); 
-       require_once("functions.php") 
+    require_once("../functions.php"); 
+    require_once("functions.php") ;
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-  <meta name="description" content=""/>
-  <meta name="author" content=""/>
-  <title>Dashtreme Admin - Free Dashboard for Bootstrap 4 by Codervent</title>
-  <!-- loader-->
-  <link href="assets/css/pace.min.css" rel="stylesheet"/>
-  <script src="assets/js/pace.min.js"></script>
-  <!--favicon-->
-  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
-  <!--Full Calendar Css-->
-  <link href="assets/plugins/fullcalendar/css/fullcalendar.min.css" rel='stylesheet'/>
-  <!-- simplebar CSS-->
-  <link href="assets/plugins/simplebar/css/simplebar.css" rel="stylesheet"/>
-  <!-- Bootstrap core CSS-->
-  <link href="assets/css/bootstrap.min.css" rel="stylesheet"/>
-  <!-- animate CSS-->
-  <link href="assets/css/animate.css" rel="stylesheet" type="text/css"/>
-  <!-- Icons CSS-->
-  <link href="assets/css/icons.css" rel="stylesheet" type="text/css"/>
-  <!-- Sidebar CSS-->
-  <link href="assets/css/sidebar-menu.css" rel="stylesheet"/>
-  <!-- Custom Style-->
-  <link href="assets/css/app-style.css" rel="stylesheet"/>
-  <style>
-        /*----------------------- CSS HOME PAGE*/
+<html lang='en'>
+  <head>
+    <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
+    <meta charset='UTF-8' />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+    <meta name="description" content="">
 
-        
-        .cards{
-            text-align: center;
-            margin: auto;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: stretch;
-            justify-content:center;
-
-            }
-            .card {
-            flex: 0 0 270px;
-            margin: 10px;
-            border: 1px solid #ccc;
-            height: 303.5px;
-            box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-            background-color: white;
-            }
-
-            .card .text {
-            padding: 0 5px 5px;
-            }
-
-
-            .card > .text > h3 {
-            font-size:30px;
-            text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);
-            }
-
-            .card .text > button {
-            background: #fd8f00;
-            border: 1;
-            color: white;
-            padding: 15px;
-            width: 100%;
-            }
-
-            .home_button {
-                font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-                border: 4px solid #fd8f00;
-                border-radius: 12px;
-                padding: 5px;
-                color: #fd8f00;
-                background-color: white;
-                text-align: center;
-                font-weight: bold;
-                text-decoration: none;
-                display: inline-block;
-                transition-duration: 0.4s;
-                cursor: pointer;
-                width: auto;
-                font-size: 19px;
-                box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-                /*hsl(44, 63%, 89%)*/
-            }
-
-    .text_title{
-                text-align: center;
-                padding: 15px;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            }
-    </style>
-</head>
-
-<body>
-
-  <?php
-            
-  top_header_6();
-?>
-<div class="container theme-showcase">
-    <h1 class="text_title">Calendar</h1>
-
-<div class="clearfix"></div>
-	
-  <div class="content-wrapper">
-    <div class="container-fluid">
+    <title>Tutor Calendar - LC:TAM</title>
+      <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
+    <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="../assets/dropdown/css/style.css">
+    <link rel="stylesheet" href="../assets/socicon/css/styles.css">
+    <link rel="stylesheet" href="../assets/theme/css/style.css">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
     
-    <div class="mt-3">
-      <div id='calendar'></div>
-    </div>
-			
-		<!--start overlay-->
-		  <div class="overlay toggle-menu"></div>
-		<!--end overlay-->	
-			
-    </div>
-    <!-- End container-fluid-->
-   </div><!--End content-wrapper-->
-   
-  <!--Start Back To Top Button-->
-    <a href="javaScript:void();" class="back-to-top"><i class="fa fa-angle-double-up"></i> </a>
-    <!--End Back To Top Button-->
-	</div>
-	<!--Start footer-->
-	<footer class="footer">
-      <div class="container">
-        <div class="text-center">
-          Copyright © 2018 Dashtreme Admin
-        </div>
-      </div>
-    </footer>
-	<!--End footer-->
+    <!-- css calendario -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css" /><!-- esta el css que cambia las letras y el colo r de las letras -->
+    <!-- termina css calendario -->
+    <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+    <!-- css calendario -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+    <!-- termina css calendario -->
+      <script>
+  
+  $(document).ready(function() {
+   var calendar = $('#calendar').fullCalendar({
+    editable:true,
+    header:{
+     left:'prev,next today',
+     center:'title',
+     right:'month,agendaWeek,agendaDay'
+    },
+    events: 'load.php',
+    selectable:true,
+    selectHelper:true,
+    select: function(start, end, allDay)
+    {
+     var title = prompt("Enter Event Title");
+     if(title)
+     {
 
+      var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+      var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
+      $.ajax({
+       url:"insert.php",
+       type:"POST",
+       data:{title:title, start:start, end:end},
+       success:function()
+       {
+        calendar.fullCalendar('refetchEvents');
+        alert("Added Successfully");
+       }
+      })
+     }
+    },
+    editable:true,
+    eventResize:function(event)
+    {
+     var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+     var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+     var title = event.title;
+     var id = event.id;
+     $.ajax({
+      url:"update.php",
+      type:"POST",
+      data:{title:title, start:start, end:end, id:id},
+      success:function(){
+       calendar.fullCalendar('refetchEvents');
+       alert('Event Update');
+      }
+     })
+    },
+ 
+    eventDrop:function(event)
+    {
+     var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+     var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
 
-  <!-- Bootstrap core JavaScript-->
+     var title = event.title;
+     var id = event.id;
+     $.ajax({
+      url:"update.php",
+      type:"POST",
+      data:{title:title, start:start, end:end, id:id},
+      success:function()
+      {
+       calendar.fullCalendar('refetchEvents');
+       alert("Event Updated");
+      }
+     });
+    },
+ 
+    eventClick:function(event)
+    {
+     if(confirm("Are you sure you want to remove it?"))
+     {
+      var id = event.id;
+      $.ajax({
+       url:"delete.php",
+       type:"POST",
+       data:{id:id},
+       success:function()
+       {
+        calendar.fullCalendar('refetchEvents');
+        alert("Event Removed");
+       }
+      })
+     }
+    },
+ 
+   });
+  });
   
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/popper.min.js"></script>
-  <script src="assets/js/bootstrap.min.js"></script>
-	
-  <!-- simplebar js -->
-  <script src="assets/plugins/simplebar/js/simplebar.js"></script>
-  <!-- sidebar-menu js -->
-  <script src="assets/js/sidebar-menu.js"></script>
-  
-  <!-- Custom scripts -->
-  <script src="assets/js/app-script.js"></script>
-  
-  <!-- Full Calendar -->
-  <script src='assets/plugins/fullcalendar/js/moment.min.js'></script>
-  <script src='assets/plugins/fullcalendar/js/fullcalendar.min.js'></script>
-  <script src="assets/plugins/fullcalendar/js/fullcalendar-custom-script.js"></script>
-	
+  </script>
+  <style>
+   .fc-event {
+	position: relative;
+	display: block;
+	font-size: .85em;
+	line-height: 1.3;
+	border-radius: 3px;
+	border: 1px solid #fd8f00
+}
+.fc-event, .fc-event-dot {
+	background-color: #fd8f00
+}
+
+  </style>
+</head>
+<body>
+    <?php
+        top_header_6();
+    ?>
+    <div class = "container container-sm">
+    <h1 class="display-3 text-center">Calendar of <?php echo $_SESSION['name']; ?></h1>
+  <div class="container">
+   <div id="calendar"></div>
+  </div><br><br>
+  <?php
+      bottom_footer();
+      credit_mobirise_1();
+        ?>
 </body>
 </html>

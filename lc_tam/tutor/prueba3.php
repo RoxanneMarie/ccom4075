@@ -143,6 +143,7 @@
 .fc-event, .fc-event-dot {
 	background-color: #fd8f00
 }
+
   </style>
 </head>
 <body>
