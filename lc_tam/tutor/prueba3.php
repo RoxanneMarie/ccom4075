@@ -15,7 +15,7 @@
     <meta name="description" content="">
 
     <title>Tutor Calendar - LC:TAM</title>
-    <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
+      <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
     <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-grid.min.css">
@@ -27,14 +27,19 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
+    
+    <!-- css calendario -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css" /><!-- esta el css que cambia las letras y el colo r de las letras -->
+    <!-- termina css calendario -->
     <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+    <!-- css calendario -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
-  <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+    <!-- termina css calendario -->
+      <script>
   
   $(document).ready(function() {
    var calendar = $('#calendar').fullCalendar({
@@ -126,10 +131,32 @@
   });
   
   </script>
+  <style>
+   .fc-event {
+	position: relative;
+	display: block;
+	font-size: .85em;
+	line-height: 1.3;
+	border-radius: 3px;
+	border: 1px solid #fd8f00
+}
+.fc-event, .fc-event-dot {
+	background-color: #fd8f00
+}
+  </style>
 </head>
 <body>
+    <?php
+        top_header_6();
+    ?>
+    <div class = "container container-sm">
+    <h1 class="display-3 text-center">Calendar of <?php echo $_SESSION['name']; ?></h1>
   <div class="container">
    <div id="calendar"></div>
-  </div>
+  </div><br><br>
+  <?php
+      bottom_footer();
+      credit_mobirise_1();
+        ?>
 </body>
 </html>
