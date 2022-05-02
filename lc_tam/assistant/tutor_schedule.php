@@ -3,6 +3,8 @@
 
     if(isset($_GET['id'])){
         $id = $_GET['id'];
+    }else{
+        redirect('index.php');
     }
 ?>
 
@@ -47,12 +49,10 @@
     <main class="mcourses" style="justify-content:center;">
         <article>
         <div class = "container">
-            <h3 class = "h3 text-center">Tutor Schedule</h3><br>
+            <h3 class = "h3 text-center">Tutor Schedule - '; echo $id; echo'</h3>
                 <table class = "table table-responsive">
             <thead class = "tCourses text-center">
                 <th>Student Num</th>
-                <th>Tutor Name</th>
-                <th>Email</th>
                 <th>Day</th>
                 <th>Start Time</th>
                 <th>End Time</th>
@@ -69,23 +69,15 @@
             INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
             INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
             WHERE lc_tutor_schedule.tutor_id = '$TutID'");
-            } else {
-            $Squery = query("SELECT CONCAT_WS(' ', lc_test_students.student_name,
-            lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_fullname',
-            lc_test_students.student_email, lc_test_students.student_id, lc_tutor_schedule.schedule_id, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time
-            FROM lc_tutor_schedule
-            INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
-            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email");
             }
     while ($row2 = fetch_array($Squery)) {
         echo '    
                 <tr class = "text-center">
                     <td>'. $row2['student_id'] .'</td>
-                    <td>'. $row2['tutor_fullname'] .'</td>
-                    <td>'. $row2['student_email'] .'</td>
                     <td>'. $row2['day'] .'</td>
-                    <td>'. $row2['start_time'].'</td>
-                    <td>'. $row2['end_time'].'</td>
+                    <td>'. conv_time(substr($row2["start_time"],0,2)) . substr($row2["start_time"],2,3) . ampm(substr($row2["start_time"],0,2)).'</td>
+                    <td>'. conv_time(substr($row2["end_time"],0,2)) . substr($row2["end_time"],2,3) . ampm(substr($row2["end_time"],0,2)).'</td>
+                    </tr>
                     </tr>
                     '; } echo '
                 </table><br><br>

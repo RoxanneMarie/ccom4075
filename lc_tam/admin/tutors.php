@@ -68,15 +68,16 @@
                 <th>Offers</th>
                 <th>Schedule</th>
                 <th>Student Num</th>
-                <th>Name</th>
-                <th>Initial</th>
-                <th>First Last Name</th>
-                <th>Second Last name</th>
+                <th>Tutor full name</th>
                 <th>Email</th>
                 <th>Type</th>
                 <th>Status</th>
+                <th>tutor image</th>
             </thead>';
-    $query = query("SELECT * FROM lc_test_tutors INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
+    $query = query("SELECT lc_test_students.student_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, 
+    lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_fullname', lc_test_tutors.student_email, 
+    lc_tutor_type.tutor_type_name, lc_tutor_type.tutor_type_id, lc_account_status.acc_stat_name, lc_test_tutors.acc_stat_id,
+    lc_test_tutors.tutor_image FROM lc_test_tutors INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
             INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id INNER JOIN lc_account_status 
             ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id");
     while ($row = fetch_array($query)) {
@@ -86,13 +87,11 @@
                     <td>   <a href = "tutor_offers.php?id='. $row['student_email'] .'">View Offer</a> </td>
                     <td>   <a href = "tutor_schedule.php?id='. $row['student_email'] .'">View Schedule</a> </td>
                     <td>'. $row['student_id'].'</td>
-                    <td>'. $row['student_name'] .'</td>
-                    <td>'. $row['student_initial'] .'</td>
-                    <td>'. $row['student_first_lastname'] .'</td>
-                    <td>'. $row['student_second_lastname'] .'</td>
+                    <td>'. $row['tutor_fullname'] .'</td>
                     <td>'. $row['student_email'] .'</td>
                     <td>'. $row['tutor_type_name'].'</td>
                     <td>'. $row['acc_stat_name'] .'</td>
+                    <td>'; if( $row['tutor_image']){echo "Yes.";} else { echo "No."; } '</td>
                     </tr>
                     '; } echo '
                 </table><br><br>

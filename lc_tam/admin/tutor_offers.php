@@ -3,6 +3,8 @@
 
     if(isset($_GET['id'])){
         $id = $_GET['id'];
+    }else{
+        redirect('tutors.php');
     }
 ?>
 
@@ -47,7 +49,7 @@
     <main class="mcourses" style="justify-content:center;">
         <article>
         <div class = "container">
-            <h3 class = "h3 text-center">Tutor Offers</h3>
+            <h3 class = "h3 text-center">Tutor Offers - '; echo $id; echo'</h3>
             <a class = "btn btn-primary" href="add_tutor_offer.php">Add Tutor Offer</a>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
@@ -66,63 +68,40 @@
             </div>
             ';
             } echo '
-                <table class = "table table-responsive">
+                <div class="table-responsive">
+                <table class = "table">
             <thead class = "tCourses">
                 <th>Edit</th>
-                <th>Student Num</th>
-                <th>Name</th>
-                <th>Initial</th>
-                <th>First Last Name</th>
-                <th>Second Last name</th>
-                <th>Email</th>
                 <th>Course</th>
                 <th>Professor</th>
             </thead>';
-            /*
-                $query = query("SELECT * FROM lc_tutor_offers
-                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
-                INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id 
-                INNER JOIN lc_account_status ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id
-                INNER JOIN lc_tutor_offers ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
-                INNER JOIN lc_professors ON lc_professors.professor_entry_id = lc_tutor_offers.professor_entry_id");
-            */
             if(isset($_GET['id'])){
                 $query = query("SELECT * FROM lc_test_tutors
                 WHERE lc_test_tutors.student_email = '$id'");
                 $row = fetch_array($query);
                 $TutID = $row['tutor_id'];
-                $Oquery = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, 
-                lc_test_students.student_email, lc_tutor_offers.offer_id, lc_tutor_offers.course_id, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
-                lc_professors.professor_second_lastname
+                $Oquery = query("SELECT lc_test_students.student_id, CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name',
+                lc_test_students.student_email, lc_tutor_offers.offer_id, CONCAT_WS(' - ', lc_tutor_offers.course_id, lc_courses.course_name) As 'course_info', CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, lc_professors.professor_second_lastname) AS 'professor_fullname'
                 FROM lc_tutor_offers
+                INNER JOIN lc_courses ON lc_courses.course_id = lc_tutor_offers.course_id
                 INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
                 INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
                 INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id
                 WHERE lc_tutor_offers.tutor_id = '$TutID'");
             } else {
-                $Oquery = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, 
-                lc_test_students.student_email, lc_tutor_offers.offer_id, lc_tutor_offers.course_id, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
-                lc_professors.professor_second_lastname
-                FROM lc_tutor_offers
-                INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
-                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
-                INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id");
+                redirect('index.php');
                 }
     while ($row2 = fetch_array($Oquery)) {
         echo '    
                 <tr>
                     <td> <a href="edit_tutor_offer.php?id='. $row2['offer_id'] .'">Edit</a>
-                    <td>'. $row2['student_id'].'</td>
-                    <td>'. $row2['student_name'] .'</td>
-                    <td>'. $row2['student_initial'] .'</td>
-                    <td>'. $row2['student_first_lastname'] .'</td>
-                    <td>'. $row2['student_second_lastname'] .'</td>
-                    <td>'. $row2['student_email'] .'</td>
-                    <td>'. $row2['course_id'].'</td>
-                    <td>'. $row2['professor_name'].' '. $row2['professor_initial'] . ' ' . $row2['professor_first_lastname'] . ' ' . $row2['professor_second_lastname'].'</td>
+                    <td>'. $row2['course_info'].'</td>
+                    <td>'. $row2['professor_fullname'].'</td>
                     </tr>
                     '; } echo '
-                </table><br><br>
+                </table>
+                </div>
+                <br><br>
                 </div>
                 </article>
             </main>';

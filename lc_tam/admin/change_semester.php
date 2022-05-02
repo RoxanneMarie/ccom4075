@@ -1,22 +1,23 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_GET) & !empty($_GET)){
-        $id = $_GET['id'];
-    } else {
-        redirect('semesters.php');
-    }
-    if(isset($_POST) & !empty($_POST)){
-        $SemesterTermName = $_POST['Semester_Term_Name'];
-        $SemesterName = $_POST['Semester_Name'];
-        $query = "UPDATE lc_semester SET semester_term = '$SemesterTermName', semester_name = '$SemesterName' WHERE semester_id = '$id'";
-        //print_r($query);
-        $res = query($query);
-        //print_r($query);
-        confirm($query);
-       //header('departments.php?success');
-        redirect('semesters.php?success');
+  require_once("../functions.php");    
 
+    if(isset($_POST['submit'])){
+        $semesterID = $_POST['Semester_ID'];
+        //Selects semester that was previously active.
+        $query = query("SELECT * FROM lc_semester WHERE semester_status = '1'");
+        confirm($query);
+        $row = fetch_array($query);
+        $prevSem = $row['semester_id'];
+        //Updates previous semester that was active to inactive.
+        $query2 = query("UPDATE lc_semester SET semester_status = '2' WHERE semester_id = '$prevSem'");
+        confirm($query2);
+        //Finally, updates selected semester to active.
+        $query3 = query("UPDATE lc_semester SET semester_status = '1' WHERE semester_id = '$semesterID'");
+        confirm($query3);
+
+    if($query3) {
+        header('location:semesters.php?selected');
+    }
 }
 ?>
 
@@ -31,7 +32,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Edit Semester - LC:TAM</title>
+      <title>Change Semester - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -43,44 +44,38 @@
       <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
-        <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+    <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
     </head>
     <body>
         <?php 
             top_header_5(); 
             ?>
-        <main class = "container">
-            <article>
-            <div class="container sm">
-                <h3 class = "h3 text-center">Edit Semester</h3>
+            <h3 class = "h3 text-center">Change Semester</h3>
+            <main class = "container d-flex justify-content-center">
                 <?php 
-                $query = query("SELECT * FROM lc_semester WHERE semester_id = '$id'");
+                $query = ("SELECT * FROM lc_semester WHERE lc_semester.semester_status = '1'");
+                $query = query($query);
                 confirm($query);
                 $row = fetch_array($query);
                 ?>
-                <form action="edit_semester.php?id=<?php echo $row['semester_id']; ?>" method="POST"><br>
-
-                <div class="form-group col">
-                    <div class="form-row">
-                        <label for="Semester_Name">Semester Term Name:</label>
-                        <input type="text" class="form-control" id="Semester_Term_Name" name="Semester_Term_Name" value = "<?php echo $row['semester_term']; ?>" placeholder="Second Semester 2021-2022" maxlength="30" required>
-                    </div>
-                </div>
-
-                <div class="form-group col">
-                    <div class="form-row">
-                        <label for="Semester_Name">Semester Name:</label>
-                        <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" value = "<?php echo $row['semester_name']; ?>" placeholder="Second Semester 2021-2022" maxlength="30" required>
-                    </div>
-                </div>
-                <br>
-                <div class = "container d-flex justify-content-center">
+            <form action="change_semester.php" method="POST">     
+            <div class="form-group">
+                <label for="Semester_ID">Current Semester:</label>
+                <select class="form-control" id="Semester_ID" name = "Semester_ID">
+                <?php 
+                    $query = query("SELECT lc_semester.semester_id, CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_semester.semester_status
+                    FROM lc_semester");
+                    confirm($query);
+                    while($row = fetch_array($query)) { ?>
+                    <option value=<?php echo $row['semester_id'] ?> <?php if ( $row['semester_status'] == '1') { echo "selected"; } ?> ><?php echo $row['semester_info']; } ?></option>
+                    </select>
+            </div>
+            <div class = "container d-flex justify-content-center">
                     <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
-                </div>
-                <br><br><br>
+                    </div>
+                    <br>
             </form>
             </div>
-            </article>
         </main>
         <?php
             bottom_footer();

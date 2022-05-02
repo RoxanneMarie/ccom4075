@@ -10,13 +10,41 @@
         $StudentInitial = $_POST['Student_Initial'];
         $StudentFLN = $_POST['Student_FLN'];
         $StudentSLN = $_POST['Student_SLN'];
-        $StudentEmail = $_POST['Student_Email'];
         $TutorType = $_POST['Tutor_Type'];
         $AccStatus = $_POST['Acc_Status'];
         $Success1 = false;
         $Success2 = false;
+
+        if(isset($_FILES) & !empty($_FILES)){
+            $name = $_FILES['tutor_img']['name'];
+            $size = $_FILES['tutor_img']['size'];
+            $type = $_FILES['tutor_img']['type'];
+            $tmp_name = $_FILES['tutor_img']['tmp_name'];
+
+            $max_size = 1000000;
+            $extension = substr($name, strpos($name, '.') + 1);
+
+            if(isset($name) & !empty($name)){
+                if(($extension == "jpg" || $extension == "jpeg" ) && $type == "image/jpeg" && $size <= $max_size){
+                $location = "../assets/images/tutors/";
+                $filepath = $location.$name;
+                if(move_uploaded_file($tmp_name, $location.$name)){
+                    echo "Uploaded successsfully";
+                }else{
+                    echo "failed to upload";
+                }
+            }else{
+                echo "Only JPG files are allowed and less than 1mb";
+            }
+            }else{
+            echo "Please select a file";
+            }
+        }else{
+              $filepath = $_POST['filepath'];
+            }
+
         $Uquery = "UPDATE lc_test_tutors
-        SET tutor_type_id = '$TutorType', acc_stat_id = '$AccStatus'
+        SET tutor_type_id = '$TutorType', acc_stat_id = '$AccStatus', tutor_image = '$filepath'
         WHERE student_email = '$id'";
         //print_r($Uquery);
         $res = query($Uquery);
@@ -78,7 +106,8 @@
                 <?php 
                 $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
                 lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_tutors.student_email, 
-                lc_tutor_type.tutor_type_name, lc_tutor_type.tutor_type_id, lc_account_status.acc_stat_name, lc_test_tutors.acc_stat_id
+                lc_tutor_type.tutor_type_name, lc_tutor_type.tutor_type_id, lc_account_status.acc_stat_name, lc_test_tutors.acc_stat_id,
+                lc_test_tutors.tutor_image
                 FROM lc_test_tutors 
                 INNER JOIN lc_test_students ON lc_test_tutors.student_email = lc_test_students.student_email 
                 INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id 
@@ -88,7 +117,7 @@
                 confirm($query);
                 $row = fetch_array($query);
                 ?>
-            <form action="edit_tutor.php?id=<?php echo $row['student_email']; ?>" method="POST">     
+            <form action="edit_tutor.php?id=<?php echo $row['student_email']; ?>" method="POST" enctype="multipart/form-data">     
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="Student_ID">Student ID:</label>
@@ -143,6 +172,17 @@
                         <option value= "<?php echo $row3['acc_stat_id'] ?>" <?php if ( $row3['acc_stat_id'] == $row['acc_stat_id']) { echo "selected"; } ?> > <?php echo $row3['acc_stat_name'];  } ?></option>
                         </select>
                     </div>
+
+                    <div class="form-group col">
+                        <label for="tutor_img">Tutor Image:</label>
+                            <?php if(isset($row['tutor_image']) & !empty($row['tutor_image'])) { ?>
+                            <img src="<?php echo $row['tutor_image'] ?>" width="250px" height="250px">
+                            <a href="delete_tutor_img.php?id=<?php echo $row['student_email']; ?>">Delete Image</a> 
+                            <?php }else{ ?>
+                            <input type="file" name="tutor_img" id="tutor_img">
+                            <p class="help-block">Only jpg/jpeg are allowed.</p><?php } ?>
+                    </div>
+
                     <div class = "container d-flex justify-content-center">
                     <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
                     </div>

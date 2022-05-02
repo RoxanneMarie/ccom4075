@@ -10,9 +10,9 @@
         //$id = $_POST['id'];
         $CourseName = $_POST['Course_Name'];
         $DepartmentID = $_POST['Department_ID'];
-        $TutorAvailable = $_POST['Tutor_Available'];
+        $courseStatus = $_POST['Course_Status'];
         $Uquery = "UPDATE lc_courses 
-        SET course_name = '$CourseName', dept_id = '$DepartmentID', tutor_available = '$TutorAvailable'
+        SET course_name = '$CourseName', dept_id = '$DepartmentID', course_status = '$courseStatus'
         WHERE course_id = '$id'";
         print_r($Uquery);
         $res = query($Uquery);
@@ -55,7 +55,7 @@
                     <div>
                     <h3 class = "h3 d-flex justify-content-center">Edit Course</h3>
             <?php 
-            $query = query("SELECT lc_courses.course_id, lc_courses.course_name, lc_courses.dept_id, lc_courses.tutor_available, lc_departments.dept_id, lc_departments.dept_name FROM lc_courses INNER JOIN lc_departments ON lc_courses.dept_id = lc_departments.dept_id WHERE course_id = '$id'");
+            $query = query("SELECT lc_courses.course_id, lc_courses.course_name, lc_courses.dept_id, lc_courses.tutor_available, lc_departments.dept_id, lc_departments.dept_name, lc_courses.course_status FROM lc_courses INNER JOIN lc_departments ON lc_courses.dept_id = lc_departments.dept_id WHERE course_id = '$id'");
             confirm($query);
             $row = fetch_array($query);
             ?>
@@ -83,9 +83,14 @@
                     </select>
             </div>
             
-            <div class="form-group col-md-6">
-                    <label for="Tutor_Available">Tutor's Available: </label>
-                    <input type="number" class="form-control" id="Tutor_Available" name = "Tutor_Available" value = "<?php echo $row['tutor_available']; ?>" min = "1" max = "10" required>
+            <div class="form-group col">
+                <label for="Course_Status">Course Status:</label>
+                <select class="form-control" id="Course_Status" name = "Course_Status" required>
+                <?php $query3 = query("SELECT * FROM lc_account_status");
+                confirm($query3);
+                while($row3 = fetch_array($query3)) { ?>
+                <option value= "<?php echo $row3['acc_stat_id'] ?>"<?php if($row['course_status'] == $row3['acc_stat_id'] ) { echo "selected"; } ?> > <?php echo $row3['acc_stat_name'];  } ?></option>
+                </select>
             </div>
 
             <div class = "container d-flex justify-content-center">

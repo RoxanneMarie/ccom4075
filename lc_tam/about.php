@@ -27,38 +27,80 @@
     </head>
 
     <body>
-
         <?php top_header_1(); ?>
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                <img class="d-block w-100" src="https://scontent-mia3-2.xx.fbcdn.net/v/t1.6435-9/51308428_816165355385312_7859383633025433600_n.jpg?stp=cp0_dst-jpg_e15_fr_q65&_nc_cat=102&ccb=1-5&_nc_sid=dd9801&efg=eyJpIjoidCJ9&_nc_ohc=ESoljJ-XbMkAX-CNvKs&_nc_ht=scontent-mia3-2.xx&oh=00_AT-tNDN6DmqgUjFAcXCrrAkgALT-fvHjmweLygJDZ19DvQ&oe=624DEC96" alt="First slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="https://scontent.fsju2-1.fna.fbcdn.net/v/t1.6435-9/76652248_1014930758842103_3511099472006348800_n.png?_nc_cat=111&ccb=1-5&_nc_sid=e3f864&_nc_ohc=tUBMV2ifancAX9pKbnX&_nc_ht=scontent.fsju2-1.fna&oh=00_AT-vmQgY9UdOlhdbzdsY4L5tuXM6MDtzXHI8ZwgCzpAo7g&oe=625A0129" alt="Second slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="https://scontent.fsju2-1.fna.fbcdn.net/v/t1.6435-9/83812970_1089709924697519_9169264008794996736_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=e3f864&_nc_ohc=gYURVJLru4gAX-dlZzP&_nc_ht=scontent.fsju2-1.fna&oh=00_AT_NdqSCnuhJ1cbbdYuEonRQlxs3yIZh6LG6CCvlpi85_A&oe=62594480" alt="Third slide">
-            </div>
+            <!-- Marketing messaging and featurettes
+  ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    <div class="container marketing">
+    <img src="assets/images/bg/lc_image10.jpeg" class="img-fluid" alt="Image of Learning Commons building found in UPRA.">
+        <div class="container">
+          <h1 class="h1 text-center">About us</h1>
+          <p class="lead">The Learning Commons is a building located within University of Puerto Rico at Arecibo campus. It is part
+            of the new library extension. It offers multiples services that promotes collaboration and learning.</p>
+        </div><!-- /.container -->
+
+<!-- START THE FEATURETTES -->
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+        <div class="container text-center">
+            <h2 class="featurette-heading">Tutoring for students. <span class="text-muted">By students.</span></h2>
         </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-        <br>
-        <div class = "container border">
-            <h3 class = "h3 text-center">About Us</h3>
-            
+        <div class="col-md-7">
+            <p class="lead">Having difficulties with some classes? Do you wish to practice more course related skills? As part of the Tutoring and Mentoring program, Learning Commons offers tutoring services for multiple courses. You can also offer your knowledge to tutor by applying as a tutor during the work/study request period.</p>
         </div>
+        <div class="col-md-5">
+        <img src="assets/images/bg/lc_image4.jpeg" class="img-fluid" aria-hidden="true" alt="Image showing a part of the learning common mostly used for tutoring.">
+        </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+        <div class="container text-center">
+            <h2 class="featurette-heading">Spaces for multiple people to study. <span class="text-muted">Or solo if you need to focus.</span></h2>
+        </div>
+        <div class="col-md-7 order-md-2">
+            <p class="lead">Learning Commons offers a space that allows multiple students to have study sessions, as well as for people that want to study alone. First come, first serve.</p>
+        </div>
+        <div class="col-md-5 order-md-1" aria-hidden="true">
+            <img src="assets/images/bg/lc_image5.jpeg" class="img-fluid" alt="Image showing another part of the Learning Commons that can be used for studying.">
+        </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+        <div class="container text-center">
+            <h2 class="featurette-heading">Technological support, as well as workshops of various skills. <span class="text-muted">And much more.</span></h2>
+        </div>
+        <div class="col-md-7">
+            <p class="lead">You can request technical assistance for database searches, and multiple workshops of various topics are offered from time to time, and much more.</p>
+        </div>
+        <div class="col-md-5">
+            <img src="assets/images/bg/lc_image6.jpeg" class="img-fluid" alt="Image of some computers that can be used in Learning Commons.">
+        </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="container">
+        <h1 class="h1 text-center">Credits</h1>
+        <ul class="list-unstyled">
+            <li>Credits to: </li>
+            <ul>
+                <li><a href="https://mobirise.com/">Mobirise</a> starting webpage layout.</li>
+                <li><a href="https://getbootstrap.com/">Bootstrap</a> plugins/examples for the webpage style.</li>
+                <li><a href="https://fullcalendar.io/">fullCalendar</a> JS plugin.</li>
+            </ul>
+        </ul>
+    </div><!-- /.container -->
+</main>
+<!-- /END THE FEATURETTES -->
+
+</div><!-- /.container -->
         <?php
             bottom_footer();
             credit_mobirise_2();

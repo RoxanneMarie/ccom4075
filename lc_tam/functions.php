@@ -25,6 +25,9 @@ function select_header($choice)
 function top_header_1()
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -58,6 +61,9 @@ function top_header_1()
 function top_header_2()
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -92,6 +98,9 @@ function top_header_2()
 function top_header_3()
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -128,6 +137,9 @@ function top_header_3()
 function top_header_4()
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -166,13 +178,16 @@ function top_header_4()
 function top_header_5()
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
                 <div class="container-fluid">
                     <div class="navbar-brand">
                         <span class="navbar-logo">
-                            <a href="admin.php">
+                            <a href="index.php">
                                 <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
                             </a>
                         </span>
@@ -187,7 +202,7 @@ function top_header_5()
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="admin.php">Home</a></li>
+                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
                         </ul>
 
@@ -204,6 +219,9 @@ function top_header_5()
 function top_header_9() //header for assistant menu.
 {
   echo '
+  <style>
+#hide-footer{display: none !important;}
+</style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
@@ -270,7 +288,7 @@ function bottom_footer()
 function credit_mobirise_1()
 {
     echo '
-        <section style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Robot, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
+        <section id="hide-footer" style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Robot, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
             <a href="https://mobirise.site/u" style="flex: 1 1; height: 3rem; padding-left: 1rem;"></a>
             <p style="flex: 0 0 auto; margin:0; padding-right:1rem;">Page was <a href="https://mobirise.site/h" style="color:#aaa;">designed with</a> Mobirise</p>
         </section>
@@ -285,7 +303,7 @@ function credit_mobirise_1()
 function credit_mobirise_2()
 {
     echo '
-        <section style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
+        <section id="hide-footer" style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
             <a href="https://mobirise.site/c" style="flex: 1 1; height: 3rem; padding-left: 1rem;"></a>
             <p style="flex: 0 0 auto; margin:0; padding-right:1rem;">The <a href="https://mobirise.site/e" style="color:#aaa;">site</a> was started with Mobirise</p>
         </section>
@@ -561,7 +579,7 @@ function student_select_course()
     {
         $row2 = fetch_array($query2);
         
-        $query3 = query("SELECT COUNT(course_id) FROM lc_courses WHERE dept_id = '{$x}' AND tutor_available = 1");
+        $query3 = query("SELECT COUNT(course_id) FROM lc_courses WHERE dept_id = '{$x}' AND tutor_available >= 1");
         confirm($query3);
         $row3 = fetch_array($query3);
         
@@ -582,7 +600,7 @@ function student_select_course()
             
             $dept = str_replace(" ","",$row2["dept_name"]);
             
-            $query4 = query("SELECT course_id FROM lc_courses WHERE dept_id = '{$x}' AND tutor_available = 1");
+            $query4 = query("SELECT course_id FROM lc_courses WHERE dept_id = '{$x}' AND tutor_available >= 1");
             confirm($query4);
 
             for ($y = 1; $y <= $row3['COUNT(course_id)']; $y++)

@@ -49,22 +49,16 @@
                 <span> Department updated successfully.</span>
             </div>'; 
             }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Department removed successfully.</span>
-            </div>
-            ';
-            }
             if(isset($_GET['Added'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Department added successfully.</span>
             </div>
             ';
             } echo '
-                <table class="table table-responsive">
+                <div class="table-responsive">
+                <table class="table">
             <thead class = "tCourses">
                 <th>Edit</th>
-                <th>Department ID</th>
                 <th>Department Name</th>
             </thead>';
     $query = query("SELECT * FROM lc_departments");
@@ -72,23 +66,17 @@
     while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>    <a href="edit_department.php?id='. $row['dept_id'] .'">Edit</a>
-                            <a href="delete_department.php?id='. $row['dept_id'] .'" onclick = "return Func_confirm()">Delete</a></td>
-                    <td>'. $row['dept_id'] .'</td>
+                    <td>    <a href="edit_department.php?id='. $row['dept_id'] .'">Edit</a></td>
                     <td>'. $row['dept_name'] .'</td>
                     </tr>
                     '; } echo '
-                </table><br><br>
+                </table>
+                </div><br><br>
                 </div>
                 </article>
             </main>';
             bottom_footer();
             credit_mobirise_1();
-        ?>
-    <script>
-    function Func_confirm() {
-        return confirm("Are you sure you wish to delete this value? This cannot be undone.");
-        }
-    </script>    
+        ?>  
     </body>
 </html>

@@ -5,10 +5,11 @@
         $courseID = $_POST['Course_ID'];
         $courseName = $_POST['Course_Name'];
         $departmentID = $_POST['Department_ID'];
-        $tutor_available = 1;
+        $courseStatus = $_POST['Course_Status'];
+        $tutor_available = 0;
 
-    echo $query = query('INSERT INTO lc_courses (course_id, course_name, dept_id, tutor_available)
-    VALUES("' . $courseID . '","' . $courseName . '",' . $departmentID . ',' . $tutor_available . ')');
+    echo $query = query('INSERT INTO lc_courses (course_id, course_name, dept_id, tutor_available, course_status)
+    VALUES("' . $courseID . '","' . $courseName . '",' . $departmentID . ',' . $tutor_available . ',' . $courseStatus .')');
     if($query) {
         header('location:courses.php?Added');
     }
@@ -70,6 +71,17 @@
                     confirm($query);
                     while($row = fetch_array($query)) { ?>
                     <option value=<?php echo $row['dept_id'] ?> ><?php echo $row['dept_name'];  } ?></option>
+                    </select>
+                </div>
+
+                <div class="form-group col">
+                    <label for="Course_Status">Course Status:</label>
+                    <select class="form-control" id="Course_Status" name = "Course_Status" required>
+                        <option selected value="">Select a status.</option>
+                    <?php $query2 = query("SELECT * FROM lc_account_status");
+                    confirm($query2);
+                    while($row2 = fetch_array($query2)) { ?>
+                    <option value= "<?php echo $row2['acc_stat_id'] ?>"> <?php echo $row2['acc_stat_name'];  } ?></option>
                     </select>
                 </div>
 

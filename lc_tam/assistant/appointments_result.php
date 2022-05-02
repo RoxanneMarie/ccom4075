@@ -1,18 +1,17 @@
 <?php 
-    require_once("../functions.php"); 
-
+    require_once("../functions.php");
+    
     if(isset($_GET['id'])){
         $id = $_GET['id'];
+    }else{
+        redirect('index.php');
     }
 ?>
 
+
+
 <!DOCTYPE html>
 <html>
-    <?php
-    $query = query("SELECT * FROM lc_appointments WHERE session_id = $id");
-    confirm($query);
-    $row = fetch_array($query);
-    ?>
     <head>
       <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
@@ -22,7 +21,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Appointments of Session #<?php echo $row['session_id']; ?> - LC:TAM</title>
+      <title>Appointments Found - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -46,58 +45,50 @@
     </head>
     <body>
         <?php 
-            top_header_5();
+            top_header_9();
     echo '
     <main class="container">
         <article>
         <div class="container-sm">
-            <h3 class = "h3 text-center">Tutoring Appointments of Session #'; echo $row['session_id']; echo '</h3>
-            <div class = "container d-flex justify-content-center">
-            <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance.</a>
-            </div>
+            <h3 class = "h3 text-center">Appointments of '; echo $id; echo '</h3><br>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Tutoring session updated successfully.</span>
             </div>'; 
-            }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutoring session removed successfully.</span>
-            </div>
-            ';
-            }
-            if(isset($_GET['Added'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutoring session added successfully.</span>
-            </div>
-            ';
             } echo '
-                <div class = "table-responsive">
-                <table class="table">
-            <thead class = "tCourses">
-                <th>Appointment ID</th>
-                <th>Session ID</th>
-                <th>Student Name</th>
-                <th>Course</th>
+                <table class="table table-responsive">
+            <thead class = "tCourses text-center">
+                <th>Student full name</th>
+                <th>Student email</th>
+                <th>Course Info</th>
+                <th>Semester Info</th>
+                <th>Time Duration</th>
+                <th>Session Date</th>
+                <th>Cancel</th>
             </thead>';
-            $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id,  
-            CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
-            lc_test_students.student_second_lastname) AS 'student_full_name', lc_appointments.course_id
-            FROM lc_appointments
-            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_appointments.student_email
-            WHERE lc_appointments.session_id = '$id'");
-            confirm($query);
-            while ($row = fetch_array($query)) {
-        echo '    
-                <tr class="trCourses">
-                    <td>'. $row['app_id'] .'</td>
-                    <td>'. $row['session_id'] .'</td>
-                    <td>'. $row['student_full_name'] .'</td>
-                    <td>'. $row['course_id'] .'</td>
+    $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'student_fullname', 
+    lc_appointments.student_email, CONCAT_WS(' - ', lc_appointments.course_id, lc_courses.course_name) AS 'course_info', CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date 
+    FROM lc_appointments
+    INNER JOIN lc_test_students ON lc_appointments.student_email = lc_test_students.student_email
+    INNER JOIN lc_courses ON lc_appointments.course_id = lc_courses.course_id
+    INNER JOIN lc_semester ON lc_semester.semester_id = lc_appointments.semester_id
+    INNER JOIN lc_sessions ON lc_appointments.session_id = lc_sessions.session_id    
+    WHERE lc_appointments.student_email = '$id'");
+    confirm($query);
+    while ($row = fetch_array($query)) {
+        echo '
+                <tr class="text-center">
+                    <td>'. $row['student_fullname'] .'</td>
+                    <td>'. $row['student_email'] .'</td>
+                    <td>'. $row['course_info'] .'</td>
+                    <td>'. $row['semester_info'] .'</td>
+                    <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
+                    <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>
+                    <td> <a href="cancel_appointment.php?id='. $row['app_id'] .'">Cancel</td>
                     </tr>
                    '; } echo '
-                </table>
-                </div><br><br>
+                </table><br><br>
+                </div>
                 </article>
             </main>';
             bottom_footer();

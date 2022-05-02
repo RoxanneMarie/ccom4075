@@ -59,35 +59,41 @@
                 <span> Semester added successfully.</span>
             </div>
             ';
+            }
+            if(isset($_GET['selected'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> The selected semester is now the main one.</span>
+            </div>
+            ';
             } echo '
-                <table class="table table-responsive">
+                <div class="table-responsive">
+                <table class="table">
             <thead class = "tCourses">
                 <th>Edit</th>
                 <th>Semester ID</th>
-                <th>Semester Name</th>
+                <th>Semester Term & Name</th>
+                <th>Semester Status</th>
             </thead>';
-    $query = query("SELECT * FROM lc_semester");
+    $query = query("SELECT lc_semester.semester_id, CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_account_status.acc_stat_name AS 'semester_status'
+    FROM lc_semester
+    INNER JOIN lc_account_status ON lc_semester.semester_status = lc_account_status.acc_stat_id");
     confirm($query);
     while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>    <a href="edit_semester.php?id='. $row['semester_id'] .'">Edit</a>
-                            <a href="delete_semester.php?id='. $row['semester_id'] .'" onclick = "return Func_confirm()">Delete</a></td>
+                    <td>    <a href="edit_semester.php?id='. $row['semester_id'] .'">Edit</a></td>
                     <td>'. $row['semester_id'] .'</td>
-                    <td>'. $row['semester_name'] .'</td>
+                    <td>'. $row['semester_info'] .'</td>
+                    <td>'. $row['semester_status'] .'</td>
                     </tr>
                     '; } echo '
-                </table><br><br>
+                </table>
+                </div><br><br>
                 </div>
                 </article>
             </main>';
             bottom_footer();
             credit_mobirise_1();
         ?>
-    <script>
-    function Func_confirm() {
-        return confirm("Are you sure you wish to delete this value? This cannot be undone.");
-    }
-    </script>
     </body>
 </html>

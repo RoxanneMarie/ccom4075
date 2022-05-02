@@ -63,12 +63,13 @@
             </div>
             ';
             } echo '
-                <table class="table table-responsive">
+            <div class = "table-responsive">
+                <table class="table">
             <thead class = "tCourses">
+                <th>Status</th>
                 <th>Student Name</th>
                 <th>Student ID</th>
                 <th>Student Email</th>
-                <th>Status</th>
             </thead>';
             $query = query("SELECT CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
             lc_test_students.student_second_lastname) AS 'student_full_name', lc_test_students.student_id, lc_test_students.student_email
@@ -79,23 +80,23 @@
             while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
+                    <td><div class="table-responsive">
+                            <select class="form-control" id="attendance_status" name = "attendance_status"  style="width: auto;" required>
+                            <option selected value = ""> Select a value. </option>';
+                            $query2 = query("SELECT * FROM lc_attendance_status");
+                            confirm($query2);
+                            while($row2 = fetch_array($query2)) { echo '
+                            <option value = "'; echo $row2['att_stat_id']; echo '"> '; echo $row2['att_stat_name']; }  echo'</option>
+                            </select>
+                        </div> 
+                    </td>
                     <td>'. $row['student_full_name'] .'</td>
                     <td>'. $row['student_id'] .'</td>
                     <td>'. $row['student_email'] .'</td>
-                    <td>                     
-                    <div class="form-group col">
-                    <select class="form-control" id="attendance_status" name = "attendance_status" required>
-                    <option selected value = ""> Select a value. </option>';
-                    $query2 = query("SELECT * FROM lc_attendance_status");
-                    confirm($query2);
-                    while($row2 = fetch_array($query2)) { echo '
-                    <option value = "'; echo $row2['att_stat_id']; echo '"> '; echo $row2['att_stat_name']; }  echo'</option>
-                        </select>
-                        </div> 
-                    </td>
                     </tr>
                    '; } echo '
                 </table>
+                </div>
                 <div class = "container d-flex justify-content-center">
                 <btn class = "btn btn-primary display-4" type = "submit name = "submit">Submit Attendance.</a>
                 </div>

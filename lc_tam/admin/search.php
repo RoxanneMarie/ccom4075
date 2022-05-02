@@ -51,27 +51,33 @@
                     <h2 class = "h2 text-center">Found '; echo $Count_r['counter']; echo ' Results.</h2>';
                     if ($Count_r['counter'] > '0') {
                         echo '
-                        <table class="table table-responsive">
-                        <thead class = "tCourses">
+                        <div class="table-responsive">
+                        <table class="table">
+                        <thead class = "tCourses text-center">
                             <th>Student full name</th>
                             <th>Student Email</th>
                             <th>View Appointments</th>
                             <th>Create Appointment</th>
+                            <th>Tutor</th>
+                            <th>Assistant</th>
                         </thead>';
                             $query = query("SELECT CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
-                            lc_test_students.student_second_lastname) AS 'Student_name', lc_test_students.student_email
+                            lc_test_students.student_second_lastname) AS 'student_fullname', lc_test_students.student_email
                             FROM lc_test_students
                             WHERE lc_test_students.student_email LIKE '%$search_r%'");
                             confirm($query);
                             while ($row = fetch_array($query)) {
                             echo ' 
-                        <tr>
-                        <td>'. $row['Student_name'] .'</td>
+                        <tr class = "text-center">
+                        <td>'. $row['student_fullname'] .'</td>
                         <td>'. $row['student_email'] .'</td>
                         <td> <a href = "appointments_result.php?id='. $row['student_email'] .'">View</a></td>
-                        <td> <a href = "cancel_appointment.php?id='. $row['student_email'] .'">Create</a></td>'; } echo '
+                        <td> <a href = "cancel_appointment.php?id='. $row['student_email'] .'">Create</a></td>
+                        <td> <a href = "add_tutor.php?id='. $row['student_email'] .'">Make tutor</a></td>
+                        <td> <a href = "add_assistant.php?id'. $row['student_email'] .'">Make assistant</a></td>'; } echo '
                         </tr>
-                        </table>';
+                        </table>
+                        </div>';
                     } else {
                         echo '<div class = "alert" style = "background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;" role="alert">
                 <span> Student was not found within our system.</span>

@@ -5,10 +5,11 @@
         $tutor = $_POST['tutor'];
         $course = $_POST['course'];
         $professor = $_POST['professor'];
-
+    //inserts into tutor offers the selected course for the selected tutor and selected professor.
     echo $Aquery = query('INSERT INTO lc_tutor_offers (tutor_id, course_id, professor_entry_id)
     VALUES("' . $tutor . '","' . $course . '",' . $professor . ')');
-    if($Aquery) {
+    $cQuery = query("UPDATE lc_courses SET tutor_available = tutor_available + 1 WHERE course_id = '$course'");
+    if($Aquery AND $cQuery) {
         header('location:tutor_offers.php?Added');
     }
 }
@@ -54,14 +55,14 @@
                         <select class="form-control" id="tutor" name = "tutor" required>
                         <option selected value = "">Select a Tutor.</option>
                         <?php 
-                            $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
-                            lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id, lc_test_tutors.acc_stat_id
+                            $query2 = query("SELECT lc_test_students.student_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
+                            lc_test_students.student_second_lastname) AS 'student_fullname', lc_test_students.student_email, lc_test_tutors.tutor_id, lc_test_tutors.acc_stat_id
                             FROM lc_test_students
                             INNER JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
-                            WHERE lc_test_tutors.student_email = lc_test_students.student_email");
+                            WHERE lc_test_tutors.student_email = lc_test_students.student_email AND lc_test_tutors.acc_stat_id != 0");
                             confirm($query2);
                             while($row2 = fetch_array($query2)) { ?>
-                            <option value = <?php echo $row2['tutor_id'] ?> <?php if ($row2['acc_stat_id'] == '0' OR $row2['acc_stat_id'] == '2') { echo "disabled"; } ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; } ?></option>
+                            <option value = <?php echo $row2['tutor_id'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_fullname']; } ?></option>
                             </select>
                     </div>
                     <br>
@@ -70,7 +71,12 @@
                         <select class="form-control" id="course" name = "course" required>
                         <option selected value = "">Select a Course.</option>
                             <?php 
-                            $query = query("SELECT * FROM lc_courses");
+                            $query = query("SELECT lc_courses.course_id, lc_courses.course_name, lc_departments.dept_id, lc_departments.dept_name, lc_courses.tutor_available, lc_courses.course_status,
+                            lc_account_status.acc_stat_name
+                            FROM lc_courses
+                            INNER JOIN lc_departments ON lc_courses.dept_id = lc_departments.dept_id
+                            INNER JOIN lc_account_status ON lc_courses.course_status = lc_account_status.acc_stat_id
+                            WHERE lc_courses.course_status != '0' AND lc_courses.course_status != '2'");
                             confirm($query);
                             while($row = fetch_array($query)) {
                                 ?>
@@ -83,10 +89,14 @@
                         <select class="form-control" id="professor" name = "professor" required>
                         <option selected value = "">Select a Professor.</option>
                         <?php 
-                            $query3 = query("SELECT * FROM lc_professors");
+                            $query3 = query("SELECT lc_professors.professor_entry_id, CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname,
+                            lc_professors.professor_second_lastname) AS 'professor_name', lc_professors.course_id, lc_courses.course_name
+                            FROM lc_professors
+                            INNER JOIN lc_courses ON lc_professors.course_id = lc_courses.course_id
+                            WHERE lc_professors.acc_stat_id = '1'");
                             confirm($query3);
                             while($row3 = fetch_array($query3)) { ?>
-                            <option value = <?php echo $row3['professor_entry_id'] ?> > <?php echo $row3['professor_name']; ?> <?php echo $row3['professor_initial']; ?> <?php echo $row3['professor_first_lastname']; ?> <?php echo $row3['professor_second_lastname']; } ?></option>
+                            <option value = <?php echo $row3['professor_entry_id'] ?> > <?php echo $row3['professor_name']; ?> - <?php echo $row3['course_id']; ?> <?php echo $row3['course_name']; } ?></option>
                             </select>
                     </div>
                     <div class = "container d-flex justify-content-center">

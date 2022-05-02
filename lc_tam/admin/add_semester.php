@@ -2,10 +2,11 @@
     require_once("../functions.php");
     
     if(isset($_POST['submit'])){
+        $SemesterTermName = $_POST['Semester_Term_Name'];
         $SemesterName = $_POST['Semester_Name'];
 
-    echo $query = query('INSERT INTO lc_semester (semester_name)
-    VALUES("' . $SemesterName . '")');
+    echo $query = query('INSERT INTO lc_semester (semester_term, semester_name)
+    VALUES("' . $SemesterTermName . '" , "' . $SemesterName . '")');
     header('location:semesters.php?Added');
     }
 ?>
@@ -44,10 +45,18 @@
             <div class="container-sm">
                 <h3 class = "h3 text-center">Add Semester</h3>
             <form action="add_semester.php" method="POST"><br>
+
+            <div class="form-group col">
+                    <div class="form-row">
+                        <label for="Semester_Name">Semester Term Name:</label>
+                        <input type="text" class="form-control" id="Semester_Term_Name" name="Semester_Term_Name" placeholder="Ex: C12" maxlength="3" required>
+                    </div>
+                </div>
+
                 <div class="form-group col">
                     <div class="form-row">
                         <label for="Semester_Name">Semester Name:</label>
-                        <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" required>
+                        <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" placeholder="Second Semester 2021-2022" maxlength="30" required>
                     </div>
                 </div>
                 <br>
