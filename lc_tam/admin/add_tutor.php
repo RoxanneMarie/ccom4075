@@ -5,9 +5,34 @@
         $Studentemail = $_POST['Student_email'];
         $TutorType = $_POST['Tutor_Type'];
         $AccStatus = $_POST['Acc_Status'];
-        $query = query('INSERT INTO lc_test_tutors (student_email, tutor_type_id, acc_stat_id) 
-        VALUES ("' . $Studentemail . '" , "' . $TutorType . '" , "' . $AccStatus . '")');
 
+        if(isset($_FILES) & !empty($_FILES)){
+            $name = $_FILES['tutor_img']['name'];
+            $size = $_FILES['tutor_img']['size'];
+            $type = $_FILES['tutor_img']['type'];
+            $tmp_name = $_FILES['tutor_img']['tmp_name'];
+
+            $max_size = 1000000;
+            $extension = substr($name, strpos($name, '.') + 1);
+
+            if(isset($name) & !empty($name)){
+                if(($extension == "jpg" || $extension == "jpeg" ) && $type == "image/jpeg" && $size <= $max_size){
+                $location = "../assets/images/tutors/";
+                if(move_uploaded_file($tmp_name, $location.$name)){
+                    echo "Uploaded successsfully";
+                }else{
+                    echo "failed to upload";
+                }
+            }else{
+                echo "Only JPG files are allowed and less than 1mb";
+            }
+            }else{
+            echo "Please select a file";
+            }
+        }
+
+        echo $query = query('INSERT INTO lc_test_tutors (student_email, tutor_type_id, acc_stat_id, tutor_image ) 
+        VALUES ("' . $Studentemail . '" , "' . $TutorType . '" , "' . $AccStatus . '" , "' . "$location$name" .'")');
     if($query) {
         header('location:tutors.php?Added');
     }
@@ -53,7 +78,7 @@
                 confirm($query);
                 $row = fetch_array($query);
                 ?>
-            <form action="add_tutor.php" method="POST">     
+            <form action="add_tutor.php" method="POST" enctype="multipart/form-data">     
                     <div class="form-row">
 
                         <div class="form-group col">
@@ -61,13 +86,15 @@
                             <select class="form-control" id="Student_email" name = "Student_email" required>
                             <option selected value = "" >Select a Student.</option>
                             <?php 
-                            $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_email, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) As 'tutor_name'
+                            $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_email, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) As 'student_fullname'
                             FROM lc_test_students
-                            LEFT JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
-                            WHERE lc_test_tutors.student_email IS NULL");
+                            LEFT JOIN lc_test_assistants ON lc_test_students.student_email = lc_test_assistants.student_email
+                            LEFT JOIN lc_test_tutors ON lc_test_tutors.student_email = lc_test_students.student_email
+                            WHERE lc_test_tutors.student_email IS NULL AND lc_test_assistants.student_email IS NULL");
                             confirm($query2);
                             while($row2 = fetch_array($query2)) { ?>
-                            <option value="<?php echo $row2['student_email']; ?>"><?php echo $row2['tutor_name']; ?> ( <?php echo $row2['student_id']; ?> ) - <?php echo $row2['student_email']; } ?></option>
+                            <option value="<?php echo $row2['student_email']; ?>" <?php if(isset($_GET) & !empty($_GET)){ $id = $_GET['id'];
+                            if ($row2['student_email'] ==  $id) { echo "selected"; } } ?> > <?php echo $row2['student_fullname']; ?> ( <?php echo $row2['student_id']; ?> ) - <?php echo $row2['student_email']; } ?></option>
                             </select>
                         </div>
                     </div>
@@ -95,6 +122,12 @@
                         <option value= "<?php echo $row3['acc_stat_id'] ?>" > <?php echo $row3['acc_stat_name'];  } ?></option>
                         </select>
                     </div>
+
+                    <div class="form-group col">
+                        <label for="tutor_img">Choose tutor picture to upload:</label>
+                        <input type="file" id="tutor_img" name="tutor_img" accept=".jpg, .jpeg">
+                    </div>
+
                     <div class = "container d-flex justify-content-center">
                     <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
                     </div>

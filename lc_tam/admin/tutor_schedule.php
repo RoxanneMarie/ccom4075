@@ -3,6 +3,8 @@
 
     if(isset($_GET['id'])){
         $id = $_GET['id'];
+    }else{
+        redirect('tutors.php');
     }
 ?>
 
@@ -47,7 +49,7 @@
     <main class="mcourses" style="justify-content:center;">
         <article>
         <div class = "container">
-            <h3 class = "h3 text-center">Tutor Schedule</h3>
+            <h3 class = "h3 text-center">Tutor Schedule - '; echo $id; echo'</h3>
             <a class = "btn btn-primary" href="add_tutor_schedule.php">Add Tutor Schedule</a>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
@@ -66,11 +68,10 @@
             </div>
             ';
             } echo '
-                <table class = "table table-responsive">
+                <div class = "table-responsive">
+                <table class = "table">
             <thead class = "tCourses">
                 <th>Edit</th>
-                <th>Tutor full name</th>
-                <th>Tutor email</th>
                 <th>Day</th>
                 <th>Start Time</th>
                 <th>End Time</th>
@@ -85,24 +86,18 @@
             INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
             INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
             WHERE lc_tutor_schedule.tutor_id = '$TutID'");
-            } else {
-            $Squery = query("SELECT CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_test_students.student_email, lc_tutor_schedule.schedule_id, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time 
-            FROM lc_tutor_schedule
-            INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
-            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email");
             }
     while ($row2 = fetch_array($Squery)) {
         echo '    
                 <tr>
                     <td>   <a href="edit_tutor_schedule.php?id='. $row2['schedule_id'] .'">Edit</a></td>
-                    <td>'. $row2['tutor_name'] .'</td>
-                    <td>'. $row2['student_email'] .'</td>
                     <td>'. $row2['day'] .'</td>
-                    <td>'. $row2['start_time'].'</td>
-                    <td>'. $row2['end_time'].'</td>
+                    <td>'. conv_time(substr($row2["start_time"],0,2)) . substr($row2["start_time"],2,3) . ampm(substr($row2["start_time"],0,2)).'</td>
+                    <td>'. conv_time(substr($row2["end_time"],0,2)) . substr($row2["end_time"],2,3) . ampm(substr($row2["end_time"],0,2)).'</td>
                     </tr>
                     '; } echo '
-                </table><br><br>
+                </table>
+                </div><br><br>
                 </div>
                 </article>
             </main>';

@@ -2,12 +2,21 @@
   require_once("../functions.php");    
 
     if(isset($_POST['submit'])){
-        $Studentemail = $_POST['Student_email'];
-        $query = query('INSERT INTO lc_test_tutors (student_email, tutor_type_id, acc_stat_id) 
-        VALUES ("' . $Studentemail . '" , "' . $TutorType . '" , "' . $AccStatus . '")');
+        $semesterID = $_POST['Semester_ID'];
+        //Selects semester that was previously active.
+        $query = query("SELECT * FROM lc_semester WHERE semester_status = '1'");
+        confirm($query);
+        $row = fetch_array($query);
+        $prevSem = $row['semester_id'];
+        //Updates previous semester that was active to inactive.
+        $query2 = query("UPDATE lc_semester SET semester_status = '2' WHERE semester_id = '$prevSem'");
+        confirm($query2);
+        //Finally, updates selected semester to active.
+        $query3 = query("UPDATE lc_semester SET semester_status = '1' WHERE semester_id = '$semesterID'");
+        confirm($query3);
 
-    if($query) {
-        header('location:tutors.php?Added');
+    if($query3) {
+        header('location:semesters.php?selected');
     }
 }
 ?>
@@ -23,7 +32,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Add Tutor - LC:TAM</title>
+      <title>Change Semester - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -41,25 +50,24 @@
         <?php 
             top_header_5(); 
             ?>
-            <h3 class = "h3 text-center">Add Tutor</h3>
+            <h3 class = "h3 text-center">Change Semester</h3>
             <main class = "container d-flex justify-content-center">
                 <?php 
-                $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
-                lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_students.student_email
-                FROM lc_test_students");
+                $query = ("SELECT * FROM lc_semester WHERE lc_semester.semester_status = '1'");
                 $query = query($query);
                 confirm($query);
                 $row = fetch_array($query);
                 ?>
-            <form action="add_tutor.php" method="POST">     
+            <form action="change_semester.php" method="POST">     
             <div class="form-group">
-                <label for="Department_ID">Department:</label>
-                <select class="form-control" id="Department_ID" name = "Department_ID">
+                <label for="Semester_ID">Current Semester:</label>
+                <select class="form-control" id="Semester_ID" name = "Semester_ID">
                 <?php 
-                    $query2 = query("SELECT * FROM lc_departments");
-                    confirm($query2);
-                    while($row2 = fetch_array($query2)) { ?>
-                    <option value=<?php echo $row2['dept_id'] ?> <?php if ( $row2['dept_id'] == $row['dept_id']) { echo "selected"; } ?> ><?php echo $row2['dept_name'];  } ?></option>
+                    $query = query("SELECT lc_semester.semester_id, CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_semester.semester_status
+                    FROM lc_semester");
+                    confirm($query);
+                    while($row = fetch_array($query)) { ?>
+                    <option value=<?php echo $row['semester_id'] ?> <?php if ( $row['semester_status'] == '1') { echo "selected"; } ?> ><?php echo $row['semester_info']; } ?></option>
                     </select>
             </div>
             <div class = "container d-flex justify-content-center">

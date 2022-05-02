@@ -66,24 +66,21 @@
             <thead class = "tCourses">
                 <th>Edit</th>
                 <th>Student Num</th>
-                <th>Name</th>
-                <th>Initial</th>
-                <th>First Last Name</th>
-                <th>Second Last name</th>
+                <th>Assistant full name</th>
                 <th>Email</th>
                 <th>Status</th>
             </thead>';
-    $query = query("SELECT * FROM lc_test_assistants INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_assistants.student_email 
-            INNER JOIN lc_account_status ON lc_test_assistants.acc_stat_id = lc_account_status.acc_stat_id");
+    $query = query("SELECT CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, 
+    lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'assistant_fullname', lc_test_assistants.student_email, lc_test_students.student_id, lc_account_status.acc_stat_name, lc_test_assistants.acc_stat_id 
+    FROM lc_test_assistants 
+    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_assistants.student_email 
+    INNER JOIN lc_account_status ON lc_test_assistants.acc_stat_id = lc_account_status.acc_stat_id");
     while ($row = fetch_array($query)) {
         echo '    
                 <tr>
                     <td>   <a href="edit_assistant.php?id='. $row['student_email'] .'">Edit</a>
-                    <td>'.$row['student_id'].'</td>
-                    <td>'. $row['student_name'] .'</td>
-                    <td>'. $row['student_initial'] .'</td>
-                    <td>'. $row['student_first_lastname'] .'</td>
-                    <td>'. $row['student_second_lastname'] .'</td>
+                    <td>'. $row['student_id'].'</td>
+                    <td>'. $row['assistant_fullname'] .'</td>
                     <td>'. $row['student_email'] .'</td>
                     <td>'. $row['acc_stat_name'] .'</td>
                     </tr>

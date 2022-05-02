@@ -60,18 +60,14 @@
             <thead class = "tCourses text-center">
                 <th>Student full name</th>
                 <th>Student email</th>
-                <th>course ID</th>
-                <th>course name</th>
-                <th>Semester Name</th>
+                <th>Course Info</th>
+                <th>Semester Info</th>
+                <th>Time Duration</th>
                 <th>Session Date</th>
-                <th>Start time</th>
-                <th>End time</th>
                 <th>Cancel</th>
             </thead>';
-    $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial,
-    lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'student_fullname', lc_appointments.student_email, 
-    lc_appointments.course_id, lc_courses.course_name, lc_semester.semester_name, lc_sessions.start_time, lc_sessions.end_time, 
-    lc_sessions.session_date
+    $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'student_fullname', 
+    lc_appointments.student_email, CONCAT_WS(' - ', lc_appointments.course_id, lc_courses.course_name) AS 'course_info', CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date 
     FROM lc_appointments
     INNER JOIN lc_test_students ON lc_appointments.student_email = lc_test_students.student_email
     INNER JOIN lc_courses ON lc_appointments.course_id = lc_courses.course_id
@@ -80,17 +76,14 @@
     WHERE lc_appointments.student_email = '$id'");
     confirm($query);
     while ($row = fetch_array($query)) {
-
-        echo '    
+        echo '
                 <tr class="text-center">
                     <td>'. $row['student_fullname'] .'</td>
                     <td>'. $row['student_email'] .'</td>
-                    <td>'. $row['course_id'] .'</td>
-                    <td>'. $row['course_name'] .'</td>
-                    <td>'. $row['semester_name'] .'</td>
-                    <td>'. $row['session_date'] .'</td>
-                    <td>'. $row['start_time'] .'</td>
-                    <td>'. $row['end_time'] .'</td>
+                    <td>'. $row['course_info'] .'</td>
+                    <td>'. $row['semester_info'] .'</td>
+                    <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
+                    <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>
                     <td> <a href="cancel_appointment.php?id='. $row['app_id'] .'">Cancel</td>
                     </tr>
                    '; } echo '

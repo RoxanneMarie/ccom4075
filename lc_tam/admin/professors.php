@@ -54,24 +54,31 @@
                     </div>
                     ';
                     } echo '
-                        <table class = "table table-responsive">
+                    <div class = "table-responsive">
+                        <table class = "table">
                     <thead class = "tCourses">
                         <th>Edit</th>
                         <th>Professor full name</th>
-                        <th>Course ID</th>
+                        <th>Course</th>
+                        <th>Professor Status</th>
                     </thead>';
-    $query = query("SELECT lc_professors.professor_entry_id, lc_professors.course_id, CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial,
-    lc_professors.professor_first_lastname, lc_professors.professor_second_lastname) AS 'professor_name' FROM lc_professors");
+    $query = query("SELECT lc_professors.professor_entry_id, CONCAT_WS(' - ', lc_professors.course_id, lc_courses.course_name) AS 'course', CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, lc_professors.professor_second_lastname) AS 'professor_fullname', lc_account_status.acc_stat_id, lc_account_status.acc_stat_name
+    FROM lc_professors
+    INNER JOIN lc_account_status ON lc_account_status.acc_stat_id = lc_professors.acc_stat_id
+    INNER JOIN lc_courses ON lc_courses.course_id = lc_professors.course_id");
     confirm($query);
     while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
                     <td>   <a href="edit_professor.php?id='. $row['professor_entry_id'] .'">Edit</a></td>
-                    <td>'. $row['professor_name'] .'</td>
-                    <td>'. $row['course_id'] .'</td>
+                    <td>'. $row['professor_fullname'] .'</td>
+                    <td>'. $row['course'] .'</td>
+                    <td>'. $row['acc_stat_name'] .'</td>
                     </tr>
                     '; } echo '
-                </table><br><br>
+                </table>
+                </div>
+                <br><br>
                 </div>
                 </article>
             </main>';

@@ -18,6 +18,10 @@ VALUES("' . $tutor . '","' . $start . '","' . $end . '","' . $date . '","' . $ca
 redirect('tutoring_sessions.php?Added');
 }
 
+$query = query("SELECT * FROM lc_conditions");
+confirm($query);
+$row = fetch_array($query);
+$cond = str_split($row['max_capacity']);
 ?>
 
 <!DOCTYPE html>
@@ -90,7 +94,7 @@ redirect('tutoring_sessions.php?Added');
 
                 <div class="form-group col-md-6">
                     <label for="capacity">Capacity: </label>
-                    <input type="number" class="form-control" id="capacity" name = "capacity" min = "1" max = "5" value = "1" required>
+                    <input type="number" class="form-control" id="capacity" name = "capacity" min = "1" max = "<?php echo $cond[2]; ?>" value = "<?php echo $cond[2]; ?>" required>
                 </div>
                 <div class = "container d-flex justify-content-center">
                 <button type="submit" name="submit"  class="btn btn-primary display-4">Submit</button>

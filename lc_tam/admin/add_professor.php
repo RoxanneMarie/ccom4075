@@ -1,15 +1,15 @@
 <?php 
     require_once("../functions.php");
-    
     if(isset($_POST['submit'])){
         $courseID = $_POST['Course_ID'];
         $professorname = $_POST['professor_name'];
         $professorinitial = $_POST['professor_initial'];
         $professorflname = $_POST['professor_flname'];
         $professorslname = $_POST['professor_slname'];
+        $accStatId = $_POST['Acc_Status'];
 
-    echo $query = query('INSERT INTO lc_professors ( course_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname)
-    VALUES("' . $courseID . '","' . $professorname . '" , "' . $professorinitial . '" , "' . $professorflname . '" , "' . $professorslname . '")');
+    echo $query = query('INSERT INTO lc_professors ( course_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname, acc_stat_id)
+    VALUES("' . $courseID . '","' . $professorname . '" , "' . $professorinitial . '" , "' . $professorflname . '" , "' . $professorslname . '" , "' . $accStatId . '")');
     if($query) {
         header('location:professors.php?Added');
     }
@@ -57,7 +57,7 @@
                         <select class="form-control" id = "Course_ID" name = "Course_ID" required>
                             <option selected value = "">Select a Course.</option>
                             <?php 
-                            $query = query("SELECT * FROM lc_courses");
+                            $query = query("SELECT * FROM lc_courses WHERE course_status != '0' AND course_status != '2'");
                             confirm($query);
                             while($row = fetch_array($query)) {
                                 ?>
@@ -86,6 +86,19 @@
                             <input type="text" class="form-control" id="professor_slname" name="professor_slname" required>
                         </div>
                     </div>
+
+                    <div class="form-group col">
+                        <label for="Acc_Status">Account Status:</label>
+                        <select class="form-control" id="Acc_Status" name = "Acc_Status" required>
+                        <option selected value = "" >Select an account status.</option>
+                        <?php 
+                        $query2 = query("SELECT * FROM lc_account_status");
+                        confirm($query2);
+                        while($row2 = fetch_array($query2)) { ?>
+                        <option value= "<?php echo $row2['acc_stat_id'] ?>" > <?php echo $row2['acc_stat_name'];  } ?></option>
+                        </select>
+                    </div>
+
                     <div class = "container d-flex justify-content-center">
                         <button type="submit" name="submit"  class="btn btn-primary display-4">Submit</button>
                     </div>

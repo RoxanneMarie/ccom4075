@@ -3,6 +3,8 @@
 
     if(isset($_GET['id'])){
         $id = $_GET['id'];
+    }else{
+        redirect('index.php');
     }
 ?>
 
@@ -47,12 +49,10 @@
     <main class="mcourses" style="justify-content:center;">
         <article>
         <div class = "container">
-            <h3 class = "h3 text-center">Tutor Offers</h3><br>
+        <h3 class = "h3 text-center">Tutor Offer - '; echo $id; echo'</h3>
                 <table class = "table table-responsive">
             <thead class = "tCourses text-center">
                 <th>Student Num</th>
-                <th>Tutor Name</th>
-                <th>Email</th>
                 <th>Course</th>
                 <th>Professor</th>
             </thead>';
@@ -94,8 +94,6 @@
         echo '    
                 <tr class = "text-center">
                     <td>'. $row2['student_id'].'</td>
-                    <td>'. $row2['tutor_fullname'] .'</td>
-                    <td>'. $row2['student_email'] .'</td>
                     <td>'. $row2['course_id'].'</td>
                     <td>'. $row2['professor_fullname'].'</td>
                     </tr>

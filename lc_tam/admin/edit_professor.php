@@ -11,10 +11,11 @@
         $professorinitial = $_POST['professor_initial'];
         $professorflname = $_POST['professor_flname'];
         $professorslname = $_POST['professor_slname'];
+        $accStatus = $_POST['Acc_Status'];
 
         $Uquery = "UPDATE lc_professors
         SET course_id = '$courseID', professor_name = '$professorname', professor_initial = '$professorinitial', 
-        professor_first_lastname = '$professorflname', professor_second_lastname = '$professorslname'
+        professor_first_lastname = '$professorflname', professor_second_lastname = '$professorslname', acc_stat_id = '$accStatus'
         WHERE professor_entry_id = '$id'";
         print_r($Uquery);
         $res = query($Uquery);
@@ -93,6 +94,17 @@
                             <label for="professor_slname">Professor Second Last name:</label>
                             <input type="text" class="form-control" id="professor_slname" name="professor_slname" aria-label="Default" required value = "<?php echo $row['professor_second_lastname']; ?>">
                         </div>
+
+                        <div class="form-group col">
+                            <label for="Acc_Status">Account Status:</label>
+                            <select class="form-control" id="Acc_Status" name = "Acc_Status" required>
+                            <?php $query2 = query("SELECT * FROM lc_account_status");
+                            confirm($query2);
+                            while($row2 = fetch_array($query2)) { ?>
+                            <option value= "<?php echo $row2['acc_stat_id'] ?>"<?php if($row['acc_stat_id'] == $row2['acc_stat_id'] ) { echo "selected"; } ?> > <?php echo $row2['acc_stat_name'];  } ?></option>
+                            </select>
+                        </div>
+
                         <div class = "container d-flex justify-content-center">
                             <button type="submit" name="submit" class="btn btn-primary display-4">Submit</button>
                         </div>

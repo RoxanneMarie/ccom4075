@@ -6,6 +6,12 @@
     } else {
         redirect('tutor_offers.php');
     }
+
+    //Search for the previous information before updating.
+    $sql = query("SELECT * FROM lc_tutor_offers WHERE offer_id = '$id'");
+    confirm($sql);
+    $row = fetch_array($sql);
+    //
     if(isset($_POST) & !empty($_POST)){
         $course = $_POST['course'];
         $professor = $_POST['professor'];
@@ -75,11 +81,16 @@
                         <label for="course">Course: </label>
                         <select class="form-control" id="course" name = "course" required>
                             <?php 
-                            $query4 = query("SELECT * FROM lc_courses");
-                            confirm($query4);
-                            while($row4 = fetch_array($query4)) {
+                            $query2 = query("SELECT lc_courses.course_id, lc_courses.course_name, lc_departments.dept_id, lc_departments.dept_name, lc_courses.tutor_available, lc_courses.course_status,
+                            lc_account_status.acc_stat_name
+                            FROM lc_courses
+                            INNER JOIN lc_departments ON lc_courses.dept_id = lc_departments.dept_id
+                            INNER JOIN lc_account_status ON lc_courses.course_status = lc_account_status.acc_stat_id
+                            WHERE lc_courses.course_status != '0' AND lc_courses.course_status != '2'");
+                            confirm($query2);
+                            while($row2 = fetch_array($query2)) {
                                 ?>
-                        <option value= "<?php echo $row4['course_id'] ?>" <?php if ( $row['course_id'] == $row4['course_id']) { echo "selected"; } ?> ><?php echo $row4['course_id']?> - <?php echo $row4['course_name'];  } ?></option>
+                        <option value= "<?php echo $row2['course_id'] ?>" <?php if ( $row['course_id'] == $row2['course_id']) { echo "selected"; } ?> ><?php echo $row2['course_id']?> - <?php echo $row2['course_name'];  } ?></option>
                         </select>
                     </div>
                     <br>

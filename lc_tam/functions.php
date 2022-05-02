@@ -579,7 +579,7 @@ function student_select_course()
     {
         $row2 = fetch_array($query2);
         
-        $query3 = query("SELECT COUNT(course_id) FROM lc_courses WHERE dept_id = '{$x}' AND tutor_available = 1");
+        $query3 = query("SELECT COUNT(course_id) FROM lc_courses WHERE dept_id = '{$x}' AND tutor_available >= 1");
         confirm($query3);
         $row3 = fetch_array($query3);
         
@@ -600,7 +600,7 @@ function student_select_course()
             
             $dept = str_replace(" ","",$row2["dept_name"]);
             
-            $query4 = query("SELECT course_id FROM lc_courses WHERE dept_id = '{$x}' AND tutor_available = 1");
+            $query4 = query("SELECT course_id FROM lc_courses WHERE dept_id = '{$x}' AND tutor_available >= 1");
             confirm($query4);
 
             for ($y = 1; $y <= $row3['COUNT(course_id)']; $y++)
