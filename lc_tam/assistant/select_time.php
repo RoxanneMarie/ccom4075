@@ -1,5 +1,6 @@
 <?php 
-    require_once("../functions.php");
+    require_once('assistant_functions.php');
+    require_once('../functions.php');
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +36,7 @@
 
         <?php 
             select_header($_SESSION['type']);
-            student_select_time();
+            student_select_time_assistant();
             bottom_footer();
             credit_mobirise_1();
         ?>

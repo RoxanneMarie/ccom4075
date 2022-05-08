@@ -69,7 +69,8 @@
             </div>
             ';
             } echo '
-                <table class="table table-responsive">
+                <div class="table-responsive">
+                <table class="table">
             <thead class = "tCourses">
                 <th>Appointment ID</th>
                 <th>Session ID</th>
@@ -92,7 +93,7 @@
                     <td>'. $row['course_id'] .'</td>
                     </tr>
                    '; } echo '
-                </table><br><br>
+                </table></div><br><br>
                 </div>
                 </article>
             </main>';

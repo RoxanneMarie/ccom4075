@@ -61,7 +61,8 @@
                     </div>
                     ';
                     } echo '
-                        <table class = "table table-responsive">
+                        <div class="table-responsive">
+                        <table class = "table">
                     <thead class = "tCourses">
                         <th>Student Num</th>
                         <th>Name</th>
@@ -168,7 +169,7 @@
                     } '</td>   
                 </tr> 
                 '; } echo '
-                    </table><br><br>
+                    </table></div><br><br>
                 </div>
                 </article>
             </main>';

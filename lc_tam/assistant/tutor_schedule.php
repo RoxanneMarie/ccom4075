@@ -50,37 +50,36 @@
         <article>
         <div class = "container">
             <h3 class = "h3 text-center">Tutor Schedule - '; echo $id; echo'</h3>
-                <table class = "table table-responsive">
-            <thead class = "tCourses text-center">
-                <th>Student Num</th>
+            <div class = "table-responsive">
+                <table class = "table">
+                <thead class = "tCourses">
                 <th>Day</th>
                 <th>Start Time</th>
                 <th>End Time</th>
-            </thead>';
+                <th>Tutor Course</th>
+                </thead>';
             if(isset($_GET['id'])){
             $query = query("SELECT * FROM lc_test_tutors
             WHERE lc_test_tutors.student_email = '$id'");
             $row = fetch_array($query);
             $TutID = $row['tutor_id'];
-            $Squery = query("SELECT CONCAT_WS(' ', lc_test_students.student_name,
-            lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_fullname',
-            lc_test_students.student_email, lc_test_students.student_id, lc_tutor_schedule.schedule_id, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time
+            $Squery = query("SELECT CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_test_students.student_email, lc_tutor_schedule.schedule_id, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time, CONCAT_WS(' - ', lc_tutor_schedule.course_id, lc_courses.course_name) AS 'course_info'
             FROM lc_tutor_schedule
             INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
             INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
+            INNER JOIN lc_courses ON lc_tutor_schedule.course_id = lc_courses.course_id
             WHERE lc_tutor_schedule.tutor_id = '$TutID'");
             }
     while ($row2 = fetch_array($Squery)) {
         echo '    
-                <tr class = "text-center">
-                    <td>'. $row2['student_id'] .'</td>
-                    <td>'. $row2['day'] .'</td>
-                    <td>'. conv_time(substr($row2["start_time"],0,2)) . substr($row2["start_time"],2,3) . ampm(substr($row2["start_time"],0,2)).'</td>
-                    <td>'. conv_time(substr($row2["end_time"],0,2)) . substr($row2["end_time"],2,3) . ampm(substr($row2["end_time"],0,2)).'</td>
-                    </tr>
-                    </tr>
-                    '; } echo '
-                </table><br><br>
+                <tr>
+                <td>'. $row2['day'] .'</td>
+                <td>'. conv_time(substr($row2["start_time"],0,2)) . substr($row2["start_time"],2,3) . ampm(substr($row2["start_time"],0,2)).'</td>
+                <td>'. conv_time(substr($row2["end_time"],0,2)) . substr($row2["end_time"],2,3) . ampm(substr($row2["end_time"],0,2)).'</td>
+                <td>'. $row2['course_info'] .'</td>
+                '; } echo '
+            </tr>
+                </table></div><br><br>
                 </div>
                 </article>
             </main>';

@@ -26,7 +26,7 @@ function top_header_1()
 {
   echo '
   <style>
-#hide-footer{display: none !important;}
+#hide-footer{display: none !important;}'; /*NO QUITEN ESTO*/ echo '
 </style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
@@ -62,7 +62,7 @@ function top_header_2()
 {
   echo '
   <style>
-#hide-footer{display: none !important;}
+#hide-footer{display: none !important;}'; /*NO QUITEN ESTO*/ echo '
 </style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
@@ -99,7 +99,7 @@ function top_header_3()
 {
   echo '
   <style>
-#hide-footer{display: none !important;}
+#hide-footer{display: none !important;}'; /*NO QUITEN ESTO*/ echo '
 </style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
@@ -138,7 +138,7 @@ function top_header_4()
 {
   echo '
   <style>
-#hide-footer{display: none !important;}
+#hide-footer{display: none !important;}'; /*NO QUITEN ESTO*/ echo '
 </style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
@@ -179,12 +179,12 @@ function top_header_5()
 {
   echo '
   <style>
-#hide-footer{display: none !important;}
+#hide-footer{display: none !important;}'; /*NO QUITEN ESTO*/ echo '
 </style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
             <nav class="navbar navbar-dropdown navbar-expand-lg">
-                <div class="container-fluid">
+                <div class="container-fluid d-flex justify-content-center" >'; /*WORK IN PROGRESS */ echo '
                     <div class="navbar-brand">
                         <span class="navbar-logo">
                             <a href="index.php">
@@ -192,6 +192,7 @@ function top_header_5()
                             </a>
                         </span>
                     </div>
+
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <div class="hamburger">
                             <span></span>
@@ -431,12 +432,16 @@ function conv_date($d)
     {
         case '1':
             $d .= "st";
+            break;
         case '2':
             $d .= "nd";
+            break;
         case '3':
             $d .= "rd";
+            break;
         default:
-            $d .= "th";    
+            $d .= "th"; 
+            break;   
     }
     
     return $d;
@@ -675,10 +680,10 @@ function student_select_professor()
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                            <strong>' . $_SESSION['selected_course'] . '</strong>
+                            <strong>Select the Professor.</strong>
                         </h3>
                         <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                        Select the Professor giving the class.
+                        Select the Professor giving the class ('; echo $_SESSION['selected_course']; echo ')
                     </div>
                     </div>';
     
@@ -689,9 +694,7 @@ function student_select_professor()
         echo '
             <div class="col-sm-6 col-lg-3">
                 <div class="card-wrap">
-                    <div class="image-wrap">
-                        <img src="../assets/images/team' . $x . '.jpg">
-                    </div>
+
                     <div class="content-wrap">
                         <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
                             <strong>' . $row['professor_name'] . ' ' . $row['professor_initial'] . ' ' . $row['professor_first_lastname'] . ' ' . $row['professor_second_lastname'] . '</strong>
@@ -723,8 +726,11 @@ function student_select_tutor()
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                            <strong>' . $_SESSION['selected_course'] . '</strong>
+                            <strong>Select the tutor.</strong>
                         </h3>
+                        <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
+                        Select the day and hour (if available) - '; echo $_SESSION["selected_course"]; echo '
+                    </div>
                     </div>';
     
     if(isset($_POST["professor_ready"]))
@@ -778,7 +784,7 @@ function student_select_tutor()
             <div class="col-sm-6 col-lg-3">
                 <div class="card-wrap">
                     <div class="image-wrap">
-                        <img src="../assets/images/' . $email . '.jpg">
+                        <img src="../assets/images/tutors/' . $email . '.jpg">
                     </div>
                     <div class="content-wrap">
                         <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
@@ -829,10 +835,10 @@ function student_select_time()
                     <div class='row justify-content-center'>
                         <div class='col-12 col-md-4'>
                             <div class='mbr-section-head align-center mb-4'>
-                                <h3 class='mbr-section-title mb-0 mbr-fonts-style display-2'><strong>Tutor's Schedule Courses</strong></h3>
+                                <h3 class='mbr-section-title mb-0 mbr-fonts-style display-2'><strong>Tutor's Available Schedule</strong></h3>
                             </div>
                             <div class='alert alert-primary' style = 'background: #fd8f00;' role='alert'>
-                                Select the course you want to request tutoring for.
+                                Select the day and hour (if available) - "; echo $_SESSION['selected_course']; echo "
                             </div>
                             <div id='bootstrap-accordion_17' class='panel-group accordionStyles accordion' role='tablist' aria-multiselectable='true'>";
 
@@ -874,8 +880,8 @@ function student_select_time()
         else if($_SESSION["current_day_of_the_week"] == "Wednesday")
         {
             $week[2] = date("Y-m-d");
-            $week[3] = date("Y-m-d", strtotime("+1 day"));
-            $week[4] = date("Y-m-d", strtotime("+2 day"));
+            $week[3] = date("Y-m-d", strtotime("+0 day"));
+            $week[4] = date("Y-m-d", strtotime("+1 day"));
         }
         else if($_SESSION["current_day_of_the_week"] == "Thursday")
         {
@@ -888,7 +894,7 @@ function student_select_time()
         }
         else
         {
-            echo "You are not suppose to be here!";
+            echo "You are not supposed to be here!";
             exit;
             redirect("logout.php");
         }
@@ -900,7 +906,7 @@ function student_select_time()
             if($week[$x-1] == "NULL")
                 continue;
 
-            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
+            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time, course_id FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND course_id = '" . $_SESSION['selected_course'] . "' AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
             confirm($query2);
 
             if(mysqli_num_rows($query2) != 0)
@@ -999,6 +1005,7 @@ function student_select_time()
             echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
 
         echo '
+                            <br><br>
                             </div>
                         </div>
                     </div>
@@ -1104,12 +1111,18 @@ function create_app()
 {
     if(isset($_POST["confirm_app"]))
     {
+        $semesterQuery = query("SELECT * FROM lc_semester WHERE semester_status = '1'");
+        confirm($semesterQuery);
+        $rowSem = fetch_array($semesterQuery);
+        echo $rowSem['semester_id'];
+        echo $_SESSION['selected_course'];
+
         $query = query("SELECT session_id FROM lc_sessions WHERE session_date = '" . $_SESSION["selected_date"] . "' AND start_time = '" . $_SESSION['selected_start_time'] . "' AND tutor_id = " . $_SESSION['selected_tutor']);
         confirm($query);
 
         if(mysqli_num_rows($query) == 0)
         {
-            $query = query('INSERT INTO lc_sessions (tutor_id, session_date, start_time, end_time, capacity) VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION["selected_date"] . '","' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '", 1)');
+            $query = query('INSERT INTO lc_sessions (tutor_id, session_date, start_time, end_time, capacity, course_id, semester_id) VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION["selected_date"] . '","' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '", 1 , "' . $_SESSION['selected_course'] .'" , "'. $rowSem['semester_id'] .'")');
             confirm($query);
 
             $id = last_id();
@@ -1118,7 +1131,7 @@ function create_app()
             confirm($query);
             $row = fetch_array($query);
 
-            $query = query('INSERT INTO lc_appointments (student_email, session_id, course_id) VALUES("' . $row["student_email"] . '", ' . $id . ', "' . $_SESSION['selected_course'] . '")');
+            $query = query('INSERT INTO lc_appointments (student_email, session_id, course_id, semester_id, app_cancel) VALUES("' . $row["student_email"] . '", ' . $id . ', "' . $_SESSION['selected_course'] . '" , "'. $rowSem['semester_id'] .'" , 1 )');
             confirm($query);
 
             unset($_SESSION["selected_course"], $_SESSION["selected_professor"], $_SESSION["selected_tutor"], $_SESSION["selected_date"], $_SESSION["selected_start_time"], $_SESSION["selected_end_time"]);
@@ -1143,7 +1156,7 @@ function create_app()
                 confirm($query);
                 $row2 = fetch_array($query);
 
-                $query = query('INSERT INTO lc_appointments (student_email, session_id) VALUES("' . $row2["student_email"] . '", ' . $row["session_id"] . ')');
+                $query = query('INSERT INTO lc_appointments (student_email, session_id, course_id, semester_id, app_cancel) VALUES("' . $row2["student_email"] . '", "' . $row["session_id"] . '" , "' . $_SESSION['selected_course'] . '" , "'. $rowSem['semester_id'] .'" , 1 )');
                 confirm($query);
 
                 unset($_SESSION["selected_course"], $_SESSION["selected_professor"], $_SESSION["selected_tutor"], $_SESSION["selected_date"], $_SESSION["selected_start_time"], $_SESSION["selected_end_time"]);
@@ -1212,6 +1225,7 @@ function student_view_appointment()
             <div class = 'container-sm'>
             <br>
             <h1 class = 'h1 text-center'>Appointments </h1>
+            <div class = 'table-responsive'>
                 <table class = 'table table-sm'>
                 <caption> Current registered appointments. Appointments past current date will not be shown.</caption>
                   <thead style = 'background: #fd8f00;'>
@@ -1226,7 +1240,7 @@ function student_view_appointment()
             {
                 echo "
                       <tbody>
-                        <td>" . $app_info[0]["f_name"] . " " . $app_info[$i-1]["l_name"] . "</td>
+                        <td>" . $app_info[$i-1]["f_name"] . " " . $app_info[$i-1]["l_name"] . "</td>
                        <td>" . $app_info[$i-1]["course"] . "</td>
                         <td>" . $app_info[$i-1]["date"] . "</td>
                         <td>" . $app_info[$i-1]["s_time"] . "</td>
@@ -1234,7 +1248,8 @@ function student_view_appointment()
                       </tbody>";
             }
 
-            echo "</table> 
+            echo "</table>
+            </div> 
             <div class = 'd-flex justify-content-center'>
             <a class = 'btn btn-primary' href = 'select_course.php'>Create Appointment</a>
             </div>

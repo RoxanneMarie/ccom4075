@@ -72,7 +72,7 @@
                         <td>'. $row['student_fullname'] .'</td>
                         <td>'. $row['student_email'] .'</td>
                         <td> <a href = "appointments_result.php?id='. $row['student_email'] .'">View</a></td>
-                        <td> <a href = "cancel_appointment.php?id='. $row['student_email'] .'">Create</a></td>
+                        <td> <a href = "generate_appointment.php?id='. $row['student_email'] .'">Create</a></td>
                         <td> <a href = "add_tutor.php?id='. $row['student_email'] .'">Make tutor</a></td>
                         <td> <a href = "add_assistant.php?id'. $row['student_email'] .'">Make assistant</a></td>'; } echo '
                         </tr>

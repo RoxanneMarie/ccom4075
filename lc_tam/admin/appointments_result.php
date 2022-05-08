@@ -1,6 +1,14 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php");
+    
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+    }else{
+        redirect('index.php');
+    }
 ?>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -13,7 +21,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Tutors - LC:TAM</title>
+      <title>Appointments Found - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -28,7 +36,6 @@
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
     <style>
         /*----------------------- CSS HOME PAGE*/
-
         .tCourses {
         background: #fd8f00;
         }
@@ -39,58 +46,48 @@
     <body>
         <?php 
             top_header_9();
-    echo '<input type="hidden" value="student_btn" name="action">
-    <main class="mcourses" style="justify-content:center;">
+    echo '
+    <main class="container">
         <article>
-        <div class = "container">
-            <h3 class = "h3 text-center">Tutors</h3><br>
+        <div class="container-sm">
+            <h3 class = "h3 text-center">Appointments of '; echo $id; echo '</h3><br>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutor updated successfully.</span>
+                <span> Tutoring session updated successfully.</span>
             </div>'; 
-            }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutor removed successfully.</span>
-            </div>
-            ';
-            }
-            if(isset($_GET['Added'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutor added successfully.</span>
-            </div>
-            ';
             } echo '
-            <div class="table-responsive">
-                <table class = "table">
+                <table class="table table-responsive">
             <thead class = "tCourses text-center">
-                <th>Offers</th>
-                <th>Schedule</th>
-                <th>Student Num</th>
-                <th>Tutor name</th>
-                <th>Email</th>
-                <th>Type</th>
-                <th>Status</th>
+                <th>Student full name</th>
+                <th>Student email</th>
+                <th>Course Info</th>
+                <th>Semester Info</th>
+                <th>Time Duration</th>
+                <th>Session Date</th>
+                <th>Cancel</th>
             </thead>';
-    $query = query("SELECT lc_test_tutors.tutor_id, lc_test_tutors.student_email, CONCAT_WS(' ', lc_test_students.student_name,
-    lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'student_fullname',
-     lc_tutor_type.tutor_type_name, lc_account_status.acc_stat_name, lc_test_students.student_id
-    FROM lc_test_tutors 
-    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
-    INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id INNER JOIN lc_account_status ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id");
+    $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'student_fullname', 
+    lc_appointments.student_email, CONCAT_WS(' - ', lc_appointments.course_id, lc_courses.course_name) AS 'course_info', CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date 
+    FROM lc_appointments
+    INNER JOIN lc_test_students ON lc_appointments.student_email = lc_test_students.student_email
+    INNER JOIN lc_courses ON lc_appointments.course_id = lc_courses.course_id
+    INNER JOIN lc_semester ON lc_semester.semester_id = lc_appointments.semester_id
+    INNER JOIN lc_sessions ON lc_appointments.session_id = lc_sessions.session_id    
+    WHERE lc_appointments.student_email = '$id'");
+    confirm($query);
     while ($row = fetch_array($query)) {
-        echo '    
-                <tr class = "text-center">
-                    <td>   <a href = "tutor_offers.php?id='. $row['student_email'] .'">View Offer</a> </td>
-                    <td>   <a href = "tutor_schedule.php?id='. $row['student_email'] .'">View Schedule</a> </td>
-                    <td>'. $row['student_id'].'</td>
+        echo '
+                <tr class="text-center">
                     <td>'. $row['student_fullname'] .'</td>
                     <td>'. $row['student_email'] .'</td>
-                    <td>'. $row['tutor_type_name'].'</td>
-                    <td>'. $row['acc_stat_name'] .'</td>
+                    <td>'. $row['course_info'] .'</td>
+                    <td>'. $row['semester_info'] .'</td>
+                    <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
+                    <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>
+                    <td> <a href="cancel_appointment.php?id='. $row['app_id'] .'">Cancel</td>
                     </tr>
-                    '; } echo '
-                </table></div><br><br>
+                   '; } echo '
+                </table><br><br>
                 </div>
                 </article>
             </main>';

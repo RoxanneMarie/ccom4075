@@ -43,7 +43,6 @@
         <article>
         <div class="container-sm">
             <h3 class = "h3 text-center">Tutoring Sessions</h3>
-            <a class = "btn btn-primary" href="add_tutoring_session.php">Add Tutoring Session</a>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Tutoring session updated successfully.</span>
@@ -55,11 +54,10 @@
             </div>
             ';
             }
-            if(isset($_GET['Added'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutoring session added successfully.</span>
-            </div>
-            ';
+             if(isset($_GET['attendance_recorded'])){ echo '
+                <div class = "alert alert-success" role="alert">
+                <span> Attendance has been recorded for this session.</span>
+            </div>';
             } echo '
                 <div class = "table-responsive">
                 <table class="table">
@@ -80,7 +78,8 @@
     INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
     INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
     INNER JOIN lc_courses ON lc_sessions.course_id = lc_courses.course_id
-    INNER JOIN lc_semester ON lc_sessions.semester_id = lc_semester.semester_id");
+    INNER JOIN lc_semester ON lc_sessions.semester_id = lc_semester.semester_id
+    ORDER BY lc_sessions.session_date DESC");
     confirm($query);
     while ($row = fetch_array($query)) {
 

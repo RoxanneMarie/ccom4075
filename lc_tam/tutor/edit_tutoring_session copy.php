@@ -1,27 +1,28 @@
 <?php 
     require_once("../functions.php");
     
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+    }
+
     if(isset($_POST['submit'])){
         $date = $_POST['appdate'];
-        $tutor = $_POST['tutor'];
         $start = $_POST['start'];
         $end = $_POST['end'];
-        $capacity = $_POST['capacity'];
 
+        $Uquery = "UPDATE lc_sessions
+        SET start_time = '$start', 
+        end_time = '$end', 
+        session_date = '$date'
+        WHERE session_id = '$id'";
 
-$query2 = query('INSERT INTO lc_sessions (tutor_id, start_time, end_time, session_date, capacity)
-VALUES("' . $tutor . '","' . $start . '","' . $end . '","' . $date . '","' . $capacity . '")');
-
+        $res = query($Uquery);
 //$sessionid = mysqli_insert_id(DB_HOST,DB_USER,DB_PASS,DB_NAME); 
 
 //$query = query('INSERT INTO lc_tutorings (ID_Tutor,')
-redirect('tutoring_sessions.php?Added');
+redirect('tutoring_sessions.php?success');
 }
 
-$query = query("SELECT * FROM lc_conditions");
-confirm($query);
-$row = fetch_array($query);
-$cond = str_split($row['max_capacity']);
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +36,7 @@ $cond = str_split($row['max_capacity']);
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Add Tutoring Sessions - LC:TAM</title>
+      <title>Edit Tutoring Sessions - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -56,45 +57,45 @@ $cond = str_split($row['max_capacity']);
             <main class="container d-flex justify-content-center">
                 <article>
                     <div>
-                    <h3 class = "h3 d-flex justify-content-center">Add Tutoring Session</h3>
-            <form action="add_tutoring_session.php" method="POST"><br>
-
+                    <h3 class = "h3 d-flex justify-content-center">Edit Tutoring Session</h3>
+            <form action="edit_tutoring_session.php?id=<?php echo $id ?>" method="POST"><br>
+            <?php 
+            $query = query("SELECT * FROM lc_sessions
+            INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
+            INNER JOIN lc_test_students ON lc_test_tutors.student_email = lc_test_students.student_email
+            WHERE lc_sessions.session_id = '$id'");
+            confirm($query);
+            $row = fetch_array($query);
+            
+            ?>
             <div class="form-group">
                 <label for="tutor">Tutor:</label>
-                <select class="form-control" id="tutor" name = "tutor" required>
-                <option selected value = "">Select a Tutor</option>
-                <?php 
-                    $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
-                    lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id, lc_test_tutors.acc_stat_id
-                    FROM lc_test_students
-                    INNER JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
-                    WHERE lc_test_tutors.student_email = lc_test_students.student_email");
-                    confirm($query2);
-                    while($row2 = fetch_array($query2)) { ?>
-                    <option value = <?php echo $row2['tutor_id'] ?> <?php if ($row2['acc_stat_id'] == '0' OR $row2['acc_stat_id'] == '2') { echo "disabled"; } ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; } ?></option>
+                <select class="form-control" id="tutor" name = "tutor" disabled>
+                <option selected value = "<?php echo $row['tutor_id']?>"><?php echo $row['student_id']; ?> - <?php echo $row['student_name']; ?> <?php echo $row['student_initial']; ?> <?php echo $row['student_first_lastname']; ?> <?php echo $row['student_second_lastname']; ?></option>
                     </select>
             </div>
+
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="appdate">Date of Appointment:</label>
-                        <input id="appdate" type="date" name="appdate" required><br><br>
+                        <input id="appdate" type="date" name="appdate" value = "<?php echo $row['session_date']; ?>" required><br><br>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <br>
                     <label for="start">Start time:</label>
-                    <input id="start" type="time" name="start" min = "08:00" max = "15:00" required><br><br>
+                    <input id="start" type="time" name="start" min = "08:00" max = "15:00" value = "<?php echo $row['start_time']; ?>" required><br><br>
                 </div>
 
                 <div class="form-row">
                     <label for="end">End time:</label>
-                    <input id="end" type="time" name="end" min = "09:00" max = "16:00" required><br><br>
+                    <input id="end" type="time" name="end" min = "09:00" max = "16:00" value = "<?php echo $row['end_time']; ?>" required><br><br>
                 </div>
 
                 <div class="form-group col-md-6">
                     <label for="capacity">Capacity: </label>
-                    <input type="number" class="form-control" id="capacity" name = "capacity" min = "1" max = "<?php echo $cond[2]; ?>" value = "<?php echo $cond[2]; ?>" required>
+                    <input type="number" class="form-control" id="capacity" name = "capacity" min = "1" max = "5" value = "<?php echo $row['capacity']; ?>" disabled>
                 </div>
                 <div class = "container d-flex justify-content-center">
                 <button type="submit" name="submit"  class="btn btn-primary display-4">Submit</button>

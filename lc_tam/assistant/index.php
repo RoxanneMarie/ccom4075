@@ -100,7 +100,12 @@
             </div>'; 
             } if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Appointment Cancelled.</span>
+                <span> Student has been appointed for the session.</span>
+            </div>'; 
+            } echo '
+            '; if(isset($_GET['cancelled'])){ echo '
+                <div class = "alert alert-success" role="alert">
+                <span> Selected student appointment has been cancelled successfully.</span>
             </div>'; 
             } echo '
            <main class="cards" style="justify-content:center;">

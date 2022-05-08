@@ -60,34 +60,45 @@
             </div>
             ';
             } echo '
-                <table class="table table-responsive">
+                <div class="table-responsive">
+                <table class="table">
             <thead class = "tCourses text-center">
-                <th>Tutor Email</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Session Date</th>
-                <th>Capacity</th>
-                <th>Appointed Students</th>
+            <th>Tutor Email</th>
+            <th>Time Duration</th>
+            <th>Session Date</th>
+            <th>Session Course</th>
+            <th>Session Semester</th>
+            <th>Capacity</th>
+            <th>Appointed Students</th>
             </thead>';
-    $query = query("SELECT * FROM lc_sessions 
-    INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
-    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email");
-    confirm($query);
-    while ($row = fetch_array($query)) {
+        $currDate = date("'Y-m-d'");
+        $query = query("SELECT lc_sessions.session_id, lc_sessions.tutor_id, lc_test_students.student_email AS 'tutor_email', CONCAT_WS(' ', lc_test_students.student_name, 
+        lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_sessions.start_time,
+        lc_sessions.end_time, lc_sessions.session_date, lc_sessions.capacity, CONCAT_WS(' - ', lc_sessions.course_id, lc_courses.course_name) AS 'course_info', lc_sessions.semester_id, lc_semester.semester_name AS 'semester_info'
+        FROM lc_sessions 
+        INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
+        INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
+        INNER JOIN lc_courses ON lc_sessions.course_id = lc_courses.course_id
+        INNER JOIN lc_semester ON lc_sessions.semester_id = lc_semester.semester_id
+        WHERE lc_sessions.session_date >= $currDate
+        ORDER BY lc_sessions.session_date DESC");
+        confirm($query);
+        while ($row = fetch_array($query)) {
 
 
 
         echo '    
                 <tr class="text-center">
-                    <td>'. $row['student_email'] .'</td>
-                    <td>'. $row['start_time'] .'</td>
-                    <td>'. $row['end_time'] .'</td>
-                    <td>'. $row['session_date'] .'</td>
-                    <td>'. $row['capacity'] .'</td>
-                    <td> <a href="tutoring_appointments.php?id='. $row['session_id'] .'">View</td>
+                <td>'. $row['tutor_email'] .'</td>
+                <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
+                <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>
+                <td>'. $row['course_info'] .'</td>
+                <td>'. $row['semester_info'] .'</td>
+                <td>'. $row['capacity'] .'</td>
+                <td> <a href="tutoring_appointments.php?id='. $row['session_id'] .'">View</td>
                     </tr>
                    '; } echo '
-                </table><br><br>
+                </table></div><br><br>
                 </div>
                 </article>
             </main>';

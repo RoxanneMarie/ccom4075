@@ -51,7 +51,8 @@
                     <h2 class = "h2 text-center">Found '; echo $Count_r['counter']; echo ' Results.</h2>';
                     if ($Count_r['counter'] > '0') {
                         echo '
-                        <table class="table table-responsive">
+                        <div class="table-responsive">
+                        <table class="table">
                         <thead class = "tCourses">
                             <th>Student full name</th>
                             <th>Student Email</th>
@@ -69,9 +70,10 @@
                         <td>'. $row['Student_name'] .'</td>
                         <td>'. $row['student_email'] .'</td>
                         <td> <a href = "appointments_result.php?id='. $row['student_email'] .'">View</a></td>
-                        <td> <a href = "cancel_appointment.php?id='. $row['student_email'] .'">Create</a></td>'; } echo '
+                        <td> <a href = "generate_appointment.php?id='. $row['student_email'] .'">Create</a></td>'; } echo '
                         </tr>
-                        </table>';
+                        </table>
+                        </div>';
                     } else {
                         echo '<div class = "alert" style = "background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;" role="alert">
                 <span> Student was not found within our system.</span>

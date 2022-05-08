@@ -56,6 +56,7 @@
                 <span> Tutoring session updated successfully.</span>
             </div>'; 
             } echo '
+                <div class="table-responsive">
                 <table class="table table-responsive">
             <thead class = "tCourses text-center">
                 <th>Student full name</th>
@@ -66,6 +67,7 @@
                 <th>Session Date</th>
                 <th>Cancel</th>
             </thead>';
+        $currDate = date("'Y-m-d'");
     $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'student_fullname', 
     lc_appointments.student_email, CONCAT_WS(' - ', lc_appointments.course_id, lc_courses.course_name) AS 'course_info', CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date 
     FROM lc_appointments
@@ -73,7 +75,8 @@
     INNER JOIN lc_courses ON lc_appointments.course_id = lc_courses.course_id
     INNER JOIN lc_semester ON lc_semester.semester_id = lc_appointments.semester_id
     INNER JOIN lc_sessions ON lc_appointments.session_id = lc_sessions.session_id    
-    WHERE lc_appointments.student_email = '$id'");
+    WHERE lc_appointments.student_email = '$id' AND lc_sessions.session_date >= $currDate
+    ORDER BY lc_sessions.session_date DESC");
     confirm($query);
     while ($row = fetch_array($query)) {
         echo '
@@ -87,7 +90,7 @@
                     <td> <a href="cancel_appointment.php?id='. $row['app_id'] .'">Cancel</td>
                     </tr>
                    '; } echo '
-                </table><br><br>
+                </table></div><br><br>
                 </div>
                 </article>
             </main>';

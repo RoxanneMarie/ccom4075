@@ -31,7 +31,7 @@
     <body>
 
         <?php 
-            top_header_2();
+            select_header($_SESSION['type']);
             student_view_appointment();
             bottom_footer();
             credit_mobirise_1();

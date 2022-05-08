@@ -73,7 +73,6 @@
                     <div class = "container-sm">
                     <br>
                     <h1 class = "h1 text-center">Cancel Appointment</h1>
-                      <div class="table-responsive">
                         <table class = "table table-sm">
                           <thead style = "background: #fd8f00;">
                             <th>Student Registered: </th>
@@ -90,7 +89,6 @@
                        <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>
                       </tbody>
                     </table> 
-                    </div>
                     <form action = "cancel_appointment.php" method="POST">
                     <input type="hidden" id="app_id" name="app_id" value="'; echo $row['app_id']; echo '">
             <div class = "d-flex justify-content-center">

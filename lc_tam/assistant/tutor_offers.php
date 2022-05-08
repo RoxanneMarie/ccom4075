@@ -50,7 +50,8 @@
         <article>
         <div class = "container">
         <h3 class = "h3 text-center">Tutor Offer - '; echo $id; echo'</h3>
-                <table class = "table table-responsive">
+        <div class="table-responsive">
+                <table class = "table">
             <thead class = "tCourses text-center">
                 <th>Student Num</th>
                 <th>Course</th>
@@ -98,7 +99,7 @@
                     <td>'. $row2['professor_fullname'].'</td>
                     </tr>
                     '; } echo '
-                </table><br><br>
+                </table></div><br><br>
                 </div>
                 </article>
             </main>';
