@@ -571,7 +571,7 @@ function create_app_admin()
 
         if(mysqli_num_rows($query) == 0)
         {
-            $query = query('INSERT INTO lc_sessions (tutor_id, session_date, start_time, end_time, capacity, course_id, semester_id) VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION["selected_date"] . '","' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '", 1 , "' . $_SESSION['selected_course'] .'" , "'. $rowSem['semester_id'] .'")');
+            $query = query('INSERT INTO lc_sessions (tutor_id, session_date, start_time, end_time, capacity, course_id, semester_id) VALUES("' . $_SESSION['selected_tutor'] . '","' . $_SESSION["selected_date"] . '","' . $_SESSION["selected_start_time"] . '","' . $_SESSION["selected_end_time"] . '", "' . 1 .'" , "' . $_SESSION['selected_course'] .'" , "'. $rowSem['semester_id'] .'")');
             confirm($query);
 
             $id = last_id();

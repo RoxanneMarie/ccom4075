@@ -109,26 +109,27 @@
             </div>'; 
             } echo '
            <main class="cards" style="justify-content:center;">
+           <article class="card">
+           <div class="text">
+               <h3>Appointments</h3>
+               <form class="form-inline" action = "student_search.php" method = "post">
+               <input class="form-control mr-sm-2" type="search" name = "student_search" placeholder = "insert student email" aria-label="Search">
+               <button class="btn btn-primary my-2 my-sm-0" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+             </svg></button>
+             </form>
+           </div>
+           </article>
+
                <article class="card">
                <div class="text">
                    <h3>Menu</h3>
                    <a class = "home_button" href = "tutors.php">View Tutors</a><br><br>
-                   <a class = "home_button" href = "view_accounts.php">View All Accounts</a><br><br>
                    <a class = "home_button" href = "tutoring_sessions.php">View Tutoring Sessions</a><br><br>
+                   <a class = "home_button" href = "view_accounts.php">View All Accounts</a><br><br>
                </div>
                </article>
 
-               <article class="card">
-               <div class="text">
-                   <h3>Appointments</h3>
-                   <form class="form-inline" action = "student_search.php" method = "post">
-                   <input class="form-control mr-sm-2" type="search" name = "student_search" placeholder = "insert student email" aria-label="Search">
-                   <button class="btn btn-primary my-2 my-sm-0" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                   <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                 </svg></button>
-                 </form>
-               </div>
-               </article>
 
            </main>
            <br>
