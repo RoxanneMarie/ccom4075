@@ -10,7 +10,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Semesters - LC:TAM</title>
@@ -28,10 +28,8 @@
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
     <style>
         /*----------------------- CSS HOME PAGE*/
-
         .tCourses {
-        background: rgb(196, 127, 0);
-        
+        background: #fd8f00;
         }
     </style>
 
@@ -61,25 +59,36 @@
                 <span> Semester added successfully.</span>
             </div>
             ';
+            }
+            if(isset($_GET['selected'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> The selected semester is now the main one.</span>
+            </div>
+            ';
             } echo '
-                <table class="table table-responsive">
+                <div class="table-responsive">
+                <table class="table">
             <thead class = "tCourses">
                 <th>Edit</th>
                 <th>Semester ID</th>
-                <th>Semester Name</th>
+                <th>Semester Term & Name</th>
+                <th>Semester Status</th>
             </thead>';
-    $query = query("SELECT * FROM lc_semester");
+    $query = query("SELECT lc_semester.semester_id, CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_account_status.acc_stat_name AS 'semester_status'
+    FROM lc_semester
+    INNER JOIN lc_account_status ON lc_semester.semester_status = lc_account_status.acc_stat_id");
     confirm($query);
     while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>    <a href="edit_semester.php?id='. $row['semester_id'] .'">Edit</a>
-                            <a href="delete_semester.php?id='. $row['semester_id'] .'">Delete</a></td>
+                    <td>    <a href="edit_semester.php?id='. $row['semester_id'] .'">Edit</a></td>
                     <td>'. $row['semester_id'] .'</td>
-                    <td>'. $row['semester_name'] .'</td>
+                    <td>'. $row['semester_info'] .'</td>
+                    <td>'. $row['semester_status'] .'</td>
                     </tr>
                     '; } echo '
-                </table><br><br>
+                </table>
+                </div><br><br>
                 </div>
                 </article>
             </main>';

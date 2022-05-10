@@ -10,7 +10,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Tutors - LC:TAM</title>
@@ -30,7 +30,7 @@
         /*----------------------- CSS HOME PAGE*/
 
         .tCourses {
-        background: rgb(196, 127, 0);
+        background: #fd8f00;
         }
 
     </style>
@@ -38,45 +38,60 @@
     </head>
     <body>
         <?php 
-            top_header_2();
+            top_header_5();
     echo '<input type="hidden" value="student_btn" name="action">
     <main class="mcourses" style="justify-content:center;">
         <article>
         <div class = "container">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Tutors</h3>
+            <h3 class = "h3 text-center">Tutors</h3>
+            <a class = "btn btn-primary" href="add_tutor.php">Add Tutor</a>
+            '; if(isset($_GET['success'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutor updated successfully.</span>
+            </div>'; 
+            }
+             if(isset($_GET['removed'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutor removed successfully.</span>
+            </div>
+            ';
+            }
+            if(isset($_GET['Added'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutor added successfully.</span>
+            </div>
+            ';
+            } echo '
                 <table class = "table table-responsive">
-            <thead class = "tCourses">
+            <thead class = "tCourses text-center">
                 <th>Edit</th>
+                <th>Offers</th>
+                <th>Schedule</th>
                 <th>Student Num</th>
-                <th>Name</th>
-                <th>Initial</th>
-                <th>First Last Name</th>
-                <th>Second Last name</th>
+                <th>Tutor full name</th>
                 <th>Email</th>
                 <th>Type</th>
                 <th>Status</th>
+                <th>tutor image</th>
             </thead>';
-    // $query = query("SELECT * FROM lc_test_students INNER JOIN lc_test_tutors ON lc_test_students.student_id = lc_test_tutors.student_id");
-    // confirm($query);
-    // $query2 = query("SELECT * FROM lc_test_tutors INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id");
-    // confirm($query2);
-    // $query3 = query("SELECT * FROM lc_test_students INNER JOIN lc_account_status ON lc_test_students.acc_stat_id = lc_account_status.acc_stat_id");
-    // confirm($query3);
-    $query = query("SELECT * FROM lc_test_students INNER JOIN lc_test_tutors ON lc_test_students.student_id = lc_test_tutors.student_id 
+    $query = query("SELECT lc_test_students.student_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, 
+    lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_fullname', lc_test_tutors.student_email, 
+    lc_tutor_type.tutor_type_name, lc_tutor_type.tutor_type_id, lc_account_status.acc_stat_name, lc_test_tutors.acc_stat_id,
+    lc_test_tutors.tutor_image FROM lc_test_tutors INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
             INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id INNER JOIN lc_account_status 
-            ON lc_test_students.acc_stat_id = lc_account_status.acc_stat_id");
+            ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id");
     while ($row = fetch_array($query)) {
         echo '    
                 <tr>
-                    <td>   <a href="edit_tutor.php?id='. $row['student_id'] .'">Edit</a>
-                    <td>'.$row['student_id'].'</td>
-                    <td>'. $row['student_name'] .'</td>
-                    <td>'. $row['student_initial'] .'</td>
-                    <td>'. $row['student_first_lastname'] .'</td>
-                    <td>'. $row['student_second_lastname'] .'</td>
+                    <td>   <a href = "edit_tutor.php?id='. $row['student_email'] .'">Edit Tutor</a> </td>
+                    <td>   <a href = "tutor_offers.php?id='. $row['student_email'] .'">View Offer</a> </td>
+                    <td>   <a href = "tutor_schedule.php?id='. $row['student_email'] .'">View Schedule</a> </td>
+                    <td>'. $row['student_id'].'</td>
+                    <td>'. $row['tutor_fullname'] .'</td>
                     <td>'. $row['student_email'] .'</td>
                     <td>'. $row['tutor_type_name'].'</td>
                     <td>'. $row['acc_stat_name'] .'</td>
+                    <td>'; if( $row['tutor_image']){echo "Yes.";} else { echo "No."; } '</td>
                     </tr>
                     '; } echo '
                 </table><br><br>

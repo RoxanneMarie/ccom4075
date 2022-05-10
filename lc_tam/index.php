@@ -10,12 +10,10 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Home</title>
-      <link rel="stylesheet" href="assets/web/assets/mobirise-icons2/mobirise2.css">
-      <link rel="stylesheet" href="assets/web/assets/mobirise-icons/mobirise-icons.css">
+      <title>Learning Commons: Tutoring Appointment Manager</title>
       <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
       <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
       <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
@@ -31,29 +29,25 @@
     <body>
 
         <?php top_header_1(); ?>
-
-        <div class="card text-center">
-            <div class="card-header">
-                Greetings
+        <div class="bg-image d-flex justify-content-center align-items-center" 
+            style = "background-image: url('assets/images/bg/lc_image1.jpg');
+                    height: 100vh">
+            <div class="card text-center bg-primary">
+                <div class="card-header">
+                    Welcome
+                </div>
+                <div class="card-body bg-white">
+                    <h5 class="card-title">Welcome to Learning Commons: Tutoring Appointment Manager.</h5>
+                    <p class="card-text">Part of the Tutor and Mentorship Program.</p>
+                    <p class="card-text">Here, you will be able to request tutoring sessions.</p>
+                    <div class = "d-flex justify-content-between">
+                        <a href="login.php" class="btn btn-primary">Login</a>
+                        <a href="about.php" class="btn btn-primary">About us</a>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-            <div class="card-footer text-muted">
-                <div class = "image-wrap">
         </div>
-            </div>
-        </div>
-
-        <section data-bs-version="5.1" class="content16 cid-sO0lfEsMNZ" id="content16-t">
-            <div class="container">
-
-            </div>
-        </section>
-
-        <?php 
+        <?php
             bottom_footer();
             credit_mobirise_1();
         ?>

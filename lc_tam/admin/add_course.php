@@ -5,10 +5,11 @@
         $courseID = $_POST['Course_ID'];
         $courseName = $_POST['Course_Name'];
         $departmentID = $_POST['Department_ID'];
-        $tutor_available = 1;
+        $courseStatus = $_POST['Course_Status'];
+        $tutor_available = 0;
 
-    echo $query = query('INSERT INTO lc_courses (course_id, course_name, dept_id, tutor_available)
-    VALUES("' . $courseID . '","' . $courseName . '",' . $departmentID . ',' . $tutor_available . ')');
+    echo $query = query('INSERT INTO lc_courses (course_id, course_name, dept_id, tutor_available, course_status)
+    VALUES("' . $courseID . '","' . $courseName . '",' . $departmentID . ',' . $tutor_available . ',' . $courseStatus .')');
     if($query) {
         header('location:courses.php?Added');
     }
@@ -23,10 +24,10 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Add Course - LC:TAM</title>
+      <title>Add Course Information - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -48,38 +49,47 @@
             <article>
             <div class="container-sm>">
                 <h3 class = "h3 d-flex justify-content-center">Add Course</h3>
-            <form action="add_course.php" method="POST"><br>
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="Course_ID" class= "input-group-text" id= "inputGroup-sizing-lg">Course ID:</label>
-                        </div>
-                        <input type="text" class="form-control" id="Course_ID" name="Course_ID" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
+                <form action="add_course.php" method="POST"><br>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="Course_ID">Course ID:</label>
+                        <input type="Course_ID" class="form-control" id="Course_ID" name = "Course_ID" required>
                     </div>
-                    <br>
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="Course_Name" class= "input-group-text" id = "inputGroup-sizing-lg">Course Name:</label>
-                        </div>
-                        <input type="text" class="form-control" id="Course_Name" name="Course_Name" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
+                    <div class="form-group col-md-6">
+                        <label for="Course_Name">Course Name:</label>
+                        <input type="Course_Name" class="form-control" id="Course_Name" name = "Course_Name" required>
                     </div>
-                    <br>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="Department">Department:</label>
-                        </div>
-                        <select class="custom-select" id = "Department_ID" name = "Department_ID">
-                            <option selected>Select a Department</option>
-                            <?php 
-                            $query = query("SELECT * FROM lc_departments");
-                            confirm($query);
-                            while($row = fetch_array($query)) {
-                                ?>
-                        <option value=<?php echo $row['dept_id'] ?> ><?php echo $row['dept_name'];  } ?></option>
-                        </select>
-                    </div>
-                    <br>
-                <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button><br>
-            </form>
+                </div>
+
+                <div class="form-group">
+                    <label for="Department_ID">Department:</label>
+                    <select class="form-control" id="Department_ID" name = "Department_ID" required>
+                    <option selected value = "">Select a Department.</option>
+                    <?php 
+                    $query = query("SELECT * FROM lc_departments");
+                    confirm($query);
+                    while($row = fetch_array($query)) { ?>
+                    <option value=<?php echo $row['dept_id'] ?> ><?php echo $row['dept_name'];  } ?></option>
+                    </select>
+                </div>
+
+                <div class="form-group col">
+                    <label for="Course_Status">Course Status:</label>
+                    <select class="form-control" id="Course_Status" name = "Course_Status" required>
+                        <option selected value="">Select a status.</option>
+                    <?php $query2 = query("SELECT * FROM lc_account_status");
+                    confirm($query2);
+                    while($row2 = fetch_array($query2)) { ?>
+                    <option value= "<?php echo $row2['acc_stat_id'] ?>"> <?php echo $row2['acc_stat_name'];  } ?></option>
+                    </select>
+                </div>
+
+                <div class = "container d-flex justify-content-center">
+                    <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
+                </div>
+                <br>
+                </form>
             </div>
             </article>
         </main>

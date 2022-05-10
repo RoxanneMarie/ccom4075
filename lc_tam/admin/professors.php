@@ -10,7 +10,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Professors - LC:TAM</title>
@@ -28,55 +28,62 @@
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
     <style>
         /*----------------------- CSS HOME PAGE*/
-
         .tCourses {
-        background: rgb(196, 127, 0);
-        }
-
-        .trCourses {
-        background: white;
+        background: #fd8f00;
         }
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_2();
-    echo '<input type="hidden" value="student_btn" name="action">
-    <main class="mcourses" style="justify-content:center;">
-        <article>
-        <div class="container">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">Professors</h3>
-            <table class = "table table-responsive">
-            <thead class = "tCourses">
-                <th>Edit</th>
-                <th>Professor ID</th>
-                <th>Course ID</th>
-                <th>Name</th>
-                <th>Initial</th>
-                <th>First Last Name</th>
-                <th>Second Last name</th>
-            </tr>';
-    $query = query("SELECT * FROM lc_professors");
+            top_header_5();
+            echo '<input type="hidden" value="student_btn" name="action">
+            <main class="mcourses" style="justify-content:center;">
+                <article>
+                <div class = "container">
+                    <h3 class = "h3 text-center">Professors</h3>
+                    <a class = "btn btn-primary" href="add_professor.php">Add Professor</a>
+                    '; if(isset($_GET['success'])){ echo '
+                        <div class="alert alert-success" role="alert">
+                        <span> Professor updated successfully.</span>
+                    </div>'; 
+                    }
+                    if(isset($_GET['Added'])){ echo '
+                        <div class="alert alert-success" role="alert">
+                        <span> Professor added successfully.</span>
+                    </div>
+                    ';
+                    } echo '
+                    <div class = "table-responsive">
+                        <table class = "table">
+                    <thead class = "tCourses">
+                        <th>Edit</th>
+                        <th>Professor full name</th>
+                        <th>Course</th>
+                        <th>Professor Status</th>
+                    </thead>';
+    $query = query("SELECT lc_professors.professor_entry_id, CONCAT_WS(' - ', lc_professors.course_id, lc_courses.course_name) AS 'course', CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, lc_professors.professor_second_lastname) AS 'professor_fullname', lc_account_status.acc_stat_id, lc_account_status.acc_stat_name
+    FROM lc_professors
+    INNER JOIN lc_account_status ON lc_account_status.acc_stat_id = lc_professors.acc_stat_id
+    INNER JOIN lc_courses ON lc_courses.course_id = lc_professors.course_id");
     confirm($query);
     while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>   <a href="editprofessor.php?id='. $row['professor_entry_id'] .'">Edit</a>
-                    <td>'. $row['professor_entry_id'] .'</td>
-                    <td>'. $row['course_id'] .'</td>
-                    <td>'. $row['professor_name'] .'</td>
-                    <td>'. $row['professor_initial'] .'</td>
-                    <td>'. $row['professor_first_lastname'] .'</td>
-                    <td>'. $row['professor_second_lastname'] .'</td>
+                    <td>   <a href="edit_professor.php?id='. $row['professor_entry_id'] .'">Edit</a></td>
+                    <td>'. $row['professor_fullname'] .'</td>
+                    <td>'. $row['course'] .'</td>
+                    <td>'. $row['acc_stat_name'] .'</td>
                     </tr>
                     '; } echo '
-                </table><br><br>
+                </table>
+                </div>
+                <br><br>
                 </div>
                 </article>
             </main>';
             bottom_footer();
             credit_mobirise_1();
-        ?>
+        ?>      
     </body>
 </html>

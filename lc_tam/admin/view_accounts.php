@@ -10,7 +10,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Accounts - LC:TAM</title>
@@ -29,129 +29,79 @@
     <style>
         /*----------------------- CSS HOME PAGE*/
 
-        .mcourses{
-        text-align: center;
-        margin: 0 auto;
-        width: 1100px;
-        flex-wrap: none;
-        align-items: stretch; 
-        justify-content:center;
-
-        }
-        .mcourse {
-        flex: 0 0 500px;
-        margin: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-        background-color: white;
-        } 
-        .card img {
-        max-width: 100%;
-        }
-        .card .text {
-        padding: 0 20px 20px;
-        }
-        .card .text > button {
-        background: rgb(196, 127, 0);
-        border: 1;
-        color: white;
-        padding: 10px;
-        width: 100%;
-        }
-
         .tCourses {
         background: #fd8f00;
-        table-layout: auto;
-        width: 100%;
         }
 
-        .trCourses {
-        background: white;
-        }
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_2();
-    echo '<input type="hidden" value="student_btn" name="action">
-    <main class="mcourses" style="justify-content:center;">
-        <article class="mcourse">
-        <div class="text">
-            <h3 style="font-size:30px;text-shadow: 2px 5px 6px  rgba(0,0,0,0.3);">All Accounts</h3>
-           
-                <table class="tCourses">
-            <tr>
-                <td>Student Num</td>
-                <td>Name</td>
-                <td>Initial</td>
-                <td>First Lastname</td>
-                <td>Second Lastname</td>
-                <td>Role</td>
-            </tr>';
-    $query = query("SELECT * FROM lc_test_students");
+            top_header_5();
+            echo '
+            <main class = "container">
+                <article>
+                <div class = "container">
+                    <h3 class = "h3 text-center">Accounts</h3><br>
+                        <div class = "table-responsive">
+                        <table class = "table">
+                    <thead class = "tCourses">
+                        <th>Student Num</th>
+                        <th>Student Name</th>
+                        <th>Student Email</th>
+                        <th>Role</th>
+                    </thead>';
+    $query = query("SELECT lc_test_students.student_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
+    lc_test_students.student_second_lastname) AS student_fullname, lc_test_students.student_email
+    FROM lc_test_students");
     confirm($query);
-    $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id ");
-    confirm($query2);
-    global $connection;
-    $stmt = $pdo->prepare($query2);
-    $stmt->execute();
-    $row2 = $stmt->fetchAll();
+
+    while($row = fetch_array($query)) {
+        $Student = false;
+        $Tutor = false;
+        $Assistant = false;
+    $id = $row['student_email'];
     
-    while($row = fetch_array($query)) 
-    {
-        $role = "";
-        $flag = false;
-        $id =  $row['student_id'];
+    $SQuery = query("SELECT count(student_email) as Student FROM lc_test_students WHERE student_email = '$id'");
+    //print_r($SQuery);
+    confirm($SQuery);
+    $SRes = fetch_array($SQuery);
+    //print_r($Sres['Student']);
+    if ($SRes['Student'] == '1') {
+        $Student = true;
+    }
 
-        foreach($row2 as $rowTutor)
-        {
-            if($row['student_id']== $rowTutor['student_id'])
-                {
-                echo 'entre while /n';
-                    $flag = true;
-                }
-        }
-      
-/* 
-        $id =  $row['student_id'];
-        //echo'SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = $id';
-        $query2 = query("SELECT COUNT(student_id) FROM lc_test_tutors WHERE student_id = ". $id ."");
-        confirm($query2);
-        
-        $row2= fetch_All($query2);
-        for($x =1; $x <= $row2["COUNT(student_id)"]; $x++)
-        {
-            if($row['student_id']== $row2['student_id'])
-            {
-                
-            echo 'entre while /n';
-                $flag = true;
-            }
-        } */
+    $TQuery = query("SELECT COUNT(student_email) as Tutor FROM lc_test_tutors WHERE student_email = '$id'");
 
-        if($flag == true){
-            $role = "Tutor";
-        }
-           
-        if($flag == false)
-        {
-            $role = "Student";
-        }
+    confirm($TQuery);
+    $TRes = fetch_array($TQuery);
+    //print_r($TRes['T']);
+    if ($TRes['Tutor'] == '1') {
+        $Tutor = true;
+    }
 
-
-
-        echo '    
-                <tr class="trCourses">
+    $AsQuery = query("SELECT COUNT(student_email) as Assist FROM lc_test_assistants WHERE student_email = '$id'");
+    $AsRes = fetch_array($AsQuery);
+    if ($AsRes['Assist'] == '1') {
+        $Assistant = true;
+    } echo '    
+                <tr>
                     <td>'. $row['student_id'] .'</td>
-                    <td>'. $row['student_name'] .' </td>
-                    <td>'. $row['student_initial'] .'</td>
-                    <td>'. $row['student_first_lastname'] .' </td>
-                    <td>'. $row['student_second_lastname'] .'</td>
-                    <td>'. $role .'</td>
-                </tr>'; 
-    } 
-    echo '   </table><br><br>
+                    <td>'. $row['student_fullname'] .' </td>
+                    <td>'. $row['student_email'] .'</td>
+                    <td>'; 
+                    if ($Student == '1') {
+                        echo 'Student';
+                    } if ($Tutor == '1') {
+                        echo ', Tutor';
+                    } if ($Assistant == '1') {
+                        echo ', Assistant ';
+                    } '</td>   
+                </tr> 
+                '; } echo '
+                    </table>
+                    </div><br><br>
                 </div>
                 </article>
             </main>';

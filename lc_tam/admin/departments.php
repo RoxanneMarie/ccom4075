@@ -10,7 +10,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Departments - LC:TAM</title>
@@ -30,8 +30,7 @@
         /*----------------------- CSS HOME PAGE*/
 
         .tCourses {
-        background: rgb(196, 127, 0);
-        
+        background: #fd8f00;
         }
     </style>
 
@@ -50,22 +49,16 @@
                 <span> Department updated successfully.</span>
             </div>'; 
             }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Department removed successfully.</span>
-            </div>
-            ';
-            }
             if(isset($_GET['Added'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Department added successfully.</span>
             </div>
             ';
             } echo '
-                <table class="table table-responsive">
+                <div class="table-responsive">
+                <table class="table">
             <thead class = "tCourses">
                 <th>Edit</th>
-                <th>Department ID</th>
                 <th>Department Name</th>
             </thead>';
     $query = query("SELECT * FROM lc_departments");
@@ -73,18 +66,17 @@
     while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>    <a href="edit_department.php?id='. $row['dept_id'] .'">Edit</a>
-                            <a href="delete_department.php?id='. $row['dept_id'] .'">Delete</a></td>
-                    <td>'. $row['dept_id'] .'</td>
+                    <td>    <a href="edit_department.php?id='. $row['dept_id'] .'">Edit</a></td>
                     <td>'. $row['dept_name'] .'</td>
                     </tr>
                     '; } echo '
-                </table><br><br>
+                </table>
+                </div><br><br>
                 </div>
                 </article>
             </main>';
             bottom_footer();
             credit_mobirise_1();
-        ?>
+        ?>  
     </body>
 </html>

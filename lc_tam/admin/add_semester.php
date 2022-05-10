@@ -2,11 +2,12 @@
     require_once("../functions.php");
     
     if(isset($_POST['submit'])){
+        $SemesterTermName = $_POST['Semester_Term_Name'];
         $SemesterName = $_POST['Semester_Name'];
 
-    echo $query = query('INSERT INTO lc_semester (semester_name)
-    VALUES("' . $SemesterName . '")'); /* formato para base datos */
-    //header('location:semester.php?Added');
+    echo $query = query('INSERT INTO lc_semester (semester_term, semester_name)
+    VALUES("' . $SemesterTermName . '" , "' . $SemesterName . '")');
+    header('location:semesters.php?Added');
     }
 ?>
 
@@ -18,7 +19,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Add Semester - LC:TAM</title>
@@ -39,19 +40,30 @@
         <?php 
             top_header_5(); 
             ?>
-    <input type="hidden" value="student_btn" name="action">
         <main class="container">
             <article>
             <div class="container-sm">
                 <h3 class = "h3 text-center">Add Semester</h3>
             <form action="add_semester.php" method="POST"><br>
-            <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="Semester_Name" class= "input-group-text" id = id="inputGroup-sizing-lg">Semester Name:</label>
-                        </div>
-                        <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" aria-label="Default" aria-describedby="inputGroup-sizing-sm">
+
+            <div class="form-group col">
+                    <div class="form-row">
+                        <label for="Semester_Name">Semester Term Name:</label>
+                        <input type="text" class="form-control" id="Semester_Term_Name" name="Semester_Term_Name" placeholder="Ex: C12" maxlength="3" required>
+                    </div>
+                </div>
+
+                <div class="form-group col">
+                    <div class="form-row">
+                        <label for="Semester_Name">Semester Name:</label>
+                        <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" placeholder="Second Semester 2021-2022" maxlength="30" required>
+                    </div>
+                </div>
+                <br>
+                    <div class = "container d-flex justify-content-center">
                         <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
                     </div>
+                </div>
                     <br><br><br>
             </form>
             </div>

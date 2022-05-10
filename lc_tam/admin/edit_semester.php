@@ -4,17 +4,18 @@
     if(isset($_GET) & !empty($_GET)){
         $id = $_GET['id'];
     } else {
-        redirect('semesters.php'); //security measure
+        redirect('semesters.php');
     }
     if(isset($_POST) & !empty($_POST)){
-        $semesterName = $_POST['Semester_Name'];
-        $query = "UPDATE lc_semester SET semester_name = '$semesterName' WHERE semester_id = '$id'";
+        $SemesterTermName = $_POST['Semester_Term_Name'];
+        $SemesterName = $_POST['Semester_Name'];
+        $query = "UPDATE lc_semester SET semester_term = '$SemesterTermName', semester_name = '$SemesterName' WHERE semester_id = '$id'";
         //print_r($query);
-        $res = query($query);  //result abrevacion and security
+        $res = query($query);
         //print_r($query);
-        confirm($query);    // security
+        confirm($query);
        //header('departments.php?success');
-        redirect('semesters.php?success'); // cuando se termine de procesar 
+        redirect('semesters.php?success');
 
 }
 ?>
@@ -27,7 +28,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Edit Semester - LC:TAM</title>
@@ -53,18 +54,29 @@
             <div class="container sm">
                 <h3 class = "h3 text-center">Edit Semester</h3>
                 <?php 
-                $query = query("SELECT * FROM lc_semester WHERE semester_id = '$id'"); // nos muestra informacion de la tabla de el semester 
+                $query = query("SELECT * FROM lc_semester WHERE semester_id = '$id'");
                 confirm($query);
                 $row = fetch_array($query);
                 ?>
-                <form action="edit_semester.php?id=<?php echo $row['semester_id']; ?>" method="POST"><br> <!-- aqui el php obliga a q el id se quede -->
-                    <div class="input-group input-group-lg">
-                        <div class="input-group-prepend">
-                        <label for="Semester_Name" class= "input-group-text" id = id="inputGroup-sizing-lg">Semester Name:</label>
-                        </div>
-                        <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" value = "<?php echo $row['semester_name']; ?>" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required><!-- el php de esta linea vuelve a mandar lo q tiene la base de datos en sus cuandros -->
-                        <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
+                <form action="edit_semester.php?id=<?php echo $row['semester_id']; ?>" method="POST"><br>
+
+                <div class="form-group col">
+                    <div class="form-row">
+                        <label for="Semester_Name">Semester Term Name:</label>
+                        <input type="text" class="form-control" id="Semester_Term_Name" name="Semester_Term_Name" value = "<?php echo $row['semester_term']; ?>" placeholder="Second Semester 2021-2022" maxlength="30" required>
                     </div>
+                </div>
+
+                <div class="form-group col">
+                    <div class="form-row">
+                        <label for="Semester_Name">Semester Name:</label>
+                        <input type="text" class="form-control" id="Semester_Name" name="Semester_Name" value = "<?php echo $row['semester_name']; ?>" placeholder="Second Semester 2021-2022" maxlength="30" required>
+                    </div>
+                </div>
+                <br>
+                <div class = "container d-flex justify-content-center">
+                    <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
+                </div>
                 <br><br><br>
             </form>
             </div>

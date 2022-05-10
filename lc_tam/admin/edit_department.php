@@ -27,7 +27,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-      <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
+      <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
       <title>Edit Department - LC:TAM</title>
@@ -63,6 +63,9 @@
                         <label for="Deparment_Name" class= "input-group-text" id = id="inputGroup-sizing-lg">Department Name:</label>
                         </div>
                         <input type="text" class="form-control" id="Department_Name" name="Department_Name" value = "<?php echo $row['dept_name']; ?>" aria-label="Default" aria-describedby="inputGroup-sizing-sm" required>
+                    </div>
+                    <br>
+                    <div class = "container d-flex justify-content-center">
                         <button type = "submit" name = "submit" class = "btn btn-primary display-4">Submit</button>
                     </div>
                 <br><br><br>
