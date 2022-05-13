@@ -100,7 +100,7 @@
     <main class="container">
         <article>
         <div class="container-sm">
-            <h3 class = "h3 text-center">Attendance of Session #'; echo $row2['session_id']; echo '</h3>
+            <h3 class = "h3 text-center">Attendance</h3>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Attendance updated successfully.</span>
@@ -112,10 +112,16 @@
             </div>
             ';
             } 
-            
-            
-            
-            
+               
+        $info = getTutoringInfo($row2['session_id']);
+        $info2= fetch_array($info);
+        echo '
+        
+        <p><b> Course:</b> '.$info2['course_info'].' </p>
+        <p><b> Date:</b> '. conv_month(substr($info2["session_date"],5,2)) . " " . conv_date(substr($info2["session_date"],8,2)) . ", " . substr($info2["session_date"],0,4) .' </p>
+        <p><b> Time:</b> '. conv_time(substr($info2["start_time"],0,2)) . substr($info2["start_time"],2,3) . ampm(substr($info2["start_time"],0,2)).' - '. conv_time(substr($info2["end_time"],0,2)) . substr($info2["end_time"],2,3) . ampm(substr($info2["end_time"],0,2)) .'</p>
+        ';
+  
             
             
             echo '
