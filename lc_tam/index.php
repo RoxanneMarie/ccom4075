@@ -38,7 +38,7 @@
                 </div>
                 <div class="card-body bg-white">
                     <h5 class="card-title">Welcome to Learning Commons: Tutoring Appointment Manager.</h5>
-                    <p class="card-text">Part of the Tutor and Mentorship Program.</p>
+                    <p class="card-text">Part of the Tutoring and Mentoring Program.</p>
                     <p class="card-text">Here, you will be able to request tutoring sessions.</p>
                     <div class = "d-flex justify-content-between">
                         <a href="login.php" class="btn btn-primary">Login</a>

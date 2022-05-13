@@ -89,7 +89,7 @@
     <body>
 
         <?php
-            top_header_5();
+            select_header($_SESSION['type']);
             echo'
             <br>
             <h4 class = "h3 text-center">Admin Menu</h4>

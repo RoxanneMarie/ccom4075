@@ -36,7 +36,7 @@
     <img src="assets/images/bg/lc_image10.jpeg" class="img-fluid" alt="Image of Learning Commons building found in UPRA.">
         <div class="container">
           <h1 class="h1 text-center">About us</h1>
-          <p class="lead">The Learning Commons is a building located within University of Puerto Rico at Arecibo campus. It is part
+          <p class="lead text-center">The Learning Commons is a building located within University of Puerto Rico at Arecibo campus. It is part
             of the new library extension. It offers multiples services that promotes collaboration and learning.</p>
         </div><!-- /.container -->
 
@@ -48,12 +48,13 @@
         <div class="container text-center">
             <h2 class="featurette-heading">Tutoring for students. <span class="text-muted">By students.</span></h2>
         </div>
-        <div class="col-md-7">
-            <p class="lead">Having difficulties with some classes? Do you wish to practice more course related skills? As part of the Tutoring and Mentoring program, Learning Commons offers tutoring services for multiple courses. You can also offer your knowledge to tutor by applying as a tutor during the work/study request period.</p>
+        <div class="col-md-7 p-auto">
+            <p class="lead p-3">Having difficulties with some classes? Do you wish to practice more course related skills? As part of the Tutoring and Mentoring program, Learning Commons offers tutoring services for multiple courses. You can also offer your knowledge to tutor by applying as a tutor during the work/study request period.</p>
         </div>
-        <div class="col-md-5">
-        <img src="assets/images/bg/lc_image4.jpeg" class="img-fluid" aria-hidden="true" alt="Image showing a part of the learning common mostly used for tutoring.">
+            <div class="col-md-5">
+            <img src="assets/images/bg/lc_image4.jpeg" class="img-fluid" aria-hidden="true" alt="Image showing a part of the learning common mostly used for tutoring.">
         </div>
+
     </div>
 
     <hr class="featurette-divider">
@@ -62,8 +63,8 @@
         <div class="container text-center">
             <h2 class="featurette-heading">Spaces for multiple people to study. <span class="text-muted">Or solo if you need to focus.</span></h2>
         </div>
-        <div class="col-md-7 order-md-2">
-            <p class="lead">Learning Commons offers a space that allows multiple students to have study sessions, as well as for people that want to study alone. First come, first serve.</p>
+        <div class="col-md-7 order-md-2 p-auto">
+            <p class="lead p-3">Learning Commons offers a space that allows multiple students to have study sessions, as well as for people that want to study alone. First come, first serve.</p>
         </div>
         <div class="col-md-5 order-md-1" aria-hidden="true">
             <img src="assets/images/bg/lc_image5.jpeg" class="img-fluid" alt="Image showing another part of the Learning Commons that can be used for studying.">
@@ -76,8 +77,8 @@
         <div class="container text-center">
             <h2 class="featurette-heading">Technological support, as well as workshops of various skills. <span class="text-muted">And much more.</span></h2>
         </div>
-        <div class="col-md-7">
-            <p class="lead">You can request technical assistance for database searches, and multiple workshops of various topics are offered from time to time, and much more.</p>
+        <div class="col-md-7 p-auto">
+            <p class="lead p-auto">You can request technical assistance for database searches, and multiple workshops of various topics are offered from time to time, and much more.</p>
         </div>
         <div class="col-md-5">
             <img src="assets/images/bg/lc_image6.jpeg" class="img-fluid" alt="Image of some computers that can be used in Learning Commons.">

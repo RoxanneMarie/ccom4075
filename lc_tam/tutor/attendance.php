@@ -68,7 +68,6 @@
                 <div class = "table-responsive">
                 <table class = "table">
             <thead class = "tCourses">
-                <th>Session ID</th>
                 <th>Time Duration</th>
                 <th>Session Date</th>
                 <th>Session Course</th>
@@ -91,7 +90,6 @@
             while($row = fetch_array($query)){
         echo '    
         <tr>
-            <td>'. $row['session_id'] .'</td>
             <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
             <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>
             <td>'. $row['course_info'] .'</td>

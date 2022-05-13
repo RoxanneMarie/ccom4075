@@ -22,7 +22,7 @@ function select_header($choice)
         exit;
     }
 }
-function top_header_1()
+function top_header_1() //Not logged in (no account type).
 {
   echo '
   <style>
@@ -58,7 +58,7 @@ function top_header_1()
         </section>';
 }
 
-function top_header_2()
+function top_header_2() //Student header.
 {
   echo '
   <style>
@@ -95,7 +95,7 @@ function top_header_2()
         </section>';
 }
 
-function top_header_3()
+function top_header_3() //Tutor header.
 {
   echo '
   <style>
@@ -123,8 +123,8 @@ function top_header_3()
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
                             <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="select_course.php">Create</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Schedule</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Attendance</a></div></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="select_course.php">Create</a></div></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="../tutor/calendar.php">Schedule</a><a class="text-black dropdown-item display-4" href="../tutor/tutoring_sessions.php">Attendance</a></div></li>
                             <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="../logout.php">Logout</a></li>
                         </ul>
                     </div>
@@ -134,7 +134,7 @@ function top_header_3()
         </section>';
 }
 
-function top_header_4()
+function top_header_4() //assistant header.
 {
   echo '
   <style>
@@ -161,9 +161,8 @@ function top_header_4()
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
                             <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="create.php">Create</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
+                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="../assistant/search.php?id=">Create</a><a class="text-black dropdown-item display-4" href="../assistant/">View</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Schedule</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Attendance</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Reports</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Generate</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">View<br></a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Logout</a></div></li>
@@ -175,7 +174,7 @@ function top_header_4()
         </section>';
 }
 
-function top_header_5()
+function top_header_5() //Admin header.
 {
   echo '
   <style>
@@ -495,7 +494,7 @@ function login()
                 $_SESSION['email'] = $email;
                 $_SESSION["current_date"] = date("Y-m-d");
                 $_SESSION["current_day_of_the_week"] = date("l");
-                redirect("admin/admin.php");
+                redirect("admin/index.php");
             }
         }
         else
@@ -1184,7 +1183,7 @@ function student_view_appointment()
     //print_r($_SESSION);
     $c = 0;
     
-    $query = query("SELECT session_id FROM lc_appointments WHERE student_email = '" . $_SESSION["email"] . "'");
+    $query = query("SELECT session_id FROM lc_appointments WHERE app_cancel = '1' AND student_email = '" . $_SESSION["email"] . "'");
     confirm($query);
     
     if(mysqli_num_rows($query) != 0)
@@ -1210,8 +1209,11 @@ function student_view_appointment()
                 $query3 = query("SELECT course_id FROM lc_appointments WHERE session_id = " . $row["session_id"]);
                 confirm($query3);
                 $row4 = fetch_array($query3);
-                
-                $app_info[$c-1] = array('f_name' => $row3["student_name"], 'l_name' => $row3["student_first_lastname"], 'course' => $row4["course_id"], 'date' => $row2["DATE_FORMAT(session_date, '%M %d %Y')"], 's_time' => substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5), 'e_time' => substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5));
+
+                $query4 = query("SELECT app_id FROM lc_appointments WHERE session_id = " . $row["session_id"] ." AND student_email = '". $_SESSION["email"] ."'");
+                confirm($query4);
+                $row5 = fetch_array($query4);
+                $app_info[$c-1] = array('f_name' => $row3["student_name"], 'l_name' => $row3["student_first_lastname"], 'course' => $row4["course_id"], 'cancel' => $row5["app_id"], 'date' => $row2["DATE_FORMAT(session_date, '%M %d %Y')"], 's_time' => substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5), 'e_time' => substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5));
             }
         }
         
@@ -1234,6 +1236,7 @@ function student_view_appointment()
                     <th>Date</th>
                     <th>Start</th>
                     <th>End</th>
+                    <th>Cancel</th>
                   </thead>";
             
             for($i=1; $i <= $c; $i++)
@@ -1241,10 +1244,11 @@ function student_view_appointment()
                 echo "
                       <tbody>
                         <td>" . $app_info[$i-1]["f_name"] . " " . $app_info[$i-1]["l_name"] . "</td>
-                       <td>" . $app_info[$i-1]["course"] . "</td>
+                        <td>" . $app_info[$i-1]["course"] . "</td>
                         <td>" . $app_info[$i-1]["date"] . "</td>
                         <td>" . $app_info[$i-1]["s_time"] . "</td>
                         <td>" . $app_info[$i-1]["e_time"] . "</td>
+                        <td><a href='cancel_appointment.php?id=" . $app_info[$i-1]['cancel'] . "'>Cancel Appointment</a></td>
                       </tbody>";
             }
 

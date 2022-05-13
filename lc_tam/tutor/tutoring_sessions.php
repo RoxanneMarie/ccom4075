@@ -55,28 +55,15 @@
         <article>
         <div class="container-sm">
             <h3 class = "h3 text-center">My Tutoring Sessions</h3>
-            '; if(isset($_GET['success'])){ echo '
+            '; if(isset($_GET['attendance_recorded'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutoring session updated successfully.</span>
+                <span> Session attendance has been recorded successfully.</span>
             </div>'; 
-            }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutoring session removed successfully.</span>
-            </div>
-            ';
-            }
-            if(isset($_GET['Added'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutoring session added successfully.</span>
-            </div>
-            ';
             } echo '
                 <div class="table-responsive">
                 <table class="table">
             <thead class = "tCourses">
                 <th>Edit</th>
-                <th>Session ID</th>
                 <th>Time Duration</th>
                 <th>Session Date</th>
                 <th>Session Course</th>
@@ -103,13 +90,12 @@
         echo '    
                 <tr class="trCourses">
                     <td>   <a class="btn btn-outline-warning" href="edit_tutoring_session.php?id='. $row['session_id'] .'"><i class="fa fa-pencil"></i></a>
-                    <td>'. $row['session_id'] .'</td>
                     <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
                     <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>
                     <td>'. $row['course_info'] .'</td>
                     <td>'. $row['semester_info'] .'</td>
                     <td>'. $row['capacity'] .'</td>
-                    <td> <a class="btn btn-outline-info" href="tutoring_appointments.php?id='. $row['session_id'] .'"><i class="fa-solid fa-eye"></i></td>
+                    <td> <a class="btn btn-outline-info" href="tutoring_appointments.php?id='. $row['session_id'] .'">View Students</a></td>
                     <td> <a class="btn btn-outline-info" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance</a></td>
                     </tr>
                    '; } echo '

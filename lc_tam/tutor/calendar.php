@@ -43,14 +43,14 @@
   
   $(document).ready(function() {
    var calendar = $('#calendar').fullCalendar({
-    editable:true,
+    editable:false,
     header:{
      left:'prev,next today',
      center:'title',
      right:'month,agendaWeek,agendaDay'
     },
     events: 'load.php',
-    selectable:true,
+    selectable:false,
     selectHelper:true,
     select: function(start, end, allDay)
     {
@@ -72,7 +72,7 @@
       })
      }
     },
-    editable:true,
+    editable:false,
     eventResize:function(event)
     {
      var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
@@ -108,25 +108,6 @@
       }
      });
     },
- 
-    eventClick:function(event)
-    {
-     if(confirm("Are you sure you want to remove it?"))
-     {
-      var id = event.id;
-      $.ajax({
-       url:"delete.php",
-       type:"POST",
-       data:{id:id},
-       success:function()
-       {
-        calendar.fullCalendar('refetchEvents');
-        alert("Event Removed");
-       }
-      })
-     }
-    },
- 
    });
   });
   
@@ -154,7 +135,7 @@
     <h1 class="display-3 text-center">Calendar of <?php echo $_SESSION['name']; ?></h1>
   <div class="container">
    <div id="calendar"></div>
-  </div><br><br>
+  </div></div><br><br>
   <?php
       bottom_footer();
       credit_mobirise_1();

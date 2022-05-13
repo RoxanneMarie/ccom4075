@@ -41,14 +41,13 @@ function top_header_6() //Menu para tutor en la interface de tutor.
                             <li class="nav-item dropdown">
                                 <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a>
                                 <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
-                                    <a class="text-black dropdown-item display-4" href="schedule.php">Schedule</a>
-                                    <a class="text-black dropdown-item display-4" href="attendance.php">Attendance</a>
+                                    <a class="text-black dropdown-item display-4" href="calendar.php">Schedule</a>
+                                    <a class="text-black dropdown-item display-4" href="tutoring_sessions.php">Attendance</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
                             <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.username_delimiter().'</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
-                                <a class="text-black dropdown-item display-4" href="view_account.php">View Account</a>
                                 <a class="text-black dropdown-item display-4" href="../student/index.php">Student Role</a>
                                 <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
                             </div>
