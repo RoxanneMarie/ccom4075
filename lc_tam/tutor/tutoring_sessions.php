@@ -73,7 +73,7 @@
             ';
             } echo '
                 <div class="table-responsive">
-                <table class="table">
+                <table class="table" style="text-align:center;">
             <thead class = "tCourses">
                 <th>Edit</th>
                 <th>Session ID</th>
@@ -83,7 +83,7 @@
                 <th>Session Semester</th>
                 <th>Capacity</th>
                 <th>Appointed Students</th>
-                <th>Attendance</th>
+                <th >Take Attendance</th>
             </thead>';
             $currEmail = $_SESSION['email'];
             $currDate = date("'Y-m-d'");
@@ -109,8 +109,8 @@
                     <td>'. $row['course_info'] .'</td>
                     <td>'. $row['semester_info'] .'</td>
                     <td>'. $row['capacity'] .'</td>
-                    <td> <a class="btn btn-outline-info" href="tutoring_appointments.php?id='. $row['session_id'] .'"><i class="fa-solid fa-eye"></i></td>
-                    <td> <a class="btn btn-outline-info" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance</a></td>
+                    <td> <a class="btn btn-outline-info" href="tutoring_appointments.php?id='. $row['session_id'] .'"><i class="fa fa-eye"></i></td>
+                    <td> <a class="btn btn-outline-success" href="appointment_attendance.php?id='; echo $row['session_id']; echo '"><i class="fa fa-check"></i></a></td>
                     </tr>
                    '; } echo '
                 </table></div><br><br>

@@ -569,7 +569,7 @@ function student_select_course()
                                 <h3 class="mbr-section-title mb-0 mbr-fonts-style display-2"><strong>Tutoring Courses</strong></h3>
                             </div>
                             <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                                Select the course you want to request tutoring for.
+                            Select the course for which you want to request tutoring
                             </div>
                             <div id="bootstrap-accordion_17" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">';
     
