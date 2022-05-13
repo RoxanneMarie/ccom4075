@@ -149,4 +149,36 @@ function calendar(){
         
      }     
 
+     function getTutoringsInfo()
+     {
+        $currEmail = $_SESSION['email'];
+        $currDate = date("'Y-m-d'");
+        $query = query("SELECT lc_sessions.session_id, lc_sessions.tutor_id, lc_test_students.student_email AS 'tutor_email', CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date, lc_sessions.capacity, CONCAT_WS(' - ', lc_sessions.course_id, lc_courses.course_name) AS 'course_info', lc_sessions.semester_id, lc_semester.semester_name AS 'semester_info', lc_sessions.session_date
+        FROM lc_sessions 
+        INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
+        INNER JOIN lc_test_students ON lc_test_students.student_email = '$currEmail'
+        INNER JOIN lc_courses ON lc_sessions.course_id = lc_courses.course_id
+        INNER JOIN lc_semester ON lc_sessions.semester_id = lc_semester.semester_id
+        WHERE lc_sessions.session_date >= $currDate
+        ORDER BY lc_sessions.session_date DESC");
+        confirm($query);
+        return $query;
+     }
+
+     function getTutoringInfo($id)
+     {
+        $currEmail = $_SESSION['email'];
+        $currDate = date("'Y-m-d'");
+        $query = query("SELECT lc_sessions.session_id, lc_sessions.tutor_id, lc_test_students.student_email AS 'tutor_email', CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date, lc_sessions.capacity, CONCAT_WS(' - ', lc_sessions.course_id, lc_courses.course_name) AS 'course_info', lc_sessions.semester_id, lc_semester.semester_name AS 'semester_info', lc_sessions.session_date
+        FROM lc_sessions 
+        INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
+        INNER JOIN lc_test_students ON lc_test_students.student_email = '$currEmail'
+        INNER JOIN lc_courses ON lc_sessions.course_id = lc_courses.course_id
+        INNER JOIN lc_semester ON lc_sessions.semester_id = lc_semester.semester_id
+        WHERE lc_sessions.session_date >= $currDate AND lc_sessions.session_id = '$id'
+        ORDER BY lc_sessions.session_date DESC");
+        confirm($query);
+        return $query;
+     }
+
 ?>

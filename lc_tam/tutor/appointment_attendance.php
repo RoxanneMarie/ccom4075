@@ -1,5 +1,6 @@
 <?php 
     require_once("../functions.php"); 
+    require_once("functions.php"); 
 
     if(isset($_GET['id'])){
         $id = $_GET['id'];
@@ -94,7 +95,7 @@
     </head>
     <body>
         <?php 
-            top_header_5();
+            top_header_6();
     echo '
     <main class="container">
         <article>
@@ -110,7 +111,14 @@
                 <span> Attendance added successfully.</span>
             </div>
             ';
-            } echo '
+            } 
+            
+            
+            
+            
+            
+            
+            echo '
             <form action="appointment_attendance.php?id=' . $id . '" method="POST"><br>
             <div class = "table-responsive">
                 <table class="table">
