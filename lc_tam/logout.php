@@ -1,8 +1,10 @@
 <?php
-    if (session_status() == PHP_SESSION_ACTIVE)
-    {
+        unset($_SESSION['type']);
+        unset($_SESSION['name']);
+        unset($_SESSION['email']);
+        unset($_SESSION["current_date"]);
+        unset($_SESSION["current_day_of_the_week"]);
         session_unset();
         session_destroy();
-    }
-    header('location:index.php');
+        header('location:index.php?logged_out');
 ?>

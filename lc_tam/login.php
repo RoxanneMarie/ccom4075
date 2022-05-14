@@ -1,6 +1,15 @@
 <?php
     require_once("functions.php");
     login();
+
+    echo "<pre>";
+    print_r($_SESSION['type']);
+    print_r($_SESSION['name']);
+    print_r($_SESSION['email']);
+    print_r($_SESSION["current_date"]);
+    print_r($_SESSION["current_day_of_the_week"]);
+    print_r(session_status());
+    echo "</pre>";
 ?>
 
 <!DOCTYPE html>
