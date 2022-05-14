@@ -116,13 +116,16 @@
         $info = getTutoringInfo($row2['session_id']);
         $info2= fetch_array($info);
         echo '
-        
+        <div class="row featurette justify-content-center">
+        <!-- <div class="container text-center">
+            <h1 class="h1 text-center">Credits</h1>
+        </div> -->
+        <div class="col-md-6">
+        <br>
         <p><b> Course:</b> '.$info2['course_info'].' </p>
         <p><b> Date:</b> '. conv_month(substr($info2["session_date"],5,2)) . " " . conv_date(substr($info2["session_date"],8,2)) . ", " . substr($info2["session_date"],0,4) .' </p>
         <p><b> Time:</b> '. conv_time(substr($info2["start_time"],0,2)) . substr($info2["start_time"],2,3) . ampm(substr($info2["start_time"],0,2)).' - '. conv_time(substr($info2["end_time"],0,2)) . substr($info2["end_time"],2,3) . ampm(substr($info2["end_time"],0,2)) .'</p>
-        ';
-  
-            
+        </div>';
             
             echo '
             <form action="appointment_attendance.php?id=' . $id . '" method="POST"><br>
@@ -134,7 +137,7 @@
                 <th>Student ID</th>
                 <th>Student Email</th>
             </thead>
-            <tr class="trCourses">
+            <tr class="trCourses" style="background-color:#E0E0E0">
             <td><div class="table-responsive">
                     <select class="form-control" id="attendance_status" name = "attendance_status"  style="width: auto;"  onchange="func_select_all()">
                     <option selected value = ""> Select a value. </option>';
@@ -145,7 +148,7 @@
                     </select>
                 </div> 
             </td>
-            <td>All students.</td>
+            <td>All students</td>
             <td></td>
             <td></td>';
             $query4 = query("SELECT CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
@@ -179,10 +182,10 @@
                 </div>
                 <div class = "container d-flex justify-content-center">
                 <input type="hidden" name="count" value="'.$counter.'">
-                <button class = "btn btn-primary display-4" type = "submit" name = "submit">Submit Attendance.</button>
+                <button class = "btn btn-primary display-4" type = "submit" name = "submit">Submit Attendance</button>
                 </div>
                 </form>
-                <br><br>
+                <br><br><br>
                 </div>
                 </article>
             </main>';
