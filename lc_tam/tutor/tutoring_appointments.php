@@ -1,6 +1,6 @@
 <?php 
     require_once("../functions.php"); 
-
+    require_once("functions.php");
     if(isset($_GET['id'])){
         $id = $_GET['id'];
     }
@@ -51,9 +51,26 @@
     <main class="container">
         <article>
         <div class="container-sm">
-            <h3 class = "h3 text-center">Tutoring Appointments of Session #'; echo $row['session_id']; echo '</h3><br>
+            <h3 class = "h3 text-center">Tutoring Appointment</h3>';
+
+
+            $info = getTutoringInfo($row['session_id']);
+            $info2= fetch_array($info);
+            echo '
+            <div class="row featurette justify-content-center">
+            <!-- <div class="container text-center">
+                <h1 class="h1 text-center">Credits</h1>
+            </div> -->
+            <div class="col-md-6">
+            <br>
+            <p><b> Course:</b> '.$info2['course_info'].' </p>
+            <p><b> Date:</b> '. conv_month(substr($info2["session_date"],5,2)) . " " . conv_date(substr($info2["session_date"],8,2)) . ", " . substr($info2["session_date"],0,4) .' </p>
+            <p><b> Time:</b> '. conv_time(substr($info2["start_time"],0,2)) . substr($info2["start_time"],2,3) . ampm(substr($info2["start_time"],0,2)).' - '. conv_time(substr($info2["end_time"],0,2)) . substr($info2["end_time"],2,3) . ampm(substr($info2["end_time"],0,2)) .'</p>
+            </div>
+                
+
             <div class = "container d-flex justify-content-center">
-                <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance.</a>
+                <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance</a>
             </div>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
@@ -71,16 +88,19 @@
                 <span> Tutoring session added successfully.</span>
             </div>
             ';
-            } echo '
+            } 
+            
+                     
+       
+            echo '
                 <div class="table-responsive">
                 <table class="table">
             <thead class = "tCourses">
-                <th>Appointment ID</th>
-                <th>Session ID</th>
+                <th>Student Number</th>
                 <th>Student Name</th>
-                <th>Course</th>
+                <th>Email</th>
             </thead>';
-            $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id,  
+            $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id,lc_test_students.student_email, lc_test_students.student_id, 
             CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
             lc_test_students.student_second_lastname) AS 'student_full_name', lc_appointments.course_id
             FROM lc_appointments
@@ -90,10 +110,9 @@
             while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>'. $row['app_id'] .'</td>
-                    <td>'. $row['session_id'] .'</td>
+                    <td>'. $row['student_id'] .'</td>
                     <td>'. $row['student_full_name'] .'</td>
-                    <td>'. $row['course_id'] .'</td>
+                    <td>'. $row['student_email'] .'</td>
                     </tr>
                    '; } echo '
                 </table></div><br><br>
