@@ -44,7 +44,7 @@
     </head>
     <body>
         <?php 
-            top_header_9();
+            select_header($_SESSION['type']);
     echo '
     <main class="mcourses" style="justify-content:center;">
         <article>
@@ -57,14 +57,6 @@
                 <th>Course</th>
                 <th>Professor</th>
             </thead>';
-            /*
-                $query = query("SELECT * FROM lc_tutor_offers
-                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
-                INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id 
-                INNER JOIN lc_account_status ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id
-                INNER JOIN lc_tutor_offers ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
-                INNER JOIN lc_professors ON lc_professors.professor_entry_id = lc_tutor_offers.professor_entry_id");
-            */
             if(isset($_GET['id'])){
                 $query = query("SELECT * FROM lc_test_tutors
                 WHERE lc_test_tutors.student_email = '$id'");

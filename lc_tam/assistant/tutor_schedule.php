@@ -44,7 +44,7 @@
     </head>
     <body>
         <?php 
-            top_header_9();
+            select_header($_SESSION['type']);
     echo '
     <main class="mcourses" style="justify-content:center;">
         <article>

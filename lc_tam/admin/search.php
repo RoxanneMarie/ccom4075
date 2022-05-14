@@ -42,7 +42,7 @@
       </head>
       <body>
           <?php 
-          top_header_9();
+          select_header($_SESSION['type']);
             echo '
             <main class="container">
                 <article>
@@ -56,25 +56,36 @@
                         <thead class = "tCourses text-center">
                             <th>Student full name</th>
                             <th>Student Email</th>
+                            <th>Student Number</th>
                             <th>View Appointments</th>
                             <th>Create Appointment</th>
                             <th>Tutor</th>
                             <th>Assistant</th>
                         </thead>';
                             $query = query("SELECT CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
-                            lc_test_students.student_second_lastname) AS 'student_fullname', lc_test_students.student_email
+                            lc_test_students.student_second_lastname) AS 'student_fullname', lc_test_students.student_email, lc_test_students.student_id
                             FROM lc_test_students
                             WHERE lc_test_students.student_email LIKE '%$search_r%'");
                             confirm($query);
                             while ($row = fetch_array($query)) {
+                                $studentEmail = $row['student_email'];
+                                $studentNum = $row['student_id'];
+                                $checkRoleQuery = query("SELECT COUNT(lc_test_students.student_email) AS 'unassigned_role'
+                                FROM lc_test_students
+                                LEFT JOIN lc_test_assistants ON lc_test_students.student_email = lc_test_assistants.student_email
+                                LEFT JOIN lc_test_tutors ON lc_test_tutors.student_email = lc_test_students.student_email
+                                WHERE lc_test_tutors.student_email IS NULL AND lc_test_assistants.student_email IS NULL AND lc_test_students.student_email = '$studentEmail'");
+                                confirm($checkRoleQuery);
+                                $checkRoleRow = fetch_array($checkRoleQuery);
                             echo ' 
                         <tr class = "text-center">
                         <td>'. $row['student_fullname'] .'</td>
                         <td>'. $row['student_email'] .'</td>
+                        <td>'. substr($studentNum, 0, 3) .'-'. substr($studentNum,3,2) .'-', substr($studentNum,5).'</td>
                         <td> <a href = "appointments_result.php?id='. $row['student_email'] .'">View</a></td>
                         <td> <a href = "generate_appointment.php?id='. $row['student_email'] .'">Create</a></td>
-                        <td> <a href = "add_tutor.php?id='. $row['student_email'] .'">Make tutor</a></td>
-                        <td> <a href = "add_assistant.php?id'. $row['student_email'] .'">Make assistant</a></td>'; } echo '
+                        <td>'; if($checkRoleRow["unassigned_role"] == '1') { echo ' <a href = "add_tutor.php?id='. $row['student_email'] .'">Make tutor</a>'; }else{ echo 'A Role is assigned.'; } echo '</td>
+                        <td>'; if($checkRoleRow["unassigned_role"] == '1') { echo ' <a href = "add_assistant.php?id='. $row['student_email'] .'">Make assistant</a>'; }else{ echo 'A Role is Assigned.'; } } echo '</td>
                         </tr>
                         </table>
                         </div>';

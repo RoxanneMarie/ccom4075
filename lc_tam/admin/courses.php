@@ -38,7 +38,7 @@
     </head>
     <body>
         <?php 
-            top_header_5();
+            select_header($_SESSION['type']);
     echo '
     <main class="container">
         <article>
@@ -63,7 +63,7 @@
                 <th>Course ID</th>
                 <th>Course Name</th>
                 <th>Department</th>
-                <th>Tutors Available</th>
+                <th># of times offered</th>
                 <th>Course Status</th>
             </thead>';
     $query = query("SELECT lc_courses.course_id, lc_courses.course_name, lc_departments.dept_name, lc_courses.tutor_available, lc_account_status.acc_stat_name 

@@ -66,7 +66,7 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
             <h3 class = "h3 text-center">Add Tutor</h3>
             <main class = "container d-flex justify-content-center">

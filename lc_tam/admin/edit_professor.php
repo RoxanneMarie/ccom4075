@@ -52,7 +52,7 @@
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
         <main class="container d-flex justify-content-center">
             <article>

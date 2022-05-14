@@ -5,8 +5,8 @@
         $SemesterTermName = $_POST['Semester_Term_Name'];
         $SemesterName = $_POST['Semester_Name'];
 
-    echo $query = query('INSERT INTO lc_semester (semester_term, semester_name)
-    VALUES("' . $SemesterTermName . '" , "' . $SemesterName . '")');
+    echo $query = query('INSERT INTO lc_semester (semester_term, semester_name, semester_status)
+    VALUES("' . $SemesterTermName . '" , "' . $SemesterName . '" , "' . 2 . '")');
     header('location:semesters.php?Added');
     }
 ?>
@@ -38,7 +38,7 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
         <main class="container">
             <article>

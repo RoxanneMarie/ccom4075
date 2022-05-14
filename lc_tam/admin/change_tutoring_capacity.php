@@ -13,7 +13,7 @@ $old_capacity = $prevR['max_capacity'];
         //print_r($query);
         confirm($query);
        //header('departments.php?success');
-        redirect('admin.php');
+        redirect('index.php');
 }
 ?>
 
@@ -44,7 +44,7 @@ $old_capacity = $prevR['max_capacity'];
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
         <main class = "container">
             <article>

@@ -37,7 +37,7 @@
     </head>
     <body>
         <?php 
-            top_header_9();
+            select_header($_SESSION['type']);
     echo '
     <main class="container">
         <article>

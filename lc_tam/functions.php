@@ -22,6 +22,14 @@ function select_header($choice)
         exit;
     }
 }
+
+function username_delimiter()
+{
+    $separador = "@";
+    $username = explode($separador, $_SESSION['email']);
+    return $username[0];
+}
+
 function top_header_1() //Not logged in (no account type).
 {
   echo '
@@ -39,19 +47,9 @@ function top_header_1() //Not logged in (no account type).
                             </a>
                         </span>
                     </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item" ><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
-                        </ul>
-                    </div>
+                    <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+                        <li class="nav-item" ><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
+                    </ul>
                 </div>
             </nav>
 
@@ -86,7 +84,14 @@ function top_header_2() //Student header.
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="select_course.php">Create</a><a class="text-black dropdown-item display-4" href="index.php">View</a></div></li>
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="../logout.php">Logout</a></li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.username_delimiter().'</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                                    <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
+                                </div>
+                            </li>
+                            
                         </ul>
                     </div>
                 </div>
@@ -98,40 +103,55 @@ function top_header_2() //Student header.
 function top_header_3() //Tutor header.
 {
   echo '
-  <style>
-#hide-footer{display: none !important;}'; /*NO QUITEN ESTO*/ echo '
-</style>
-        <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
-    
-            <nav class="navbar navbar-dropdown navbar-expand-lg">
-                <div class="container-fluid">
-                    <div class="navbar-brand">
-                        <span class="navbar-logo">
-                            <a href="index.php">
-                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
-                            </a>
-                        </span>
-                    </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="select_course.php">Create</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="../tutor/calendar.php">Schedule</a><a class="text-black dropdown-item display-4" href="../tutor/tutoring_sessions.php">Attendance</a></div></li>
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="../logout.php">Logout</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+    <style>
+    #hide-footer{display: none !important;}'; /*NO QUITEN ESTO*/ echo '
+    </style>
 
-        </section>';
+    <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
+
+    <nav class="navbar navbar-dropdown navbar-expand-lg">
+    <div class="container-fluid">
+        <div class="navbar-brand">
+            <span class="navbar-logo">
+                <a href="index.php">
+                    <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
+                </a>
+            </span>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+                <li class="nav-item">
+                    <a class="nav-link link text-black text-primary display-4" href="index.php">Home</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                        <a class="text-black dropdown-item display-4" href="../tutor/calendar.php">Calendar</a>
+                        <a class="text-black dropdown-item display-4" href="../tutor/tutoring_sessions.php">Attendance</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.username_delimiter().'</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                    <a class="text-black dropdown-item display-4" href="../student/index.php">Student Role</a>
+                    <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
+                </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </nav>
+    </section>';
 }
 
 function top_header_4() //assistant header.
@@ -161,11 +181,31 @@ function top_header_4() //assistant header.
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+
+                            <li class="nav-item"><form class="form-inline" action = "../assistant/student_search.php" method = "post">
+                            <input class="form-control mr-sm-2" type="search" name = "student_search" placeholder = "insert student email" aria-label="Search">'; /*Search bar, calls the search function used on assistant*/ echo '
+                            <button class="btn btn-primary my-2 my-sm-0" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg></button>
+                            </form></li>
+
                             <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="../assistant/search.php?id=">Create</a><a class="text-black dropdown-item display-4" href="../assistant/">View</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Schedule</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Attendance</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Reports</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Generate</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">View<br></a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Logout</a></div></li>
+
+                            <li class="nav-item dropdown">'; /*Role specific submenu (ASSISTANT)*/ echo '
+                                <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Assistant</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                                    <a class="text-black dropdown-item display-4" href="../assistant/tutors.php">Tutors</a>
+                                    <a class="text-black dropdown-item display-4" href="../assistant/tutoring_sessions.php">Sessions</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                            <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.username_delimiter().'</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                                <a class="text-black dropdown-item display-4" href="../student/index.php">Student Role</a>
+                                <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
+                            </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -182,75 +222,71 @@ function top_header_5() //Admin header.
 </style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
-            <nav class="navbar navbar-dropdown navbar-expand-lg">
-                <div class="container-fluid d-flex justify-content-center" >'; /*WORK IN PROGRESS */ echo '
-                    <div class="navbar-brand">
-                        <span class="navbar-logo">
-                            <a href="index.php">
-                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
-                            </a>
-                        </span>
-                    </div>
-
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
-                        </ul>
-
-
-                    </div>
+        <nav class="navbar navbar-dropdown navbar-expand-lg">
+        <div class="container-fluid">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="index.php">
+                        <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
+                    </a>
+                </span>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-            </nav>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
 
-        </section>';
-}
+                    <li class="nav-item"><form class="form-inline" action = "../admin/student_search.php" method = "post">
+                    <input class="form-control mr-sm-2" type="search" name = "student_search" placeholder = "insert student email" aria-label="Search">'; /*Search bar, calls the search function used on admin*/ echo '
+                    <button class="btn btn-primary my-2 my-sm-0" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg></button>
+                    </form></li>
 
-/* Space for top_header6 and top_header7 until top header 9*/
+                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
 
-function top_header_9() //header for assistant menu.
-{
-  echo '
-  <style>
-#hide-footer{display: none !important;}
-</style>
-        <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
-    
-            <nav class="navbar navbar-dropdown navbar-expand-lg">
-                <div class="container-fluid">
-                    <div class="navbar-brand">
-                        <span class="navbar-logo">
-                            <a href="index.php">
-                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
-                            </a>
-                        </span>
-                    </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
+                    <li class="nav-item dropdown">'; /*View Menu*/ echo '
+                        <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">View</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                            <a class="text-black dropdown-item display-4" href="../admin/tutors.php">Tutors</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/assistants.php">Assistants</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/professors.php">Professors</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/courses.php">Courses</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/departments.php">Departments</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/semesters.php">Semesters</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/tutoring_sessions.php">Tutoring Sessions</a>
                         </div>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
-                        </ul>
+                    </li>
 
+                    <li class="nav-item dropdown">'; /*Add Menu*/ echo '
+                        <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Add</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                            <a class="text-black dropdown-item display-4" href="../admin/add_tutor.php">Tutor</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/add_assistant.php">Assistant</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/add_professor.php">Professor</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/add_course.php">Course</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/add_department.php">Department</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/add_semester.php">Semester</a>
+                        </div>
+                    </li>
 
+                    <li class="nav-item dropdown">
+                    <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.username_delimiter().'</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                        <a class="text-black dropdown-item display-4" href="../student/index.php">Student Role</a>
+                        <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
                     </div>
-                </div>
-            </nav>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
         </section>';
 }
@@ -483,8 +519,7 @@ function login()
             confirm($query2);
             if(mysqli_num_rows($query2) == 0) //no es admin
             {
-                echo "Your Password or Username is incorrect";
-                redirect("login.php");
+                redirect("login.php?error");
             }
             else // es admin
             {

@@ -46,7 +46,7 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
         <main class = "container">
             <article>

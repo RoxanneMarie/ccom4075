@@ -4,12 +4,7 @@ session_start();
 
 date_default_timezone_set("America/Puerto_Rico");
 
-function username_delimiter()
-{
-    $separador = "@";
-    $username = explode($separador, $_SESSION['email']);
-    return $username[0];
-}
+
 
 function top_header_6() //Menu para tutor en la interface de tutor.
 {
@@ -51,12 +46,10 @@ function top_header_6() //Menu para tutor en la interface de tutor.
                                 <a class="text-black dropdown-item display-4" href="../student/index.php">Student Role</a>
                                 <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
                             </div>
-                        
                         </ul>
                     </div>
                 </div>
             </nav>
-
         </section>';
 }
 

@@ -38,7 +38,7 @@
     </head>
     <body>
         <?php 
-            top_header_9();
+            select_header($_SESSION['type']);
             echo '
             <main class = "container">
                 <article>
@@ -102,57 +102,7 @@
     $AsRes = fetch_array($AsQuery);
     if ($AsRes['Assist'] == '1') {
         $Assistant = true;
-    }
-    //print_r($AsRes['Assist']);
-    //$TRes2 = array_shift($TRes);
-    //print_r($TRes2);
-    /*$query2 = query("SELECT COUNT(student_email) FROM lc_test_tutors WHERE student_email = $id ");
-    confirm($query2);
-    global $connection;
-    $stmt = $pdo->prepare($query2);
-    $stmt->execute();
-    $row2 = $stmt->fetchAll();
-    
-    while($row = fetch_array($query)) 
-    {
-        $role = "";
-        $flag = false;
-        $id =  $row['student_email'];
-
-        foreach($row2 as $rowTutor)
-        {
-            if($row['student_email']== $rowTutor['student_email'])
-                {
-                echo 'entre while /n';
-                    $flag = true;
-                }
-        }
-      
-        $id =  $row['student_email'];
-        echo 'SELECT COUNT(student_email) FROM lc_test_tutors WHERE student_email = $id';
-        $query2 = query("SELECT COUNT(student_email) FROM lc_test_tutors WHERE student_email = ". $id ."");
-        confirm($query2);
-        
-        $row2= fetch_All($query2);
-        for($x =1; $x <= $row2["COUNT(student_email)"]; $x++)
-        {
-            if($row['student_email']== $row2['student_email'])
-            {
-                
-            echo 'entre while /n';
-                $flag = true;
-            }
-        }
-
-        if($flag == true){
-            $role = "Tutor";
-        }
-           
-        if($flag == false)
-        {
-            $role = "Student";
-        }
-        */ echo '    
+    } echo '
                 <tr>
                     <td>'. $row['student_id'] .'</td>
                     <td>'. $row['student_name'] .' </td>
