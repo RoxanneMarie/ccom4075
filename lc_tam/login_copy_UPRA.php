@@ -30,7 +30,13 @@ include "common_db.inc";
 		ldap_close($ldapLink);
 		
 		if($ok==true){
-			redirect("student/confirm_acc.php?id=");
+            $query = query("SELECT * FROM lc_test_students WHERE student_email LIKE '%$user1%')
+            confirm($query);
+            if(mysqli_num_rows($query) == 0) {
+                redirect("student/confirm_acc.php?id="'$user1'"@upr.edu");
+            }else{
+                redirect("student/index.php");
+            }
 		}
 	}
 	else{
@@ -69,7 +75,8 @@ else {*/
   
       <body>
   ';
-     top_header_1(); echo '
+     top_header_1();
+      echo '
   
           <section data-bs-version="5.1" class="form6 cid-sO0lqJujAF" id="form6-u">
               <div class="container">
@@ -79,11 +86,7 @@ else {*/
                   <div class="row justify-content-center mt-4">
                       <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
                           <form action="login_copy_upra.php" method="POST" class="mbr-form form-with-styler mx-auto" data-form-title="Form Name">';
-                              /*<!-- <input type="hidden" name="email" data-form-email="true" value="qEQkUZCrQV0jr3m7VxTivJu/7YR7JO7sqhde/qdpvDpts06yWNd/vJUYUsoNSK4Z+UioUOHdxBjPEBJTN4N6mgVq4kn330NZGvXg7oSdLvjTJe+dzIPufSvwIdwj2lg2">
-                              <div class="row">
-                                  <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Login Successful!</div>
-                                  <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">Oops...! Try Again!</div>
-                              </div> -->*/ echo '
+                              echo '
                               <div class="dragArea row">';
                               if($alert){ echo '
                                   <div class = "alert alert-primary" role = "alert"> Invalid Login. Please try again. </div>

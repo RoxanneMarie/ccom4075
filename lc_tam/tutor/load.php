@@ -1,6 +1,21 @@
 <?php
  require_once("../functions.php"); 
  require_once("functions.php") ;
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Tutor.
+        if($_SESSION['type'] == 'Student') {
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') { //checks if the type is assistant.
+            redirect('../assistant/index.php');
+        }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin.
+            redirect('../admin/index.php');
+        }else{
+           redirect('../tutor/index.php');   //checks if the type is tutor and redirects.
+        }
+    } 
  
 $id = $_SESSION['email'];
   

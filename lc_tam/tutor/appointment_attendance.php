@@ -2,24 +2,38 @@
     require_once("../functions.php"); 
     require_once("functions.php"); 
 
-    if(isset($_GET['id'])){
-        $id = $_GET['id'];
-        if(isset($_POST['submit'])){
-            $counter1 = $_POST['count'];
-            $counter2 = 0;
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Tutor. Proceeds to page.
+        if($_SESSION['type'] == 'Student') {    //checks if the type is student.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') { //checks if the type is assistant.
+            redirect('../assistant/index.php');
+        }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin.
+            redirect('../admin/index.php');
+        }
+    } 
 
-            for($i = 1; $i <= $counter1; $i++) {
+    if(isset($_GET['id'])){ //gets session ID
+        $id = $_GET['id'];  //sets session ID
+
+        if(isset($_POST['submit'])){ //checks whenever attendance has been submitted.
+            $counter1 = $_POST['count']; //counts how many students there are.
+            $counter2 = 0;     //counter that ensures every student registered in the appointment gets the attendance record.
+
+            for($i = 1; $i <= $counter1; $i++) {    //enters for loop until every student is registered. Gets their data from submit to prepare to insert to DB.
             $_SESSION['appointed_students'][$_POST['student_reg'. $i .'']] = array('attendance_status' => $_POST['attendance_status'. $i. '']);
             }
-            echo "<pre>";
-            print_r($_SESSION['appointed_students']);
-            echo "</pre>";
-            $appointedStudents = $_SESSION['appointed_students'];
+            /*echo "<pre>";
+            print_r($_SESSION['appointed_students']); //Prints session values of appointed students (debugging purposes).
+            echo "</pre>";*/
+            $appointedStudents = $_SESSION['appointed_students'];   //sets appointedstudents to a variable.
 
-            foreach ($appointedStudents as $appStud => $studName) {
+            foreach ($appointedStudents as $appStud => $studName) { //for each students registered, prepares to insert their information.
                 $appStud;
                 $studName;
-                /*echo $appQuery = "SELECT * FROM lc_appointments WHERE session_id = '$id' AND student_email = '$appStud'"; echo '<br><br>';*/
+                /*echo $appQuery = "SELECT * FROM lc_appointments WHERE session_id = '$id' AND student_email = '$appStud'"; echo '<br><br>'; debugging query, ignore unless debugging.*/
                 $appQuery = query("SELECT * FROM lc_appointments WHERE session_id = '$id' AND student_email = '$appStud'");
                 confirm($appQuery);
                 $appRow = fetch_array($appQuery);
@@ -31,12 +45,12 @@
 
                 //inserts the selected student information into the database.
                 $insertAppQuery = query("INSERT INTO lc_tutoring_attendance (session_id, student_email, attendance_status) VALUES ('$sessionID', '$appStud', '$statusID')");
-                if($insertAppQuery) {
+                if($insertAppQuery) {   //if the insert was successful, updates second counter variable.
                     $counter2 = $counter2 + 1;
                 }
             }
             if ($counter1 == $counter2) { //checks that X amount of student entered where sucessfully inserted into the database. if sucessful, redirects to tutoring sessions with a message notifying that the attendance was successful.
-                unset($_SESSION['appointed_students']);
+                unset($_SESSION['appointed_students']); //We will no longer need this. Unset for future use.
                 redirect('tutoring_sessions.php?attendance_recorded');
             }
         }
@@ -46,17 +60,7 @@
 <!DOCTYPE html>
 <html>
     <?php
-    unset($_SESSION['appointed_students']);
-
-    $query = query("SELECT * FROM lc_appointments WHERE session_id = $id");
-    confirm($query);
-    while($row = fetch_array($query)) {
-        /*$student = $row['student_email'];
-        $_SESSION['appointed_students']['student_appointed'] = array('student' => $student);
-        echo "<pre>";
-        print_r($_SESSION['appointed_students']);
-        echo "</pre>";*/
-    }
+    unset($_SESSION['appointed_students']); //clear session appointed students just in case.
 
     $query2 = query("SELECT * FROM lc_appointments WHERE session_id = $id");
     confirm($query2);
@@ -95,7 +99,7 @@
     </head>
     <body>
         <?php 
-            top_header_6();
+            select_header($_SESSION['type']);
     echo '
     <main class="container">
         <article>

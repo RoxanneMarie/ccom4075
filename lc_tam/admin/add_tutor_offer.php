@@ -1,16 +1,41 @@
 <?php 
     require_once("../functions.php");
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+            redirect('../assistant/index.php');
+        }
+    } 
+
+    if(isset($_GET['id'])){                 //gets the tutors ID.
+        $id = $_GET['id'];
+    }else{
+        redirect('tutors.php');
+    }
     
-    if(isset($_POST['submit'])){
-        $tutor = $_POST['tutor'];
-        $course = $_POST['course'];
-        $professor = $_POST['professor'];
+    if(isset($_POST['submit'])){            //checks if anything has been submitted.
+        $tutor = $_POST['tutor'];           //takes anything from the form field called 'tutor' (which should be the tutor we want to add an offer).
+        $course = $_POST['course'];         //takes anything from the form field called 'course' (the course to be offered).
+        $professor = $_POST['professor'];   //takes anything from the form field called 'professor' which should be the professor giving the course.
+        /*echo $tutor;                      //debugging. Ignore unless debugging.
+        echo "<br>";
+        echo $course;
+        echo "<br>";
+        echo $professor;
+        echo "<br>";*/
     //inserts into tutor offers the selected course for the selected tutor and selected professor.
     echo $Aquery = query('INSERT INTO lc_tutor_offers (tutor_id, course_id, professor_entry_id)
     VALUES("' . $tutor . '","' . $course . '",' . $professor . ')');
     $cQuery = query("UPDATE lc_courses SET tutor_available = tutor_available + 1 WHERE course_id = '$course'");
     if($Aquery AND $cQuery) {
-        header('location:tutor_offers.php?Added');
+        header('location:tutors.php?Offer_Added');
     }
 }
 ?>
@@ -48,28 +73,27 @@
             <article>
             <div class="container-sm>">
                 <h3 class = "h3 d-flex justify-content-center">Add Tutor Offer</h3>
-            <form action="add_tutor_offer.php" method="POST"><br>
+            <form action="add_tutor_offer.php?id=<?php echo $id; ?>" method="POST"><br>
 
                     <div class="form-group">
-                        <label for="tutor">Tutor: </label>
-                        <select class="form-control" id="tutor" name = "tutor" required>
-                        <option selected value = "">Select a Tutor.</option>
-                        <?php 
+                        <label for="tutor_inf">Tutor: </label>
+                        <?php
+
                             $query2 = query("SELECT lc_test_students.student_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
-                            lc_test_students.student_second_lastname) AS 'student_fullname', lc_test_students.student_email, lc_test_tutors.tutor_id, lc_test_tutors.acc_stat_id
+                            lc_test_students.student_second_lastname) AS 'tutor_fullname', lc_test_students.student_email, lc_test_tutors.tutor_id, lc_test_tutors.acc_stat_id
                             FROM lc_test_students
                             INNER JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
-                            WHERE lc_test_tutors.student_email = lc_test_students.student_email AND lc_test_tutors.acc_stat_id != 0");
+                            WHERE lc_test_tutors.student_email = lc_test_students.student_email AND lc_test_tutors.acc_stat_id != 0 AND lc_test_students.student_email = '$id'");
                             confirm($query2);
-                            while($row2 = fetch_array($query2)) { ?>
-                            <option value = <?php echo $row2['tutor_id'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_fullname']; } ?></option>
-                            </select>
+                            $row2 = fetch_array($query2); ?>
+                            <input class="form-control" id="tutor_inf" name = "tutor_inf"  type = "text" value = "<?php echo $row2['tutor_fullname']; ?>" disabled>
+                            <input type="hidden" id="tutor" name="tutor" value = "<?php echo $row2['tutor_id'] ?>">
                     </div>
                     <br>
                     <div class="form-group">
                         <label for="course">Course: </label>
                         <select class="form-control" id="course" name = "course" required>
-                        <option selected value = "">Select a Course.</option>
+                        <option selected value = "">Select a Course</option>
                             <?php 
                             $query = query("SELECT lc_courses.course_id, lc_courses.course_name, lc_departments.dept_id, lc_departments.dept_name, lc_courses.tutor_available, lc_courses.course_status,
                             lc_account_status.acc_stat_name
@@ -87,7 +111,7 @@
                     <div class="form-group">
                         <label for="tutor">Professor: </label>
                         <select class="form-control" id="professor" name = "professor" required>
-                        <option selected value = "">Select a Professor.</option>
+                        <option selected value = "">Select a Professor</option>
                         <?php 
                             $query3 = query("SELECT lc_professors.professor_entry_id, CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname,
                             lc_professors.professor_second_lastname) AS 'professor_name', lc_professors.course_id, lc_courses.course_name

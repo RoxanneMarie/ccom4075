@@ -1,5 +1,18 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php");
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+        }
+        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+                redirect('../student/index.php');
+            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+                redirect('../tutor/index.php');
+            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+                redirect('../assistant/index.php');
+            }
+        } 
 ?>
 
 <!DOCTYPE html>
@@ -44,9 +57,15 @@
                 <article>
                 <div class = "container">
                     <h3 class = "h3 text-center">Accounts</h3><br>
+                    '; if(isset($_GET['success'])){ echo '
+                        <div class="alert alert-success" role="alert">
+                        <span> Student updated successfully.</span>
+                    </div>';
+                    } echo '
                         <div class = "table-responsive">
                         <table class = "table">
                     <thead class = "tCourses">
+                        <th>Edit</th>
                         <th>Student Num</th>
                         <th>Student Name</th>
                         <th>Student Email</th>
@@ -87,6 +106,7 @@
         $Assistant = true;
     } echo '    
                 <tr>
+                    <td> <a href="edit_student.php?id='. $row["student_email"] .'">Edit</a> </td>
                     <td>'. $row['student_id'] .'</td>
                     <td>'. $row['student_fullname'] .' </td>
                     <td>'. $row['student_email'] .'</td>

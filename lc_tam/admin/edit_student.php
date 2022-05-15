@@ -14,42 +14,34 @@
         }
     } 
 
-    if(isset($_GET['id'])){                                     //gets the assistant's ID.
+    if(isset($_GET['id'])){                                     //gets the student's ID.
         $id = $_GET['id'];
     }
 
     if(isset($_POST['submit'])){                                //checks if anything has been submitted.
+        $studentID = $_POST['Student_ID'];                     //takes student number.
         $StudentName = $_POST['Student_Name'];                  //Takes the student name, initial and lastnames to edit (if necesary).
         $StudentInitial = $_POST['Student_Initial'];            
         $StudentFLN = $_POST['Student_FLN'];
         $StudentSLN = $_POST['Student_SLN'];
         $AccStatus = $_POST['Acc_Status'];                      //takes the account status if necesary.
-        $Success1 = false;
-        $Success2 = false;
-        $Uquery = "UPDATE lc_test_assistants
-        SET acc_stat_id = '$AccStatus'
+        $Success = false;
+
+        $Uquery = "UPDATE lc_test_students
+        SET student_id = '$studentID', student_name = '$StudentName', 
+        student_initial = '$StudentInitial', student_first_lastname = '$StudentFLN',
+        student_second_lastname = '$StudentSLN', acc_stat_id = '$AccStatus'
         WHERE student_email = '$id'";
-        print_r($Uquery);
         $res = query($Uquery);
+
+        //Checks if query was successful.
         confirm($Uquery);
         if($res == '1') {
-            $Success1 = true;
-        }
-        $Uquery2 = "UPDATE lc_test_students
-        SET student_name = '$StudentName', 
-        student_initial = '$StudentInitial', student_first_lastname = '$StudentFLN',
-        student_second_lastname = '$StudentSLN'
-        WHERE student_email = '$id'";
-        print_r($Uquery2);
-        $res2 = query($Uquery2);
-        //Checks if query was successful.
-        confirm($Uquery2);
-        if($res == '1') {
-            $Success2 = true;
+            $Success = true;
         }
 
-        if ($Success1 == '1' & $Success2 == '1') {
-            redirect('assistants.php?success');
+        if ($Success == '1') {
+            redirect('view_accounts.php?success');
         }
 }
 ?>
@@ -65,7 +57,7 @@
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Edit Assistant - LC:TAM</title>
+      <title>Edit Student - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -83,27 +75,26 @@
         <?php 
             select_header($_SESSION['type']);
             ?>
-            <h3 class = "h3 text-center">Edit Assistant</h3>
+            <h3 class = "h3 text-center">Edit Student</h3>
             <main class = "container d-flex justify-content-center">
             <article>
             <div class="container-sm>">
                 <?php 
                 $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
-                lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_assistants.student_email, 
-                lc_account_status.acc_stat_name, lc_test_assistants.acc_stat_id
-                FROM lc_test_assistants 
-                INNER JOIN lc_test_students ON lc_test_assistants.student_email = lc_test_students.student_email
-                INNER JOIN lc_account_status ON lc_test_assistants.acc_stat_id = lc_account_status.acc_stat_id
-                WHERE lc_test_assistants.student_email = '$id'");
+                lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_students.student_email, 
+                lc_account_status.acc_stat_name, lc_test_students.acc_stat_id
+                FROM lc_test_students
+                INNER JOIN lc_account_status ON lc_test_students.acc_stat_id = lc_account_status.acc_stat_id
+                WHERE lc_test_students.student_email = '$id'");
                 $query = query($query);
                 confirm($query);
                 $row = fetch_array($query);
                 ?>
-            <form action="edit_assistant.php?id=<?php echo $row['student_email']; ?>" method="POST">     
+            <form action="edit_student.php?id=<?php echo $row['student_email']; ?>" method="POST">     
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="Student_ID">Student ID:</label>
-                            <input type="Student_ID" class="form-control" id="Student_ID" name = "Student_ID" value = "<?php echo $row['student_id']; ?> - <?php echo $row['student_name']; ?> <?php echo $row['student_initial']; ?> <?php echo $row['student_first_lastname']; ?> <?php echo $row['student_second_lastname']; ?>" disabled>
+                            <input type="Student_ID" class="form-control" id="Student_ID" name = "Student_ID" value = "<?php echo $row['student_id']; ?>" required>
                         </div>
                         <div class="form-group col">
                             <label for="Student_Name">Student Name:</label>

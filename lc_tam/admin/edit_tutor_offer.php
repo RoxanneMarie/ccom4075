@@ -1,24 +1,37 @@
 <?php 
     require_once("../functions.php");
     
-    if(isset($_GET) & !empty($_GET)){
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+        }
+        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+                redirect('../student/index.php');
+            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+                redirect('../tutor/index.php');
+            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+                redirect('../assistant/index.php');
+            }
+        } 
+
+    if(isset($_GET) & !empty($_GET)){                           //gets id, if no id, redirects.
         $id = $_GET['id'];
     } else {
-        redirect('tutor_offers.php');
+        redirect('tutors.php');
     }
 
     //Search for the previous information before updating.
     $sql = query("SELECT * FROM lc_tutor_offers WHERE offer_id = '$id'");
     confirm($sql);
     $row = fetch_array($sql);
-    //
+    //updates the selected tutors offers.
     if(isset($_POST) & !empty($_POST)){
         $course = $_POST['course'];
         $professor = $_POST['professor'];
         $query = "UPDATE lc_tutor_offers SET course_id = '$course', professor_entry_id = '$professor' WHERE offer_id = '$id'";
         $res = query($query);
         confirm($query);
-        redirect('tutor_offers.php?success');
+        redirect('tutors.php?Offer_edit');
 
 }
 ?>

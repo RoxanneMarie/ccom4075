@@ -1,9 +1,22 @@
 <?php 
   require_once("../functions.php");    
 
-    if(isset($_POST['submit'])){
-        $Studentemail = $_POST['Student_email'];
-        $AccStatus = $_POST['Acc_Status'];
+  if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+    redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+            redirect('../assistant/index.php');
+        }
+    } 
+
+    if(isset($_POST['submit'])){                                //checks if something was submitted.
+        $Studentemail = $_POST['Student_email'];                //takes the student email to add to the assistant table.
+        $AccStatus = $_POST['Acc_Status'];                      //takes the account status (usually 'active').
         $query = query('INSERT INTO lc_test_assistants (student_email, acc_stat_id) 
         VALUES ("' . $Studentemail . '" , "' . $AccStatus . '")');
 
@@ -59,7 +72,7 @@
                         <div class="form-group col">
                             <label for="Student_ID">Student Email</label>
                             <select class="form-control" id="Student_email" name = "Student_email" required>
-                            <option selected value = "">Select a Student.</option>
+                            <option selected value = "">Select a Student</option>
                             <?php 
                             $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_email, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) As 'student_fullname'
                             FROM lc_test_students
@@ -77,7 +90,7 @@
                     <div class="form-group col">
                         <label for="Acc_Status">Account Status:</label>
                         <select class="form-control" id="Acc_Status" name = "Acc_Status" required>
-                        <option selected value = "" >Select an account status.</option>
+                        <option selected value = "" >Select an account status</option>
                         <?php 
                         $query3 = query("SELECT * FROM lc_account_status");
                         confirm($query3);

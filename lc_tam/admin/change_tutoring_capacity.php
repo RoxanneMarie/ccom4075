@@ -1,12 +1,26 @@
 <?php 
     require_once("../functions.php");
-$prevSql = query("SELECT lc_conditions.max_capacity FROM lc_conditions");
-$prevRes = confirm($prevSql);   
-$prevR = fetch_array($prevSql);
-$old_capacity = $prevR['max_capacity']; 
 
-    if(isset($_POST) & !empty($_POST)){
-        $capacity = $_POST['Capacity'];
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+            redirect('../assistant/index.php');
+        }
+    } 
+
+    if(isset($_POST) & !empty($_POST)){                         //checks if anything has been submitted.
+        $prevSql = query("SELECT lc_conditions.max_capacity FROM lc_conditions");   //query that selects previous capacity.
+        $prevRes = confirm($prevSql);   
+        $prevR = fetch_array($prevSql);
+        $old_capacity = $prevR['max_capacity'];                 //saves old capacity to be replaced.
+
+        $capacity = $_POST['Capacity'];                         //receives new capacity.
         $query = "UPDATE lc_conditions SET max_capacity = '$capacity' WHERE max_capacity = '$old_capacity'";
         //print_r($query);
         $res = query($query);

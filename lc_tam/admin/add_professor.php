@@ -1,12 +1,26 @@
 <?php 
     require_once("../functions.php");
-    if(isset($_POST['submit'])){
-        $courseID = $_POST['Course_ID'];
-        $professorname = $_POST['professor_name'];
-        $professorinitial = $_POST['professor_initial'];
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+            redirect('../assistant/index.php');
+        }
+    } 
+
+    if(isset($_POST['submit'])){                                //checks if anything has been submitted.
+        $courseID = $_POST['Course_ID'];                        //takes the submitted course ID from the form field 'course_ID'.
+        $professorname = $_POST['professor_name'];              //takes the professor's name from the professor_name form field.
+        $professorinitial = $_POST['professor_initial'];           
         $professorflname = $_POST['professor_flname'];
         $professorslname = $_POST['professor_slname'];
-        $accStatId = $_POST['Acc_Status'];
+        $accStatId = $_POST['Acc_Status'];                      //takes the submitted Account status from the form field 'acc_status'.
 
     echo $query = query('INSERT INTO lc_professors ( course_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname, acc_stat_id)
     VALUES("' . $courseID . '","' . $professorname . '" , "' . $professorinitial . '" , "' . $professorflname . '" , "' . $professorslname . '" , "' . $accStatId . '")');
@@ -55,7 +69,7 @@
                     <div class="form-group col">
                         <label for="Course_ID">Course ID:</label>
                         <select class="form-control" id = "Course_ID" name = "Course_ID" required>
-                            <option selected value = "">Select a Course.</option>
+                            <option selected value = "">Select a Course</option>
                             <?php 
                             $query = query("SELECT * FROM lc_courses WHERE course_status != '0' AND course_status != '2'");
                             confirm($query);
@@ -90,7 +104,7 @@
                     <div class="form-group col">
                         <label for="Acc_Status">Account Status:</label>
                         <select class="form-control" id="Acc_Status" name = "Acc_Status" required>
-                        <option selected value = "" >Select an account status.</option>
+                        <option selected value = "" >Select an account status</option>
                         <?php 
                         $query2 = query("SELECT * FROM lc_account_status");
                         confirm($query2);

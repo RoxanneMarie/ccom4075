@@ -1,10 +1,25 @@
 <?php 
     require_once("../functions.php");
     
-    if(isset($_GET['id'])){
-        $id = $_GET['id'];
-    }
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+        }
+        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+                redirect('../student/index.php');
+            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+                redirect('../tutor/index.php');
+            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+                redirect('../assistant/index.php');
+            }
+        } 
 
+    if(isset($_GET['id'])){                                     //checks if there is an id, if no id, redirects.
+        $id = $_GET['id'];
+    }else{
+        redirect('professors.php');
+    }
+    //checks if anything has been submitted, takes those values from form field and inserts into the DB.
     if(isset($_POST['submit'])){
         $courseID = $_POST['Course_ID'];
         $professorname = $_POST['professor_name'];
@@ -92,7 +107,7 @@
                         </div>
                         <div class="form-group col">
                             <label for="professor_slname">Professor Second Last name:</label>
-                            <input type="text" class="form-control" id="professor_slname" name="professor_slname" aria-label="Default" required value = "<?php echo $row['professor_second_lastname']; ?>">
+                            <input type="text" class="form-control" id="professor_slname" name="professor_slname" aria-label="Default" value = "<?php echo $row['professor_second_lastname']; ?>">
                         </div>
 
                         <div class="form-group col">

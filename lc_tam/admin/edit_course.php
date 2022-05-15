@@ -1,20 +1,31 @@
 <?php 
     require_once("../functions.php");
     
-    if(isset($_GET) & !empty($_GET)){
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+        }
+        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+                redirect('../student/index.php');
+            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+                redirect('../tutor/index.php');
+            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+                redirect('../assistant/index.php');
+            }
+        } 
+
+    if(isset($_GET) & !empty($_GET)){                            //gets course information.
         $id = $_GET['id'];
     } else {
         redirect('courses.php');
     }
-    if(isset($_POST) & !empty($_POST)){
-        //$id = $_POST['id'];
-        $CourseName = $_POST['Course_Name'];
-        $DepartmentID = $_POST['Department_ID'];
-        $courseStatus = $_POST['Course_Status'];
+    if(isset($_POST) & !empty($_POST)){                         //checks if anything has been submitted.
+        $CourseName = $_POST['Course_Name'];                    //takes the value from the form field 'course_name'.
+        $DepartmentID = $_POST['Department_ID'];                //takes the value from the form field 'department_id'.
+        $courseStatus = $_POST['Course_Status'];                //takes the value from the form field 'course_status'.
         $Uquery = "UPDATE lc_courses 
         SET course_name = '$CourseName', dept_id = '$DepartmentID', course_status = '$courseStatus'
         WHERE course_id = '$id'";
-        print_r($Uquery);
         $res = query($Uquery);
         confirm($Uquery);
         redirect('courses.php?success');
@@ -64,11 +75,11 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="Course_ID">Course ID:</label>
-                    <input type="Course_ID" class="form-control" id="Course_ID" name = "Course_ID" value = "<?php echo $row['course_id']; ?>" disabled>
+                    <input type="Course_ID" class="form-control" id="Course_ID" name = "Course_ID" maxlength = "8" value = "<?php echo $row['course_id']; ?>" disabled>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="Course_Name">Course Name:</label>
-                    <input type="Course_Name" class="form-control" id="Course_Name" name = "Course_Name" value = "<?php echo $row['course_name']; ?>" required>
+                    <input type="Course_Name" class="form-control" id="Course_Name" name = "Course_Name" maxlength = "100" value = "<?php echo $row['course_name']; ?>" required>
                 </div>
             </div>
 

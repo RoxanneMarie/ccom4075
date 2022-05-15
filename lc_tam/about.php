@@ -1,6 +1,19 @@
 <?php
     require_once("functions.php");
-    login();
+    
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {
+        if($_SESSION['type'] == 'Student') {
+            redirect('student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {
+            redirect('tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {
+            redirect('assistant/index.php');
+        }elseif($_SESSION['type'] == 'Admin') {
+            redirect('admin/index.php');
+        }else{
+            redirect('student/index.php');
+        }
+    }
 ?>
 
 <!DOCTYPE html>

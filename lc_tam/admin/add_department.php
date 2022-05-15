@@ -1,8 +1,21 @@
 <?php 
     require_once("../functions.php");
     
-    if(isset($_POST['submit'])){
-        $departmentName = $_POST['Department_Name'];
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+            redirect('../assistant/index.php');
+        }
+    } 
+
+    if(isset($_POST['submit'])){                                //checks if anything has been submitted to the form.
+        $departmentName = $_POST['Department_Name'];            //takes the department name from the form field 'Department_Name'.
 
     echo $query = query('INSERT INTO lc_departments (dept_name)
     VALUES("' . $departmentName . '")');

@@ -1,6 +1,15 @@
 <?php 
     require_once("../functions.php");
 
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+      redirect('../index.php');                               //redirects to normal index.
+  }
+  if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is admin.
+      if($_SESSION['type'] == 'Admin') {
+          redirect('../admin/index.php');
+      }
+  }
+
     if(isset($_GET['id'])){
         $id = $_GET['id'];
     }else{
@@ -57,7 +66,7 @@
       </head>
       <body>
           <?php 
-          top_header_9();
+          select_header($_SESSION['type']);
           $query = query("SELECT lc_appointments.student_email, CONCAT_WS(' - ', lc_appointments.course_id, lc_courses.course_name) AS 'course_info', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date, CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_appointments.app_id
           FROM lc_appointments
           INNER JOIN lc_sessions ON lc_sessions.session_id = lc_appointments.session_id

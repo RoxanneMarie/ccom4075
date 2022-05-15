@@ -1,5 +1,18 @@
 <?php 
-    require_once("../functions.php") 
+    require_once("../functions.php");
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+        }
+        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+                redirect('../student/index.php');
+            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+                redirect('../tutor/index.php');
+            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+                redirect('../assistant/index.php');
+            }
+        } 
 ?>
 
 <!DOCTYPE html>
@@ -61,8 +74,33 @@
                 <span> Tutor added successfully.</span>
             </div>
             ';
+            } 
+            if(isset($_GET['Offer_Added'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutor offer added successfully.</span>
+            </div>
+            ';
+            } 
+            if(isset($_GET['Schedule_Added'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutor schedule added successfully.</span>
+            </div>
+            ';
+            } 
+            if(isset($_GET['Offer_edit'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutor offer modified successfully.</span>
+            </div>
+            ';
+            } 
+            if(isset($_GET['Schedule_edit'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Tutor schedule modified successfully.</span>
+            </div>
+            ';
             } echo '
-                <table class = "table table-responsive">
+            <div class = "table-responsive">
+                <table class = "table">
             <thead class = "tCourses text-center">
                 <th>Edit</th>
                 <th>Offers</th>
@@ -94,7 +132,7 @@
                     <td>'; if( $row['tutor_image']){echo "Yes.";} else { echo "No."; } '</td>
                     </tr>
                     '; } echo '
-                </table><br><br>
+                </table><br><br></div>
                 </div>
                 </article>
             </main>';

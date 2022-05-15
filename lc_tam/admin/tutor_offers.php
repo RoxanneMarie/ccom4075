@@ -1,7 +1,20 @@
 <?php 
     require_once("../functions.php"); 
 
-    if(isset($_GET['id'])){
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+        }
+        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+                redirect('../student/index.php');
+            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+                redirect('../tutor/index.php');
+            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+                redirect('../assistant/index.php');
+            }
+        } 
+
+    if(isset($_GET['id'])){ //checks if there is an id, if no id, redirects.
         $id = $_GET['id'];
     }else{
         redirect('tutors.php');
@@ -50,7 +63,7 @@
         <article>
         <div class = "container">
             <h3 class = "h3 text-center">Tutor Offers - '; echo $id; echo'</h3>
-            <a class = "btn btn-primary" href="add_tutor_offer.php">Add Tutor Offer</a>
+            <a class = "btn btn-primary" href="add_tutor_offer.php?id='.$id.'">Add Tutor Offer</a>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Tutor Offer updated successfully.</span>

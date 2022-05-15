@@ -1,14 +1,27 @@
 <?php 
     require_once("../functions.php");
 
-    if(isset($_GET['id'])){
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+      redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+      if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+          redirect('../student/index.php');
+      }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+          redirect('../tutor/index.php');
+      }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+          redirect('../assistant/index.php');
+      }
+  } 
+
+    if(isset($_GET['id'])){                                   //gets appointment ID.
         $id = $_GET['id'];
     }else{
         redirect('index.php');
     }
 
-    if(isset($_POST) & !empty($_POST)){
-      $appointment = $_POST['app_id'];
+    if(isset($_POST) & !empty($_POST)){                       //receives values from the form when submitted.
+      $appointment = $_POST['app_id'];                        //gets the appointment ID to cancel the appointment.
       $squery = query("SELECT * FROM lc_appointments WHERE app_id = '$appointment'");
       confirm($squery);
       $row = fetch_array($squery);

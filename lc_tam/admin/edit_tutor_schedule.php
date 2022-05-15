@@ -1,23 +1,36 @@
 <?php 
     require_once("../functions.php");
     
-    if(isset($_GET) & !empty($_GET)){
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+        }
+        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+                redirect('../student/index.php');
+            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+                redirect('../tutor/index.php');
+            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+                redirect('../assistant/index.php');
+            }
+        } 
+
+    if(isset($_GET) & !empty($_GET)){                           //gets the id, if no id, redirects.
         $id = $_GET['id'];
     } else {
-        redirect('tutor_schedule.php');
+        redirect('tutors.php');
     }
-    if(isset($_POST) & !empty($_POST)){
-        $tutor = $_POST['tutor'];
-        $day = $_POST['day'];
-        $starttime = $_POST['start'];
-        $endtime = $_POST['end'];
+    if(isset($_POST) & !empty($_POST)){                         //checks if anything has been submitted.
+        $tutor = $_POST['tutor'];                               //takes from the form field ' ' the selected value (the tutor).
+        $day = $_POST['day'];                                   //takes from the form field ' ' the selected value (DAY OF THE WEEK).
+        $starttime = $_POST['start'];                           //takes from the form field ' ' the selected value (TIME).
+        $endtime = $_POST['end'];                               //takes from the form field ' ' the selected value (TIME).
+        $course = $_POST['course'];                             //takes from the form field ' ' the selected value (the course).
         $Uquery = "UPDATE lc_tutor_schedule 
-        SET tutor_id = '$tutor', day = '$day', start_time = '$starttime', end_time = '$endtime'
+        SET tutor_id = '$tutor', day = '$day', start_time = '$starttime', end_time = '$endtime', course_id = '$course'
         WHERE schedule_id = '$id'";
-        print_r($Uquery);
         $res = query($Uquery);
         confirm($Uquery);
-        redirect('tutor_schedule.php?success');
+        redirect('tutors.php?Schedule_edit');
 }
 ?>
 
@@ -65,8 +78,9 @@
                 $Trow = fetch_array($Tquery);
                 ?>
                     <div class="form-group">
-                        <label for="tutor">Tutor:</label>
-                        <input class="form-control" id="tutor" name = "tutor" type = "text" disabled value = "<?php echo $Trow['student_id']; ?> - <?php echo $Trow['student_name']; ?> <?php echo $Trow['student_initial']; ?> <?php echo $Trow['student_first_lastname']; ?> <?php echo $Trow['student_second_lastname']; ?>">
+                        <label for="tutor_inf">Tutor:</label>
+                        <input class="form-control" id="tutor_inf" name = "tutor_inf" type = "text" disabled value = "<?php echo $Trow['student_id']; ?> - <?php echo $Trow['student_name']; ?> <?php echo $Trow['student_initial']; ?> <?php echo $Trow['student_first_lastname']; ?> <?php echo $Trow['student_second_lastname']; ?>">
+                        <input type="hidden" id="tutor" name="tutor" value = "<?php echo $row['tutor_id'] ?>">
                     </div>
                     <br>
                     <div class="form-group">
@@ -90,8 +104,26 @@
                     <label for="end">End time:</label>
                     <input id="end" type="time" name="end" value = <?php echo $row['end_time']; ?> required><br><br>
                 </div>
+
+                <div class="form-group">
+                        <label for="course">Course: </label>
+                        <select class="form-control" id="course" name = "course" required>
+                            <?php 
+                            $query2 = query("SELECT lc_courses.course_id, lc_courses.course_name, lc_departments.dept_id, lc_departments.dept_name, lc_courses.tutor_available, lc_courses.course_status,
+                            lc_account_status.acc_stat_name
+                            FROM lc_courses
+                            INNER JOIN lc_departments ON lc_courses.dept_id = lc_departments.dept_id
+                            INNER JOIN lc_account_status ON lc_courses.course_status = lc_account_status.acc_stat_id
+                            WHERE lc_courses.course_status != '0' AND lc_courses.course_status != '2'");
+                            confirm($query2);
+                            while($row2 = fetch_array($query2)) {    ?>
+                        <option value = "<?php echo $row2['course_id'] ?>" <?php if ($row['course_id'] == $row2['course_id']) { echo "selected"; } ?>><?php echo $row2['course_id']?> - <?php echo $row2['course_name'];  } ?></option>
+                        </select>
+                    </div>
+                    <br>
+
                 <div class = "container d-flex justify-content-center">
-                <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button>
+                    <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button>
                 </div>
                 <br>
             </form>

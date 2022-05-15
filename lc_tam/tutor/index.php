@@ -1,6 +1,19 @@
 <?php 
     require_once("../functions.php"); 
-    require_once("functions.php") 
+    require_once("functions.php");
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Tutor.
+        if($_SESSION['type'] == 'Student') {
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') { //checks if the type is assistant.
+            redirect('../assistant/index.php');
+        }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin.
+            redirect('../admin/index.php');
+        }
+    } 
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +113,7 @@
 
         <?php
             
-          top_header_6();
+          select_header($_SESSION['type']);
             echo'
             <h2 class="text_title">Tutor Role</h2>
             <div class = "container">

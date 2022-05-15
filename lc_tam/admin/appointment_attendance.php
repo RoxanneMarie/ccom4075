@@ -1,24 +1,34 @@
 <?php 
     require_once("../functions.php"); 
 
-    if(isset($_GET['id'])){
-        $id = $_GET['id'];
-        if(isset($_POST['submit'])){
-            $counter1 = $_POST['count'];
-            $counter2 = 0;
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+            redirect('../assistant/index.php');
+        }
+    } 
 
-            for($i = 1; $i <= $counter1; $i++) {
+    if(isset($_GET['id'])){                                     //gets ID.
+        $id = $_GET['id'];
+        if(isset($_POST['submit'])){                            //checks if any values have been submitted.
+            $counter1 = $_POST['count'];                        //takes variable to count how many students are.
+            $counter2 = 0;                                      //second counter.
+
+            for($i = 1; $i <= $counter1; $i++) {                //for every student registered, record to an array to use to submit.
             $_SESSION['appointed_students'][$_POST['student_reg'. $i .'']] = array('attendance_status' => $_POST['attendance_status'. $i. '']);
             }
-            echo "<pre>";
-            print_r($_SESSION['appointed_students']);
-            echo "</pre>";
+
             $appointedStudents = $_SESSION['appointed_students'];
 
-            foreach ($appointedStudents as $appStud => $studName) {
+            foreach ($appointedStudents as $appStud => $studName) { //every student recorded into array gets submitted to the DB.
                 $appStud;
                 $studName;
-                /*echo $appQuery = "SELECT * FROM lc_appointments WHERE session_id = '$id' AND student_email = '$appStud'"; echo '<br><br>';*/
                 $appQuery = query("SELECT * FROM lc_appointments WHERE session_id = '$id' AND student_email = '$appStud'");
                 confirm($appQuery);
                 $appRow = fetch_array($appQuery);

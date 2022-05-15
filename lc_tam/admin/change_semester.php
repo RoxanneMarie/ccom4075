@@ -1,16 +1,32 @@
 <?php 
   require_once("../functions.php");    
 
+  if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+    redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+            redirect('../assistant/index.php');
+        }
+    }
+
     if(isset($_POST['submit'])){
         $semesterID = $_POST['Semester_ID'];
+
         //Selects semester that was previously active.
         $query = query("SELECT * FROM lc_semester WHERE semester_status = '1'");
         confirm($query);
         $row = fetch_array($query);
         $prevSem = $row['semester_id'];
+
         //Updates previous semester that was active to inactive.
         $query2 = query("UPDATE lc_semester SET semester_status = '2' WHERE semester_id = '$prevSem'");
         confirm($query2);
+        
         //Finally, updates selected semester to active.
         $query3 = query("UPDATE lc_semester SET semester_status = '1' WHERE semester_id = '$semesterID'");
         confirm($query3);

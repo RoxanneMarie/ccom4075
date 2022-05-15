@@ -2,6 +2,8 @@
 if(session_status() == PHP_SESSION_NONE)
 session_start();
 
+
+
 date_default_timezone_set("America/Puerto_Rico");
 
 
@@ -174,4 +176,17 @@ function calendar(){
         return $query;
      }
 
+     function getAppStudentsCount($id)
+     {
+        $query = query("SELECT COUNT(student_email) AS 'students_reg' FROM lc_appointments WHERE session_id = '$id'");
+        confirm($query);
+        return $query;
+     }
+
+     function getAttStudentCount($id)
+     {
+         $query = query("SELECT COUNT(student_email) 'students_att' FROM lc_tutoring_attendance WHERE session_id = '$id'");
+         confirm($query);
+         return $query;
+     }
 ?>

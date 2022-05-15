@@ -279,7 +279,6 @@ function top_header_5() //Admin header.
                     <li class="nav-item dropdown">
                     <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.username_delimiter().'</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
-                        <a class="text-black dropdown-item display-4" href="../student/index.php">Student Role</a>
                         <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
                     </div>
                     </li>
@@ -542,8 +541,7 @@ function login()
             
             if($row2['acc_stat_name'] != 'Active')
             {
-                echo "Your account is deactivated. Please ask UPRA's Learning Commons for assistance.";
-                redirect("login.php");
+                redirect("login.php?deactivated");
             }
             else
             {
@@ -574,16 +572,19 @@ function login()
                     
                     if($row2['acc_stat_name'] != 'Active' && $row3['acc_stat_name'] != 'Active')   //era tutor y era asistente
                         $_SESSION['type'] = "Student";
-                    else if($row2['acc_stat_name'] == 'Active') //es tutor
+                    else if($row2['acc_stat_name'] == 'Active') 
+                    {   //es tutor
                         $_SESSION['type'] = "Tutor";
-                    else    //es asistente
+                    }
+                    else
+                    { //es asistente
                         $_SESSION['type'] = "Assistant";
-                    
+                    }
                     //NOTA: UNA CUENTA (PERSONA/ESTUDIANTE) NO PUEDE SER TUTOR Y ASISTENTE A LA VEZ
                 }
                 else // es estudiante
                     $_SESSION['type'] = "Student";
-                
+
                 redirect("student/index.php");
             }
         }
@@ -603,7 +604,7 @@ function student_select_course()
                                 <h3 class="mbr-section-title mb-0 mbr-fonts-style display-2"><strong>Tutoring Courses</strong></h3>
                             </div>
                             <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                                Select the course you want to request tutoring for.
+                                Select the course you want to request tutoring for
                             </div>
                             <div id="bootstrap-accordion_17" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">';
     
@@ -705,7 +706,7 @@ function professor_available()
 
 function student_select_professor()
 {
-    $query = query("SELECT professor_entry_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname FROM lc_professors WHERE course_id = '" . $_SESSION['selected_course'] . "'");
+    $query = query("SELECT professor_entry_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname FROM lc_professors WHERE acc_stat_id = '1' AND course_id = '" . $_SESSION['selected_course'] . "'");
     confirm($query);
     
     echo '
@@ -714,11 +715,11 @@ function student_select_professor()
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                            <strong>Select the Professor.</strong>
+                            <strong>Select the Professor</strong>
                         </h3>
                         <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                        Select the Professor giving the class ('; echo $_SESSION['selected_course']; echo ')
-                    </div>
+                            Select the Professor giving the class ('; echo $_SESSION['selected_course']; echo ')
+                        </div>
                     </div>';
     
     $x = 1;
@@ -728,7 +729,9 @@ function student_select_professor()
         echo '
             <div class="col-sm-6 col-lg-3">
                 <div class="card-wrap">
-
+                    <div class="image-wrap">
+                        <img src="../assets/images/user.jpg"
+                    </div>
                     <div class="content-wrap">
                         <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
                             <strong>' . $row['professor_name'] . ' ' . $row['professor_initial'] . ' ' . $row['professor_first_lastname'] . ' ' . $row['professor_second_lastname'] . '</strong>
@@ -738,18 +741,13 @@ function student_select_professor()
                         </div>
                     </div>
                 </div>
-            </div>
             <form id="form' . $x . '">
                 <input type="hidden" name="professor_ready">
-            </form>';
-        
+            </form>
+            </div>
+        </div>';
         $x++;
     }
-    
-    echo '
-                </div>
-            </div>
-        </section>';
 }
 
 function student_select_tutor()
@@ -760,11 +758,11 @@ function student_select_tutor()
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                            <strong>Select the tutor.</strong>
+                            <strong>Select the tutor</strong>
                         </h3>
                         <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                        Select the day and hour (if available) - '; echo $_SESSION["selected_course"]; echo '
-                    </div>
+                            Select the day and hour (if available) - '; echo $_SESSION["selected_course"]; echo '
+                        </div>
                     </div>';
     
     if(isset($_POST["professor_ready"]))
@@ -808,7 +806,12 @@ function student_select_tutor()
         $query2 = query("SELECT student_email FROM lc_test_tutors WHERE tutor_id = '" . $row["tutor_id"] . "'");
         confirm($query2);
         $row2 = fetch_array($query2);
+
+        $query3 = query("SELECT tutor_image FROM lc_test_tutors WHERE tutor_id = '" . $row["tutor_id"] . "'");
+        confirm($query3);
+        $row3 = fetch_array($query3);
         $email = $row2["student_email"];
+        $tutorImg = $row3['tutor_image'];
         
         $query2 = query("SELECT student_name, student_initial, student_first_lastname, student_second_lastname FROM lc_test_students WHERE student_email = '" . $email . "'");
         confirm($query2);
@@ -817,8 +820,12 @@ function student_select_tutor()
         echo '
             <div class="col-sm-6 col-lg-3">
                 <div class="card-wrap">
-                    <div class="image-wrap">
-                        <img src="../assets/images/tutors/' . $email . '.jpg">
+                    <div class="image-wrap">';
+                    if ($row3['tutor_image'] != NULL) {
+                        echo '<img src="' . $tutorImg . '">';
+                    }else{
+                        echo '<img src="../assets/images/user.jpg"';
+                    } echo '
                     </div>
                     <div class="content-wrap">
                         <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
@@ -939,8 +946,9 @@ function student_select_time()
         {
             if($week[$x-1] == "NULL")
                 continue;
-
-            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time, course_id FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND course_id = '" . $_SESSION['selected_course'] . "' AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
+            
+            $currTime = date("h:i:a");
+            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time, course_id FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND start_time >= '$currTime' AND course_id = '" . $_SESSION['selected_course'] . "' AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
             confirm($query2);
 
             if(mysqli_num_rows($query2) != 0)
@@ -1036,7 +1044,9 @@ function student_select_time()
         }
         
         if(!$flag)
-            echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
+        echo "<div class = 'alert' style = 'background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;' role='alert'>
+        <span> This tutor has no more sections available to make appointments on this week. Wait until next week and try again! </span>
+        </div>";
 
         echo '
                             <br><br>

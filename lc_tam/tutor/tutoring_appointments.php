@@ -1,6 +1,20 @@
 <?php 
     require_once("../functions.php"); 
     require_once("functions.php");
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Tutor.
+        if($_SESSION['type'] == 'Student') {
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') { //checks if the type is assistant.
+            redirect('../assistant/index.php');
+        }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin.
+            redirect('../admin/index.php');
+        }
+    } 
+
     if(isset($_GET['id'])){
         $id = $_GET['id'];
     }
@@ -46,7 +60,7 @@
     </head>
     <body>
         <?php 
-            top_header_9();
+            select_header($_SESSION['type']);
     echo '
     <main class="container">
         <article>
@@ -56,6 +70,10 @@
 
             $info = getTutoringInfo($row['session_id']);
             $info2= fetch_array($info);
+            $info3 = getAppStudentsCount($row['session_id']);
+            $RegisteredStudentCount = fetch_array($info3);
+            $info4 = getAttStudentCount($row['session_id']);
+            $AttendanceStudentRegCount = fetch_array($info4);
             echo '
             <div class="row featurette justify-content-center">
             <!-- <div class="container text-center">
@@ -68,10 +86,16 @@
             <p><b> Time:</b> '. conv_time(substr($info2["start_time"],0,2)) . substr($info2["start_time"],2,3) . ampm(substr($info2["start_time"],0,2)).' - '. conv_time(substr($info2["end_time"],0,2)) . substr($info2["end_time"],2,3) . ampm(substr($info2["end_time"],0,2)) .'</p>
             </div>
                 
-
+            '; 
+            
+            if ($RegisteredStudentCount['students_reg'] != $AttendanceStudentRegCount['students_att']) { echo '
             <div class = "container d-flex justify-content-center">
                 <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance</a>
-            </div>
+            </div>'; }else{ echo '
+                <div class = "container d-flex justify-content-center">
+                <a class = "btn btn-primary" disabled">REGISTERED.</a>
+            </div>'; }
+                '
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Tutoring session updated successfully.</span>
@@ -89,9 +113,6 @@
             </div>
             ';
             } 
-            
-                     
-       
             echo '
                 <div class="table-responsive">
                 <table class="table">

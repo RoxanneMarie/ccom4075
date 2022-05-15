@@ -1,7 +1,7 @@
 <?php 
     require_once("functions.php");
     
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {
+    /*if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {
         if($_SESSION['type'] == 'Student') {
             redirect('student/index.php');
         }elseif($_SESSION['type'] == 'Tutor') {
@@ -13,7 +13,7 @@
         }else{
             redirect('student/index.php');
         }
-    } 
+    }*/
 ?>
 
 <!DOCTYPE html>
@@ -42,24 +42,23 @@
     </head>
     <body>
 
-        <?php top_header_1(); ?>
+        <?php if(!isset($_SESSION['type'])) {top_header_1(); }else{
+            select_header($_SESSION['type']);
+        } ?>
         <div class="bg-image d-flex justify-content-center align-items-center" 
-            style = "background-image: url('assets/images/bg/lc_image1.jpg');
+            style = "background-image: url('assets/images/bg/lc_image7.jpeg');
                     height: 100vh">
-            <div class="card text-center bg-primary">
-                <div class="card-header">
-                    Welcome
-                </div>
-                <div class="card-body bg-white">
-                    <h5 class="card-title">Welcome to Learning Commons: Tutoring Appointment Manager.</h5>
-                    <p class="card-text">Part of the Tutoring and Mentoring Program.</p>
-                    <p class="card-text">Here, you will be able to request tutoring sessions.</p>
-                    <div class = "d-flex justify-content-between">
-                        <a href="login.php" class="btn btn-primary">Login</a>
-                        <a href="about.php" class="btn btn-primary">About us</a>
-                    </div>
+            <br><br>
+            <div class = 'container border rounded bg-light'>
+                <br>
+                <h1 class = 'h1 text-center display-1'>404</h1>
+                <p class = 'lead text-center display-2'>Oops!</p>
+                <p class = 'lead text-center'>It seems the page you have requested is either unavailable or doesn't exist.</p>
+                <div class = 'd-flex justify-content-center'>
+                    <a class = 'btn btn-primary' href = 'index.php'>Go back</a>
                 </div>
             </div>
+       <br>
         </div>
         <?php
             bottom_footer();

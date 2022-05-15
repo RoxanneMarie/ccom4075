@@ -1,5 +1,14 @@
 <?php 
     require_once("../functions.php");
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is admin.
+        if($_SESSION['type'] == 'Admin') {
+            redirect('../admin/index.php');
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +40,7 @@
     <body>
 
         <?php 
-            top_header_2();
+            select_header($_SESSION['type']);
             create_session();
             bottom_footer();
             credit_mobirise_1();

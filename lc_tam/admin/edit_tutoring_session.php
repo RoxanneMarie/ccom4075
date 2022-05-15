@@ -1,15 +1,27 @@
 <?php 
     require_once("../functions.php");
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+        }
+        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+                redirect('../student/index.php');
+            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+                redirect('../tutor/index.php');
+            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+                redirect('../assistant/index.php');
+            }
+        } 
     
-    if(isset($_GET['id'])){
+    if(isset($_GET['id'])){                                     //gets ID of the tutoring sessionthat wants to be edited.
         $id = $_GET['id'];
     }
 
-    if(isset($_POST['submit'])){
-        $date = $_POST['appdate'];
-        $start = $_POST['start'];
-        $end = $_POST['end'];
-
+    if(isset($_POST['submit'])){                                //checks if anything has been submitted.
+        $date = $_POST['appdate'];                              //takes the value from form field 'appdate' (the sessions date).
+        $start = $_POST['start'];                               //takes the value from form field 'start' (TIME).
+        $end = $_POST['end'];                                   //takes the value from form field 'end' (TIME).
         $Uquery = "UPDATE lc_sessions
         SET start_time = '$start', 
         end_time = '$end', 

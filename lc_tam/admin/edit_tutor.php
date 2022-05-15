@@ -1,17 +1,32 @@
 <?php 
   require_once("../functions.php");
     
-    if(isset($_GET['id'])){
+  if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+    redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+            redirect('../assistant/index.php');
+        }
+    } 
+
+    if(isset($_GET['id'])){                                    //gets the tutor ID.
         $id = $_GET['id'];
+    }else{
+        redirect('index.php');
     }
 
-    if(isset($_POST['submit'])){
-        $StudentName = $_POST['Student_Name'];
+    if(isset($_POST['submit'])){                                //checks if anything has been submitted.
+        $StudentName = $_POST['Student_Name'];                  //takes from the student name, initial, and lastname form field the values.
         $StudentInitial = $_POST['Student_Initial'];
         $StudentFLN = $_POST['Student_FLN'];
         $StudentSLN = $_POST['Student_SLN'];
-        $TutorType = $_POST['Tutor_Type'];
-        $AccStatus = $_POST['Acc_Status'];
+        $TutorType = $_POST['Tutor_Type'];                      //takes from the form field 'tutor_type' the selected tutor type (journal/work study).
+        $AccStatus = $_POST['Acc_Status'];                      //takes from the form field 'acc_status' the selected account status.
         $Success1 = false;
         $Success2 = false;
 
@@ -29,7 +44,7 @@
                 $location = "../assets/images/tutors/";
                 $filepath = $location.$name;
                 if(move_uploaded_file($tmp_name, $location.$name)){
-                    echo "Uploaded successsfully";
+                    echo "Image uploaded successsfully";
                 }else{
                     echo "failed to upload";
                 }
@@ -51,7 +66,7 @@
         //Checks if query was successful.
         confirm($Uquery);
         if($res == '1') {
-            echo $Success1 = true;
+            $Success1 = true;
         }
         $Uquery2 = "UPDATE lc_test_students
         SET student_name = '$StudentName', 
@@ -63,7 +78,7 @@
         //Checks if query was successful.
         confirm($Uquery2);
         if($res == '1') {
-            echo $Success2 = true;
+            $Success2 = true;
         }
 
         if ($Success1 == '1' & $Success2 == '1') {
@@ -143,7 +158,7 @@
                     <div class = "form-row">
                         <div class="form-group col">
                             <label for="Student_SLN">Second Last Name:</label>
-                            <input type="Student_SLN" class="form-control" id="Student_SLN" name = "Student_SLN" value = "<?php echo $row['student_second_lastname']; ?>" required>
+                            <input type="Student_SLN" class="form-control" id="Student_SLN" name = "Student_SLN" value = "<?php echo $row['student_second_lastname']; ?>">
                         </div>
                         <div class="form-group col">
                             <label for="Student_Email">Student Email:</label>

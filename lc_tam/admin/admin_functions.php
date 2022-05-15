@@ -2,6 +2,19 @@
 
 include('../functions.php');
 
+if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+    redirect('../index.php');                               //redirects to normal index.
+}
+if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+    if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+        redirect('../student/index.php');
+    }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+        redirect('../tutor/index.php');
+    }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+        redirect('../assistant/index.php');
+    }
+} 
+
 function student_select_course_admin()
 {
     echo '
@@ -115,51 +128,47 @@ function professor_available_admin()
 
 function student_select_professor_admin()
 {
-    $query = query("SELECT professor_entry_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname FROM lc_professors WHERE course_id = '" . $_SESSION['selected_course'] . "'");
+    $query = query("SELECT professor_entry_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname FROM lc_professors WHERE acc_stat_id = '1' AND course_id = '" . $_SESSION['selected_course'] . "'");
     confirm($query);
     
     echo '
-        <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-12">
-                        <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                            <strong>Select the Professor.</strong>
-                        </h3>
-                        <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                        Select the Professor giving the class ('; echo $_SESSION['selected_course']; echo ')
-                    </div>
-                    </div>';
+    <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
+                    <strong>Select the Professor</strong>
+                </h3>
+                <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
+                    Select the Professor giving the class ('; echo $_SESSION['selected_course']; echo ')
+                </div>
+            </div>';
+        $x = 1;
     
-    $x = 1;
-    
-    while($row = fetch_array($query))
-    {
-        echo '
-            <div class="col-sm-6 col-lg-3">
-                <div class="card-wrap">
-
-                    <div class="content-wrap">
-                        <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
-                            <strong>' . $row['professor_name'] . ' ' . $row['professor_initial'] . ' ' . $row['professor_first_lastname'] . ' ' . $row['professor_second_lastname'] . '</strong>
-                        </h5>
-                        <div class="mbr-section-btn card-btn align-center">
-                            <button type="submit" form="form' . $x . '" formmethod="POST" formaction="select_tutor.php" class="btn btn-primary display-4" name="professor_' . $x . '" value="' . $row["professor_entry_id"] . '">Select</button>
+        while($row = fetch_array($query))
+        {
+            echo '
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card-wrap">
+                        <div class="image-wrap">
+                            <img src="../assets/images/user.jpg"
+                        </div>
+                        <div class="content-wrap">
+                            <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
+                                <strong>' . $row['professor_name'] . ' ' . $row['professor_initial'] . ' ' . $row['professor_first_lastname'] . ' ' . $row['professor_second_lastname'] . '</strong>
+                            </h5>
+                            <div class="mbr-section-btn card-btn align-center">
+                                <button type="submit" form="form' . $x . '" formmethod="POST" formaction="select_tutor.php" class="btn btn-primary display-4" name="professor_' . $x . '" value="' . $row["professor_entry_id"] . '">Select</button>
+                            </div>
                         </div>
                     </div>
+                <form id="form' . $x . '">
+                    <input type="hidden" name="professor_ready">
+                </form>
                 </div>
-            </div>
-            <form id="form' . $x . '">
-                <input type="hidden" name="professor_ready">
-            </form>';
-        
-        $x++;
-    }
-    
-    echo '
-                </div>
-            </div>
-        </section>';
+            </div>';
+            $x++;
+        }
 }
 
 function student_select_tutor_admin()
@@ -218,7 +227,12 @@ function student_select_tutor_admin()
         $query2 = query("SELECT student_email FROM lc_test_tutors WHERE tutor_id = '" . $row["tutor_id"] . "'");
         confirm($query2);
         $row2 = fetch_array($query2);
+
+        $query3 = query("SELECT tutor_image FROM lc_test_tutors WHERE tutor_id = '" . $row["tutor_id"] . "'");
+        confirm($query3);
+        $row3 = fetch_array($query3);
         $email = $row2["student_email"];
+        $tutorImg = $row3['tutor_image'];
         
         $query2 = query("SELECT student_name, student_initial, student_first_lastname, student_second_lastname FROM lc_test_students WHERE student_email = '" . $email . "'");
         confirm($query2);
@@ -227,8 +241,12 @@ function student_select_tutor_admin()
         echo '
             <div class="col-sm-6 col-lg-3">
                 <div class="card-wrap">
-                    <div class="image-wrap">
-                        <img src="../assets/images/tutors/' . $email . '.jpg">
+                    <div class="image-wrap">';
+                    if ($row3['tutor_image'] != NULL) {
+                        echo '<img src="' . $tutorImg . '">';
+                    }else{
+                        echo '<img src="../assets/images/user.jpg"';
+                    } echo '
                     </div>
                     <div class="content-wrap">
                         <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
@@ -350,7 +368,8 @@ function student_select_time_admin()
             if($week[$x-1] == "NULL")
                 continue;
 
-            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time, course_id FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND course_id = '" . $_SESSION['selected_course'] . "' AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
+            $currTime = date("h:i:a");
+            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time, course_id FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND start_time >= '$currTime' AND course_id = '" . $_SESSION['selected_course'] . "' AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
             confirm($query2);
 
             if(mysqli_num_rows($query2) != 0)
@@ -446,7 +465,9 @@ function student_select_time_admin()
         }
         
         if(!$flag)
-            echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
+            echo "<div class = 'alert' style = 'background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;' role='alert'>
+            <span> This tutor has no more sections available to make appointments on this week. Wait until next week and try again! </span>
+        </div>";
 
         echo '
                             <br><br>
@@ -624,4 +645,18 @@ function create_app_admin()
     }
     else
         redirect("../logout.php");
+}
+
+function getAppStudentsCount($id)
+{
+   $query = query("SELECT COUNT(student_email) AS 'students_reg' FROM lc_appointments WHERE session_id = '$id'");
+   confirm($query);
+   return $query;
+}
+
+function getAttStudentCount($id)
+{
+    $query = query("SELECT COUNT(student_email) 'students_att' FROM lc_tutoring_attendance WHERE session_id = '$id'");
+    confirm($query);
+    return $query;
 }

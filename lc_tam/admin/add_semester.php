@@ -1,9 +1,22 @@
 <?php 
     require_once("../functions.php");
     
-    if(isset($_POST['submit'])){
-        $SemesterTermName = $_POST['Semester_Term_Name'];
-        $SemesterName = $_POST['Semester_Name'];
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+            redirect('../assistant/index.php');
+        }
+    } 
+
+    if(isset($_POST['submit'])){                                //checks whenever something was submitted to the form.
+        $SemesterTermName = $_POST['Semester_Term_Name'];       //takes the value from the form field called 'semester_term_name' (the same term used in PuTTy).
+        $SemesterName = $_POST['Semester_Name'];                //takes the value from the form field called 'semester_name' (should be the official semester name).
 
     echo $query = query('INSERT INTO lc_semester (semester_term, semester_name, semester_status)
     VALUES("' . $SemesterTermName . '" , "' . $SemesterName . '" , "' . 2 . '")');

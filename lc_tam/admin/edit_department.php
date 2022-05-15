@@ -1,11 +1,25 @@
 <?php 
     require_once("../functions.php");
     
-    if(isset($_GET) & !empty($_GET)){
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+        }
+        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+                redirect('../student/index.php');
+            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+                redirect('../tutor/index.php');
+            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+                redirect('../assistant/index.php');
+            }
+        } 
+
+    if(isset($_GET) & !empty($_GET)){                               //checks if there is id, if no id, redirects.
         $id = $_GET['id'];
     } else {
         redirect('departments.php');
     }
+    //checks if anything has been submitted, takes those values and inserts into DB.
     if(isset($_POST) & !empty($_POST)){
         $departmentName = $_POST['Department_Name'];
         $query = "UPDATE lc_departments SET dept_name = '$departmentName' WHERE dept_id = '$id'";

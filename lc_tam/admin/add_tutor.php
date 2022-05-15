@@ -1,25 +1,38 @@
 <?php 
   require_once("../functions.php");    
 
-    if(isset($_POST['submit'])){
-        $Studentemail = $_POST['Student_email'];
-        $TutorType = $_POST['Tutor_Type'];
-        $AccStatus = $_POST['Acc_Status'];
+  if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+    redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+            redirect('../assistant/index.php');
+        }
+    } 
 
-        if(isset($_FILES) & !empty($_FILES)){
+    if(isset($_POST['submit'])){                                //checks if anything has been submitted.
+        $Studentemail = $_POST['Student_email'];                //takes what was in the form called 'student_email'.
+        $TutorType = $_POST['Tutor_Type'];                      //takes what was in the form called 'tutor_type'.
+        $AccStatus = $_POST['Acc_Status'];                      //takes what was in the form called 'acc_status'.
+
+        if(isset($_FILES) & !empty($_FILES)){                   //if the user uploaded a file (image in this case), moves it to the assets folder.
             $name = $_FILES['tutor_img']['name'];
             $size = $_FILES['tutor_img']['size'];
             $type = $_FILES['tutor_img']['type'];
             $tmp_name = $_FILES['tutor_img']['tmp_name'];
 
-            $max_size = 1000000;
+            $max_size = 10000000;
             $extension = substr($name, strpos($name, '.') + 1);
 
             if(isset($name) & !empty($name)){
-                if(($extension == "jpg" || $extension == "jpeg" ) && $type == "image/jpeg" && $size <= $max_size){
-                $location = "../assets/images/tutors/";
-                if(move_uploaded_file($tmp_name, $location.$name)){
-                    echo "Uploaded successsfully";
+                if(($extension == "jpg" || $extension == "jpeg" ) && $type == "image/jpeg" && $size <= $max_size){//checks the file type.
+                $location = "../assets/images/tutors/";         //the location previously mentioned.
+                if(move_uploaded_file($tmp_name, $location.$name)){ //moves file if there is no issues.
+                    echo "Image uploaded successsfully.";
                 }else{
                     echo "failed to upload";
                 }
@@ -31,10 +44,10 @@
             }
         }
 
-        echo $query = query('INSERT INTO lc_test_tutors (student_email, tutor_type_id, acc_stat_id, tutor_image ) 
+        $query = query('INSERT INTO lc_test_tutors (student_email, tutor_type_id, acc_stat_id, tutor_image ) 
         VALUES ("' . $Studentemail . '" , "' . $TutorType . '" , "' . $AccStatus . '" , "' . "$location$name" .'")');
     if($query) {
-        header('location:tutors.php?Added');
+        header('location:tutors.php?Added'); //if the query was successful, redirects to tutor notifying a tutor has been added.
     }
 }
 ?>
@@ -84,7 +97,7 @@
                         <div class="form-group col">
                             <label for="Student_ID">Student Email</label>
                             <select class="form-control" id="Student_email" name = "Student_email" required>
-                            <option selected value = "" >Select a Student.</option>
+                            <option selected value = "" >Select a Student</option>
                             <?php 
                             $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_email, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) As 'student_fullname'
                             FROM lc_test_students
@@ -102,7 +115,7 @@
                     <div class="form-group col">
                         <label for="Tutor_Type">Tutor Type:</label>
                         <select class="form-control" id="Tutor_Type" name = "Tutor_Type" required>
-                        <option selected value = "" >Select a tutor type.</option>
+                        <option selected value = "" >Select a tutor type</option>
                         <?php 
                         $query2 = query("SELECT * FROM lc_tutor_type");
                         confirm($query2);
@@ -114,7 +127,7 @@
                     <div class="form-group col">
                         <label for="Acc_Status">Account Status:</label>
                         <select class="form-control" id="Acc_Status" name = "Acc_Status" required>
-                        <option selected value = "" >Select an account status.</option>
+                        <option selected value = "" >Select an account status</option>
                         <?php 
                         $query3 = query("SELECT * FROM lc_account_status");
                         confirm($query3);

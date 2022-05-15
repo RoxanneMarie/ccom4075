@@ -1,6 +1,19 @@
 <?php 
     require_once("../functions.php"); 
-    require_once("functions.php") ;
+    require_once("functions.php");
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+      redirect('../index.php');                               //redirects to normal index.
+  }
+  if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Tutor. Proceeds to page.
+      if($_SESSION['type'] == 'Student') {    //checks if the type is student.
+          redirect('../student/index.php');
+      }elseif($_SESSION['type'] == 'Assistant') { //checks if the type is assistant.
+          redirect('../assistant/index.php');
+      }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin.
+          redirect('../admin/index.php');
+      }
+  } 
 ?>
 
 <!DOCTYPE html>
@@ -42,14 +55,14 @@
       <script>
   
   $(document).ready(function() {
-   var calendar = $('#calendar').fullCalendar({
-    editable:false,
+   var calendar = $('#calendar').fullCalendar({ //sets calendar variable. calendar plugin.
+    editable:false,   //events cannot be edited. this disables the popup.
     header:{
      left:'prev,next today',
      center:'title',
      right:'month,agendaWeek,agendaDay'
     },
-    events: 'load.php',
+    events: 'load.php', //from this php, it loads the data from the DB.
     selectable:false,
     selectHelper:true,
     select: function(start, end, allDay)
@@ -129,7 +142,7 @@
 </head>
 <body>
     <?php
-        top_header_6();
+        select_header($_SESSION['type']);
     ?>
     <div class = "container container-sm">
     <h1 class="display-3 text-center">Calendar of <?php echo $_SESSION['name']; ?></h1>

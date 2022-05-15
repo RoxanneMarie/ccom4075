@@ -1,8 +1,24 @@
 <?php 
+    require_once('admin_functions.php');
     require_once("../functions.php"); 
 
-    if(isset($_GET['id'])){
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+        }
+        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
+            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
+                redirect('../student/index.php');
+            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
+                redirect('../tutor/index.php');
+            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
+                redirect('../assistant/index.php');
+            }
+        } 
+
+    if(isset($_GET['id'])){                                     //checks if there is id, if no id, redirects.
         $id = $_GET['id'];
+    }else{
+        redirect('index.php');
     }
 ?>
 
@@ -51,11 +67,20 @@
     <main class="container">
         <article>
         <div class="container-sm">
-            <h3 class = "h3 text-center">Tutoring Appointments of Session #'; echo $row['session_id']; echo '</h3>
-            <div class = "container d-flex justify-content-center">
-            <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance.</a>
-            </div>
-            '; if(isset($_GET['success'])){ echo '
+            <h3 class = "h3 text-center">Tutoring Appointments of Session #'; echo $row['session_id']; echo '</h3>';
+            $info3 = getAppStudentsCount($row['session_id']);
+            $RegisteredStudentCount = fetch_array($info3);
+            $info4 = getAttStudentCount($row['session_id']);
+            $AttendanceStudentRegCount = fetch_array($info4);
+            if ($RegisteredStudentCount['students_reg'] != $AttendanceStudentRegCount['students_att']) { echo '
+                <div class = "container d-flex justify-content-center">
+                    <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance</a>
+                </div>'; }else{ echo '
+                    <div class = "container d-flex justify-content-center">
+                    <a class = "btn btn-primary" disabled">REGISTERED.</a>
+                </div>'; }
+                
+                if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Tutoring session updated successfully.</span>
             </div>'; 

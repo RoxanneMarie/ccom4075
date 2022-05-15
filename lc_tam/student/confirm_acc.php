@@ -1,5 +1,27 @@
 <?php 
     require_once("../functions.php");
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is admin.
+        if($_SESSION['type'] == 'Admin') {
+            redirect('../admin/index.php');
+        }
+    }
+
+    if(isset($_GET['id'])){                                     //gets the student's ID (EMAIL).
+        $id = $_GET['id'];
+        $checkquery = query("SELECT * FROM lc_test_students WHERE student_email LIKE '%$id%'");
+        confirm($checkquery);
+        if(mysqli_num_rows == 0) {
+            redirect('../logout.php');
+        }else{
+            
+        }
+
+
+    }
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +53,7 @@
     <body>
 
         <?php 
-            top_header_2();
+            select_header($_SESSION['type']);
             echo "
             <div class = 'container-sm'>
             <br>
@@ -39,7 +61,7 @@
             <form class = 'row g-2' action = 'POST'>
                 <div class = 'col-md-12'>
                     <label for = 'Email' class = 'form-label'>Student Email</label>
-                    <input type = 'email' class = 'form-control' id = 'Email' name = 'Email' disabled>
+                    <input type = 'email' class = 'form-control' id = 'Email' name = 'Email' value='$id' disabled>
                 </div>
                 <div class = 'col-md-6'>
                     <label for = 'fname' class = 'form-label'>First Name:</label>
@@ -47,7 +69,7 @@
                 </div>
                 <div class = 'col-md-6'>
                     <label for = 'initial' class = 'form-label'>Initial:</label>
-                    <input type = 'initial' class = 'form-control' id = 'initial' name = 'initial' required>
+                    <input type = 'initial' class = 'form-control' id = 'initial' name = 'initial'>
                 </div>
                 <div class = 'col-md-6'>
                     <label for = 'flname' class = 'form-label'>First Last Name:</label>
@@ -55,7 +77,7 @@
                 </div>
                 <div class = 'col-md-6'>
                     <label for = 'slname' class = 'form-label'>Second Last Name:</label>
-                    <input type = 'slname' class = 'form-control' id = 'slname' name = 'slname' required>
+                    <input type = 'slname' class = 'form-control' id = 'slname' name = 'slname'>
                 </div>
                 <div class = 'col-md-12'>
                     <label for = 'studnum' class = 'form-label'>Student Number</label>
