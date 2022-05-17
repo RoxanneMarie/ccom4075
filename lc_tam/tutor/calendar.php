@@ -144,11 +144,17 @@
     <?php
         select_header($_SESSION['type']);
     ?>
-    <div class = "container container-sm">
-    <h1 class="display-3 text-center">Calendar of <?php echo $_SESSION['name']; ?></h1>
-  <div class="container">
-   <div id="calendar"></div>
-  </div></div><br><br>
+     <div class="row featurette justify-content-center ">
+        <div class="container text-center">
+          <!-- <div class = "container container-sm"> -->
+            <h1 class="display-3 text-center">Calendar of <?php echo $_SESSION['name']; ?></h1>
+        </div>
+          <!-- <div class="container"> -->
+        <div class="col-md-8">
+          <div id="calendar"></div>
+        </div>
+           <!-- </div> -->
+    </div><br><br>
   <?php
       bottom_footer();
       credit_mobirise_1();
