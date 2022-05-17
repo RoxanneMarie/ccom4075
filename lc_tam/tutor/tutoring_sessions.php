@@ -86,9 +86,12 @@
             </thead>';
             
             $info = getTutoringsInfo();
+
     while ($row = fetch_array($info)) {
-
-
+        $info3 = getAppStudentsCount($row['session_id']);
+        $RegisteredStudentCount = fetch_array($info3);
+        $info4 = getAttStudentCount($row['session_id']);
+        $AttendanceStudentRegCount = fetch_array($info4);
 
         echo '    
                 <tr class="trCourses">
@@ -98,7 +101,9 @@
                     <td>'. $row['semester_info'] .'</td>
                     <td>'. $row['capacity'] .'</td>
                     <td> <a class="btn btn-outline-info" href="tutoring_appointments.php?id='. $row['session_id'] .'"><i class="fa fa-eye"></i></a></td>
-                    <td> <a class="btn btn-outline-success" href="appointment_attendance.php?id='; echo $row['session_id']; echo '"><i class="fa fa-check"></i></a></td>
+                    <td>'; if ($RegisteredStudentCount['students_reg'] != $AttendanceStudentRegCount['students_att']) { echo '<a class="btn btn-outline-success" href="appointment_attendance.php?id='; echo $row['session_id']; echo '"><i class="fa fa-check"></i></a>'; }else{
+                        echo '<span>Registered.</span>';
+                    } echo '</td>
                     </tr>
                    '; } echo '
                 </table></div><br><br>

@@ -129,7 +129,7 @@ function top_header_3() //Tutor header.
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
                 <li class="nav-item">
-                    <a class="nav-link link text-black text-primary display-4" href="index.php">Home</a>
+                    <a class="nav-link link text-black text-primary display-4" href="../tutor/index.php">Home</a>
                 </li>
 
                 <li class="nav-item dropdown">
@@ -189,7 +189,7 @@ function top_header_4() //assistant header.
                             </svg></button>
                             </form></li>
 
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
+                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="../assistant/index.php">Home</a></li>
 
                             <li class="nav-item dropdown">'; /*Role specific submenu (ASSISTANT)*/ echo '
                                 <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Assistant</a>
@@ -249,7 +249,7 @@ function top_header_5() //Admin header.
                     </svg></button>
                     </form></li>
 
-                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
+                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="../admin/index.php">Home</a></li>
 
                     <li class="nav-item dropdown">'; /*View Menu*/ echo '
                         <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">View</a>
@@ -946,11 +946,19 @@ function student_select_time()
         {
             if($week[$x-1] == "NULL")
                 continue;
-            
+
+            /*echo date('h:i:a', $endTime);*/
             $currTime = date("h:i:a");
+
             $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time, course_id FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND start_time >= '$currTime' AND course_id = '" . $_SESSION['selected_course'] . "' AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
             confirm($query2);
 
+            /*$timeres = fetch_array($query2);
+            $selectedTime = $timeres['start_time'];
+            $modifiedTime = strtotime("+20 minutes", strtotime($selectedTime));
+
+            echo date('h:i:s', $modifiedTime);
+            echo ' TIME<br><br>';*/
             if(mysqli_num_rows($query2) != 0)
             {
                 $date = conv_month(substr($week[$x-1],5,2)) . " " . conv_date(substr($week[$x-1],8,2)) . ", " . substr($week[$x-1],0,4);

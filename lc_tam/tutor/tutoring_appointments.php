@@ -93,7 +93,7 @@
                 <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance</a>
             </div>'; }else{ echo '
                 <div class = "container d-flex justify-content-center">
-                <a class = "btn btn-primary" disabled">REGISTERED.</a>
+                <a class = "btn btn-primary" disabled">REGISTERED</a>
             </div>'; }
                 '
             '; if(isset($_GET['success'])){ echo '
@@ -126,7 +126,7 @@
             lc_test_students.student_second_lastname) AS 'student_full_name', lc_appointments.course_id
             FROM lc_appointments
             INNER JOIN lc_test_students ON lc_test_students.student_email = lc_appointments.student_email
-            WHERE lc_appointments.session_id = '$id'");
+            WHERE lc_appointments.session_id = '$id' AND lc_appointments.app_cancel = '1'");
             confirm($query);
             while ($row = fetch_array($query)) {
         echo '    

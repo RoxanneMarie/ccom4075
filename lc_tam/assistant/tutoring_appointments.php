@@ -88,14 +88,15 @@
                 <th>Appointment ID</th>
                 <th>Session ID</th>
                 <th>Student Name</th>
+                <th>Student Email</th>
                 <th>Course</th>
             </thead>';
             $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id,  
             CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
-            lc_test_students.student_second_lastname) AS 'student_full_name', lc_appointments.course_id
+            lc_test_students.student_second_lastname) AS 'student_full_name', lc_appointments.course_id, lc_test_students.student_email
             FROM lc_appointments
             INNER JOIN lc_test_students ON lc_test_students.student_email = lc_appointments.student_email
-            WHERE lc_appointments.session_id = '$id'");
+            WHERE lc_appointments.session_id = '$id' AND lc_appointments.app_cancel = '1'");
             confirm($query);
             while ($row = fetch_array($query)) {
         echo '    
@@ -103,6 +104,7 @@
                     <td>'. $row['app_id'] .'</td>
                     <td>'. $row['session_id'] .'</td>
                     <td>'. $row['student_full_name'] .'</td>
+                    <td>'. $row['student_email'] .'</td>
                     <td>'. $row['course_id'] .'</td>
                     </tr>
                    '; } echo '

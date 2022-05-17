@@ -1,7 +1,7 @@
 <?php	
 include "common_db.inc";
 
-/*if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	IF ((isset($_REQUEST['login'])) && (!empty($_POST['email'])) && (!empty($_POST['password'])))
 	{
 		$user1=$_POST['email'];
@@ -25,15 +25,16 @@ include "common_db.inc";
 		}
 	
 		$ok=ldap_bind($ldapLink,$ldapUser,$ldapPswd)
-		or die(error_message('Email o contraseña inválida. Favor intentarlo nuevamente'));
+		or die(error_message('Email or password is invalid. Please try again'));
 		
 		ldap_close($ldapLink);
 		
 		if($ok==true){
-            $query = query("SELECT * FROM lc_test_students WHERE student_email LIKE '%$user1%')
+            $query = query("SELECT * FROM lc_test_students WHERE student_email LIKE '%$user1%'");
             confirm($query);
             if(mysqli_num_rows($query) == 0) {
-                redirect("student/confirm_acc.php?id="'$user1'"@upr.edu");
+                $Iquery  = query("INSERT INTO lc_test_students ");
+                redirect("student/confirm_acc.php?id=".$user1."@upr.edu");
             }else{
                 redirect("student/index.php");
             }
@@ -43,11 +44,9 @@ include "common_db.inc";
 		error_message('Usted ha dejado algún dato en blanco. Favor completar los datos requeridos.');
 	}
 }
-else {*/
 
       require_once("functions.php");
-      //login();
-      $alert = 0;
+
   echo '
   <!DOCTYPE html>
   <html>
@@ -88,9 +87,10 @@ else {*/
                           <form action="login_copy_upra.php" method="POST" class="mbr-form form-with-styler mx-auto" data-form-title="Form Name">';
                               echo '
                               <div class="dragArea row">';
-                              if($alert){ echo '
-                                  <div class = "alert alert-primary" role = "alert"> Invalid Login. Please try again. </div>
-                                  '; } echo '
+                              if(isset($_GET['error'])) {
+                                echo '<div class = "alert" style = "background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;" role="alert"> Invalid Login. Please try again. </div>'; }
+                                if(isset($_GET['deactivated'])) {
+                                    echo "<div class = 'alert' style = 'background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;' role='alert'> Your account is deactivated. Please ask UPRA's Learning Commons for assistance. </div>" ; } echo '
                                   <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="email">
                                       <input type="text" name="email" placeholder="Email without @upr.edu" data-form-field="email" class="form-control" id="email" required>
                                   </div>

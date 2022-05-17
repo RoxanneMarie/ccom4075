@@ -144,7 +144,7 @@
             <tr class="trCourses" style="background-color:#E0E0E0">
             <td><div class="table-responsive">
                     <select class="form-control" id="attendance_status" name = "attendance_status"  style="width: auto;"  onchange="func_select_all()">
-                    <option selected value = ""> Select a value. </option>';
+                    <option selected value = ""> Select a value</option>';
                     $query3 = query("SELECT * FROM lc_attendance_status");
                     confirm($query3);
                     while($row3 = fetch_array($query3)) { echo '
@@ -159,7 +159,7 @@
             lc_test_students.student_second_lastname) AS 'student_full_name', lc_test_students.student_id, lc_test_students.student_email
             FROM lc_appointments
             INNER JOIN lc_test_students ON lc_test_students.student_email = lc_appointments.student_email
-            WHERE lc_appointments.session_id = '$id'");
+            WHERE lc_appointments.session_id = '$id' AND lc_appointments.app_cancel = '1'");
             confirm($query4);
             $counter = 0;
             while ($row4 = fetch_array($query4)) {
@@ -168,7 +168,7 @@
                 <tr class="trCourses">
                     <td><div class="table-responsive">
                             <select class="form-control" id="attendance_status'.$counter.'" name = "attendance_status'.$counter.'"  style="width: auto;" required>
-                            <option selected value = ""> Select a value. </option>';
+                            <option selected value = ""> Select a value </option>';
                             $query5 = query("SELECT * FROM lc_attendance_status");
                             confirm($query5);
                             while($row5 = fetch_array($query5)) { echo '

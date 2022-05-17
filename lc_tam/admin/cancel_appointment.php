@@ -28,7 +28,7 @@
       $query = "UPDATE lc_appointments SET app_cancel = '2' WHERE app_id = '$appointment'";
       $res = query($query);
       confirm($query);
-      $uquery = query("UPDATE lc_sessions SET capacity = capacity - 1");
+      $uquery = query("UPDATE lc_sessions SET capacity = capacity - 1 WHERE session_id = '$sessionID'");
       confirm($uquery);
 
       redirect('index.php?cancelled');
