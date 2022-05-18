@@ -13,7 +13,7 @@
                 redirect('../assistant/index.php');
             }
         } 
-
+        //Searches on database students.
     $search_r = $_GET['id'];
     $CountQuery = query("SELECT COUNT(lc_test_students.student_email) As 'counter' FROM lc_test_students
     WHERE lc_test_students.student_email LIKE '%$search_r%'");

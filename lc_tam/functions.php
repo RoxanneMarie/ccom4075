@@ -2,10 +2,12 @@
 if(session_status() == PHP_SESSION_NONE)
     session_start();
 
+//sets default timezone to Puerto Rico.
 date_default_timezone_set("America/Puerto_Rico");
 
 //error_reporting(0);
 
+//depending on session type, gives a header.
 function select_header($choice)
 {
     if($choice == "Student")
@@ -23,6 +25,7 @@ function select_header($choice)
     }
 }
 
+//gives the email as a username.
 function username_delimiter()
 {
     $separador = "@";
@@ -360,13 +363,13 @@ defined("DB_PASS") ? null : define("DB_PASS", "");
 defined("DB_NAME") ? null : define("DB_NAME", "lc_tam");
 */
 
-defined("DB_HOST") ? null : define("DB_HOST" , "136.145.29.193");
+defined("DB_HOST") ? null : define("DB_HOST" , "localhost");
 
-defined("DB_USER") ? null : define("DB_USER", "roxmaral");
+defined("DB_USER") ? null : define("DB_USER", "root");
 
-defined("DB_PASS") ? null : define("DB_PASS", "R@mar12345");
+defined("DB_PASS") ? null : define("DB_PASS", "");
 
-defined("DB_NAME") ? null : define("DB_NAME", "roxmaral_db");
+defined("DB_NAME") ? null : define("DB_NAME", "lc_tam");
 
 
 $connection = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
@@ -377,6 +380,7 @@ function escape_string($string)
     return mysqli_real_escape_string($connection, $string);
 }
 
+//our function to do queries.
 function query($sql) 
 {
     global $connection;
@@ -386,6 +390,7 @@ function query($sql)
     return mysqli_query($connection, $sql);
 }
 
+//confirm query results.
 function confirm($result)
 {
     global $connection;
@@ -394,11 +399,13 @@ function confirm($result)
         die("QUERY FAILED: " . mysqli_error($connection) . mysqli_close($connection));
 }
 
+//fetches query information.
 function fetch_array($result)
 {
     return mysqli_fetch_assoc($result);
 }
 
+//closes connection.
 function close()
 {
     global $connection;
@@ -406,19 +413,14 @@ function close()
     mysqli_close($connection);
 }
 
+//redirects to desired page.
 function redirect($location)
 {
     return header('refresh: 0; url='.$location);
     //return header('refresh:3; url='.$location);
 }
-/*
-function testing()
-{
-    $courseID = "CCOM3002";
-    $courseName = "COMPUTER PROGRAMMING II";
-    $departmentID = 3;
-    $tutor_available = 1;
-*/
+
+//gets the last id used.
 function last_id()
 {
     global $connection;
@@ -426,6 +428,7 @@ function last_id()
     return $connection->insert_id;
 }
 
+//converts month from number to text.
 function conv_month($m)
 {
     switch($m)
@@ -457,6 +460,7 @@ function conv_month($m)
     }
 }
 
+//converts the date to a text version.
 function conv_date($d)
 {
     if(substr($d,0,1) == "0")
@@ -481,6 +485,7 @@ function conv_date($d)
     return $d;
 }
 
+//converts time to regular format.
 function conv_time($t)
 {
     $t = number_format($t);
@@ -491,6 +496,7 @@ function conv_time($t)
     return $t;
 }
 
+//converts time whenever its AM or PM.
 function ampm($t)
 {
     $t = number_format($t);
@@ -501,6 +507,7 @@ function ampm($t)
         return "am";
 }
 
+//login function.
 function login()
 {
     if(isset($_POST['login']))
@@ -593,6 +600,7 @@ function login()
     }
 }
 
+//function that students use to select the course.
 function student_select_course()
 {
     echo '
@@ -676,6 +684,7 @@ function student_select_course()
     close();
 }
 
+//function that selects professor as a student. checks if a professor is available.
 function professor_available()
 {
     if(isset($_POST["course_ready"]))
@@ -704,6 +713,7 @@ function professor_available()
     }
 }
 
+//functions that select professor.
 function student_select_professor()
 {
     $query = query("SELECT professor_entry_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname FROM lc_professors WHERE acc_stat_id = '1' AND course_id = '" . $_SESSION['selected_course'] . "'");
@@ -750,6 +760,7 @@ function student_select_professor()
     }
 }
 
+//functions that students use to select tutor.
 function student_select_tutor()
 {
     echo '
@@ -854,7 +865,7 @@ function student_select_tutor()
 
 // Needs Crowd Control.
 // Section Confliction needs simplification (Key: course_id)
-
+//functions that allows student to select appointment time.
 function student_select_time()
 {   
     if(isset($_POST['tutor_ready']))
@@ -1069,7 +1080,7 @@ function student_select_time()
     else
         redirect("../logout.php");
 }
-
+//confirms the appointment details of student.
 function confirm_app()
 {
     //print_r($_POST);
@@ -1159,6 +1170,7 @@ function confirm_app()
         redirect("../logout.php");
 }
 
+//creates an appointment in the database.
 function create_app()
 {
     if(isset($_POST["confirm_app"]))
@@ -1231,6 +1243,7 @@ function create_app()
 
 //lc_sessions ya no tiene course_id
 
+//views appointment details as a student.
 function student_view_appointment()
 {
     //print_r($_SESSION);
@@ -1280,6 +1293,11 @@ function student_view_appointment()
             <div class = 'container-sm'>
             <br>
             <h1 class = 'h1 text-center'>Appointments </h1>
+            "; if(isset($_GET['cancelled'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Appointment cancelled successfully.</span>
+            </div>
+            '; }  echo "
             <div class = 'table-responsive'>
                 <table class = 'table table-sm'>
                 <caption> Current registered appointments. Appointments past current date will not be shown.</caption>
@@ -1320,6 +1338,11 @@ function student_view_appointment()
             <div class = 'container-sm border rounded'>
                  <br>
                  <h1 class = 'h1 text-center'>Appointments </h1>
+                 "; if(isset($_GET['cancelled'])){ echo '
+                    <div class="alert alert-success" role="alert">
+                    <span> Appointment cancelled successfully.</span>
+                </div>
+                '; }  echo "
                  <p class = 'lead text-center'>You don't have any appointments. Would you like to create one?</p>
                  <div class = 'd-flex justify-content-center'>
                      <a class = 'btn btn-primary' href = 'select_course.php'>Create Appointment</a>
@@ -1335,6 +1358,11 @@ function student_view_appointment()
        <div class = 'container-sm border rounded'>
             <br>
             <h1 class = 'h1 text-center'>Appointments </h1>
+            "; if(isset($_GET['cancelled'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Appointment cancelled successfully.</span>
+            </div>
+            '; }  echo "
             <p class = 'lead text-center'>You don't have any appointments. Would you like to create one?</p>
             <div class = 'd-flex justify-content-center'>
                 <a class = 'btn btn-primary' href = 'select_course.php'>Create Appointment</a>
