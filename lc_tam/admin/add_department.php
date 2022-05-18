@@ -17,7 +17,7 @@
     if(isset($_POST['submit'])){                                //checks if anything has been submitted to the form.
         $departmentName = $_POST['Department_Name'];            //takes the department name from the form field 'Department_Name'.
 
-    echo $query = query('INSERT INTO lc_departments (dept_name)
+    $query = query('INSERT INTO lc_departments (dept_name)
     VALUES("' . $departmentName . '")');
     header('location:departments.php?Added');
     }

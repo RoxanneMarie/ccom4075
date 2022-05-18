@@ -2,6 +2,20 @@
 /*include "common_db.inc";*/
 include("functions.php");
 
+if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {
+    if($_SESSION['type'] == 'Student') {
+        redirect('student/index.php');
+    }elseif($_SESSION['type'] == 'Tutor') {
+        redirect('tutor/index.php');
+    }elseif($_SESSION['type'] == 'Assistant') {
+        redirect('assistant/index.php');
+    }elseif($_SESSION['type'] == 'Admin') {
+        redirect('admin/index.php');
+    }else{
+        redirect('student/index.php');
+    }
+}
+
 //checks if anything has been submitted.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	IF ((isset($_REQUEST['login'])) && (!empty($_POST['email'])) && (!empty($_POST['password']))) //checks if login, pass and email are written.
@@ -60,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION["current_day_of_the_week"] = date("l");
                 redirect("admin/index.php");
             }else{
-                redirect("student/confirm_acc.php?id=".$email."");
+                redirect("confirm_acc.php?id=".$email."");
             }
         }
         else
