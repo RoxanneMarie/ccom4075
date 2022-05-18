@@ -18,8 +18,7 @@
     if(isset($_GET['id'])){                                     //gets the student's ID (EMAIL).
         $id = $_GET['id'];
         $fulladdress = explode('.', $id);
-        echo $name = $fulladdress[0];
-        echo "<br>";
+        $name = $fulladdress[0];
     }
 
     if(isset($_POST['submit'])){ 
