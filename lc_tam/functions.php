@@ -2,10 +2,12 @@
 if(session_status() == PHP_SESSION_NONE)
     session_start();
 
+//sets default timezone to Puerto Rico.
 date_default_timezone_set("America/Puerto_Rico");
 
 //error_reporting(0);
 
+//depending on session type, gives a header.
 function select_header($choice)
 {
     if($choice == "Student")
@@ -22,7 +24,16 @@ function select_header($choice)
         exit;
     }
 }
-function top_header_1()
+
+//gives the email as a username.
+function username_delimiter()
+{
+    $separador = "@";
+    $username = explode($separador, $_SESSION['email']);
+    return $username[0];
+}
+
+function top_header_1() //Not logged in (no account type).
 {
   echo '
   <style>
@@ -39,26 +50,16 @@ function top_header_1()
                             </a>
                         </span>
                     </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item" ><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
-                        </ul>
-                    </div>
+                    <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+                        <li class="nav-item" ><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
+                    </ul>
                 </div>
             </nav>
 
         </section>';
 }
 
-function top_header_2()
+function top_header_2() //Student header.
 {
   echo '
   <style>
@@ -86,7 +87,14 @@ function top_header_2()
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
                             <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="select_course.php">Create</a><a class="text-black dropdown-item display-4" href="index.php">View</a></div></li>
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="../logout.php">Logout</a></li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.username_delimiter().'</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                                    <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
+                                </div>
+                            </li>
+                            
                         </ul>
                     </div>
                 </div>
@@ -95,7 +103,61 @@ function top_header_2()
         </section>';
 }
 
-function top_header_3()
+function top_header_3() //Tutor header.
+{
+  echo '
+    <style>
+    #hide-footer{display: none !important;}'; /*NO QUITEN ESTO*/ echo '
+    </style>
+
+    <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
+
+    <nav class="navbar navbar-dropdown navbar-expand-lg">
+    <div class="container-fluid">
+        <div class="navbar-brand">
+            <span class="navbar-logo">
+                <a href="index.php">
+                    <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
+                </a>
+            </span>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
+                <li class="nav-item">
+                    <a class="nav-link link text-black text-primary display-4" href="../tutor/index.php">Home</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                        <a class="text-black dropdown-item display-4" href="../tutor/calendar.php">Calendar</a>
+                        <a class="text-black dropdown-item display-4" href="../tutor/tutoring_sessions.php">Attendance</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.username_delimiter().'</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                    <a class="text-black dropdown-item display-4" href="../student/index.php">Student Role</a>
+                    <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
+                </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </nav>
+    </section>';
+}
+
+function top_header_4() //assistant header.
 {
   echo '
   <style>
@@ -122,10 +184,31 @@ function top_header_3()
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="select_course.php">Create</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Schedule</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Attendance</a></div></li>
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="../logout.php">Logout</a></li>
+
+                            <li class="nav-item"><form class="form-inline" action = "../assistant/student_search.php" method = "post">
+                            <input class="form-control mr-sm-2" type="search" name = "student_search" placeholder = "insert student email" aria-label="Search">'; /*Search bar, calls the search function used on assistant*/ echo '
+                            <button class="btn btn-primary my-2 my-sm-0" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg></button>
+                            </form></li>
+
+                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="../assistant/index.php">Home</a></li>
+
+                            <li class="nav-item dropdown">'; /*Role specific submenu (ASSISTANT)*/ echo '
+                                <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Assistant</a>
+                                <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                                    <a class="text-black dropdown-item display-4" href="../assistant/tutors.php">Tutors</a>
+                                    <a class="text-black dropdown-item display-4" href="../assistant/tutoring_sessions.php">Sessions</a>
+                                </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                            <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.username_delimiter().'</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                                <a class="text-black dropdown-item display-4" href="../student/index.php">Student Role</a>
+                                <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
+                            </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -134,7 +217,7 @@ function top_header_3()
         </section>';
 }
 
-function top_header_4()
+function top_header_5() //Admin header.
 {
   echo '
   <style>
@@ -142,116 +225,70 @@ function top_header_4()
 </style>
         <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
     
-            <nav class="navbar navbar-dropdown navbar-expand-lg">
-                <div class="container-fluid">
-                    <div class="navbar-brand">
-                        <span class="navbar-logo">
-                            <a href="index.php">
-                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
-                            </a>
-                        </span>
-                    </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="login.php">Login</a></li>
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Appointment</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item text-primary display-4" href="create.php">Create</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Tutoring</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Schedule</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Attendance</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Reports</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">Generate</a><a class="text-black dropdown-item display-4" href="https://mobirise.com">View</a></div></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="https://mobirise.com">View<br></a><a class="text-black dropdown-item display-4" href="https://mobirise.com">Logout</a></div></li>
-                        </ul>
-                    </div>
+        <nav class="navbar navbar-dropdown navbar-expand-lg">
+        <div class="container-fluid">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="index.php">
+                        <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
+                    </a>
+                </span>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-            </nav>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
 
-        </section>';
-}
+                    <li class="nav-item"><form class="form-inline" action = "../admin/student_search.php" method = "post">
+                    <input class="form-control mr-sm-2" type="search" name = "student_search" placeholder = "insert student email" aria-label="Search">'; /*Search bar, calls the search function used on admin*/ echo '
+                    <button class="btn btn-primary my-2 my-sm-0" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg></button>
+                    </form></li>
 
-function top_header_5()
-{
-  echo '
-  <style>
-#hide-footer{display: none !important;}'; /*NO QUITEN ESTO*/ echo '
-</style>
-        <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
-    
-            <nav class="navbar navbar-dropdown navbar-expand-lg">
-                <div class="container-fluid d-flex justify-content-center" >'; /*WORK IN PROGRESS */ echo '
-                    <div class="navbar-brand">
-                        <span class="navbar-logo">
-                            <a href="index.php">
-                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
-                            </a>
-                        </span>
-                    </div>
+                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="../admin/index.php">Home</a></li>
 
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
+                    <li class="nav-item dropdown">'; /*View Menu*/ echo '
+                        <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">View</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                            <a class="text-black dropdown-item display-4" href="../admin/tutors.php">Tutors</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/assistants.php">Assistants</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/professors.php">Professors</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/courses.php">Courses</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/departments.php">Departments</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/semesters.php">Semesters</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/tutoring_sessions.php">Tutoring Sessions</a>
                         </div>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
-                        </ul>
+                    </li>
 
-
-                    </div>
-                </div>
-            </nav>
-
-        </section>';
-}
-
-/* Space for top_header6 and top_header7 until top header 9*/
-
-function top_header_9() //header for assistant menu.
-{
-  echo '
-  <style>
-#hide-footer{display: none !important;}
-</style>
-        <section data-bs-version="5.1" class="menu cid-s48OLK6784" once="menu" id="menu1-k">
-    
-            <nav class="navbar navbar-dropdown navbar-expand-lg">
-                <div class="container-fluid">
-                    <div class="navbar-brand">
-                        <span class="navbar-logo">
-                            <a href="index.php">
-                                <img src="../assets/images/logo_1.png" alt="Mobirise" style="height: 3.8rem;">
-                            </a>
-                        </span>
-                    </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <div class="hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
+                    <li class="nav-item dropdown">'; /*Add Menu*/ echo '
+                        <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Add</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                            <a class="text-black dropdown-item display-4" href="../admin/add_tutor.php">Tutor</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/add_assistant.php">Assistant</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/add_professor.php">Professor</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/add_course.php">Course</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/add_department.php">Department</a>
+                            <a class="text-black dropdown-item display-4" href="../admin/add_semester.php">Semester</a>
                         </div>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index.php">Home</a></li>
-                            <li class="nav-item dropdown"><a class="nav-link link text-black dropdown-toggle display-4" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Account</a><div class="dropdown-menu" aria-labelledby="dropdown-undefined"><a class="text-black dropdown-item display-4" href="../logout.php">Logout</a></div></li>
-                        </ul>
+                    </li>
 
-
+                    <li class="nav-item dropdown">
+                    <a class="nav-link link text-black dropdown-toggle display-4" href="#" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">'.username_delimiter().'</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown-undefined">
+                        <a class="text-black dropdown-item display-4" href="../logout.php">Logout</a>
                     </div>
-                </div>
-            </nav>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
         </section>';
 }
@@ -295,10 +332,8 @@ function credit_mobirise_1()
         </section>
         <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="../assets/smoothscroll/smooth-scroll.js"></script>
-        <script src="../assets/ytplayer/index.js"></script>
         <script src="../assets/mbr-switch-arrow/mbr-switch-arrow.js"></script>
-        <script src="../assets/dropdown/js/navbar-dropdown.js"></script>
-        <script src="../assets/theme/js/script.js"></script>';
+        <script src="../assets/dropdown/js/navbar-dropdown.js"></script>';
 }
 
 function credit_mobirise_2()
@@ -316,6 +351,19 @@ function credit_mobirise_2()
         <script src="../assets/formoid/formoid.min.js"></script>';
 }
 
+function credit_mobirise_3()
+{
+    echo '
+        <section id="hide-footer" style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Robot, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
+            <a href="https://mobirise.site/u" style="flex: 1 1; height: 3rem; padding-left: 1rem;"></a>
+            <p style="flex: 0 0 auto; margin:0; padding-right:1rem;">Page was <a href="https://mobirise.site/h" style="color:#aaa;">designed with</a> Mobirise</p>
+        </section>
+        <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/smoothscroll/smooth-scroll.js"></script>
+        <script src="assets/mbr-switch-arrow/mbr-switch-arrow.js"></script>
+        <script src="assets/dropdown/js/navbar-dropdown.js"></script>';
+}
+
 /*
 defined("DB_HOST") ? null : define("DB_HOST" , "localhost");
 
@@ -326,16 +374,43 @@ defined("DB_PASS") ? null : define("DB_PASS", "");
 defined("DB_NAME") ? null : define("DB_NAME", "lc_tam");
 */
 
-defined("DB_HOST") ? null : define("DB_HOST" , "136.145.29.193");
+defined("DB_HOST") ? null : define("DB_HOST" , "localhost");
 
-defined("DB_USER") ? null : define("DB_USER", "roxmaral");
+defined("DB_USER") ? null : define("DB_USER", "root");
 
-defined("DB_PASS") ? null : define("DB_PASS", "R@mar12345");
+defined("DB_PASS") ? null : define("DB_PASS", "");
 
-defined("DB_NAME") ? null : define("DB_NAME", "roxmaral_db");
+defined("DB_NAME") ? null : define("DB_NAME", "lc_tam");
 
 
 $connection = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
+
+//=================PDO Connection========================================
+$host     = DB_HOST;
+$db       = DB_NAME;
+$user     = DB_USER;
+$password = DB_PASS;
+
+$dsn = "mysql:host=$host;dbname=$db;charset=UTF8";
+
+try {
+    $conn = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+
+} catch (PDOException $e) {
+     echo $e->getMessage();
+}
+
+
+defined("DB_PDO_HOST") ? null : define("DB_PDO_HOST" , "localhost");
+
+defined("DB_PDO_USER") ? null : define("DB_PDO_USER", "root");
+
+defined("DB_PDO_PASS") ? null : define("DB_PDO_PASS", "");
+
+defined("DB_PDO_NAME") ? null : define("DB_PDO_NAME", "lc_tam");
+
+
+/*$connection = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);*/
 
 function escape_string($string)
 {
@@ -343,6 +418,7 @@ function escape_string($string)
     return mysqli_real_escape_string($connection, $string);
 }
 
+//our function to do queries.
 function query($sql) 
 {
     global $connection;
@@ -352,6 +428,7 @@ function query($sql)
     return mysqli_query($connection, $sql);
 }
 
+//confirm query results.
 function confirm($result)
 {
     global $connection;
@@ -360,11 +437,13 @@ function confirm($result)
         die("QUERY FAILED: " . mysqli_error($connection) . mysqli_close($connection));
 }
 
+//fetches query information.
 function fetch_array($result)
 {
     return mysqli_fetch_assoc($result);
 }
 
+//closes connection.
 function close()
 {
     global $connection;
@@ -372,19 +451,14 @@ function close()
     mysqli_close($connection);
 }
 
+//redirects to desired page.
 function redirect($location)
 {
     return header('refresh: 0; url='.$location);
     //return header('refresh:3; url='.$location);
 }
-/*
-function testing()
-{
-    $courseID = "CCOM3002";
-    $courseName = "COMPUTER PROGRAMMING II";
-    $departmentID = 3;
-    $tutor_available = 1;
-*/
+
+//gets the last id used.
 function last_id()
 {
     global $connection;
@@ -392,6 +466,7 @@ function last_id()
     return $connection->insert_id;
 }
 
+//converts month from number to text.
 function conv_month($m)
 {
     switch($m)
@@ -423,6 +498,7 @@ function conv_month($m)
     }
 }
 
+//converts the date to a text version.
 function conv_date($d)
 {
     if(substr($d,0,1) == "0")
@@ -447,6 +523,7 @@ function conv_date($d)
     return $d;
 }
 
+//converts time to regular format.
 function conv_time($t)
 {
     $t = number_format($t);
@@ -457,6 +534,7 @@ function conv_time($t)
     return $t;
 }
 
+//converts time whenever its AM or PM.
 function ampm($t)
 {
     $t = number_format($t);
@@ -467,6 +545,7 @@ function ampm($t)
         return "am";
 }
 
+//login function.
 function login()
 {
     if(isset($_POST['login']))
@@ -484,8 +563,7 @@ function login()
             confirm($query2);
             if(mysqli_num_rows($query2) == 0) //no es admin
             {
-                echo "Your Password or Username is incorrect";
-                redirect("login.php");
+                redirect("login.php?error");
             }
             else // es admin
             {
@@ -495,7 +573,10 @@ function login()
                 $_SESSION['email'] = $email;
                 $_SESSION["current_date"] = date("Y-m-d");
                 $_SESSION["current_day_of_the_week"] = date("l");
-                redirect("admin/admin.php");
+                $_SESSION["logged_in"] = true;  //confirms that the user is logged in.
+                $_SESSION["last_activity"] = time();    //last activity will be the exact time of login. Can be refreshed.
+                $_SESSION["expiration"] = 1*15*60; //expires in 15 min.
+                redirect("admin/index.php");
             }
         }
         else
@@ -508,8 +589,7 @@ function login()
             
             if($row2['acc_stat_name'] != 'Active')
             {
-                echo "Your account is deactivated. Please ask UPRA's Learning Commons for assistance.";
-                redirect("login.php");
+                redirect("login.php?deactivated");
             }
             else
             {
@@ -517,6 +597,9 @@ function login()
                 $_SESSION['email'] = $email;
                 $_SESSION["current_date"] = date("Y-m-d");
                 $_SESSION["current_day_of_the_week"] = date("l");
+                $_SESSION["logged_in"] = true;  //confirms that the user is logged in.
+                $_SESSION["last_activity"] = time();    //last activity will be the exact time of login. Can be refreshed.
+                $_SESSION["expiration"] = 1*15*60; //expires in 15 min.
                 
                 $query = query("SELECT acc_stat_id FROM lc_test_tutors WHERE student_email = '{$email}'");
                 confirm($query);
@@ -540,16 +623,19 @@ function login()
                     
                     if($row2['acc_stat_name'] != 'Active' && $row3['acc_stat_name'] != 'Active')   //era tutor y era asistente
                         $_SESSION['type'] = "Student";
-                    else if($row2['acc_stat_name'] == 'Active') //es tutor
+                    else if($row2['acc_stat_name'] == 'Active') 
+                    {   //es tutor
                         $_SESSION['type'] = "Tutor";
-                    else    //es asistente
+                    }
+                    else
+                    { //es asistente
                         $_SESSION['type'] = "Assistant";
-                    
+                    }
                     //NOTA: UNA CUENTA (PERSONA/ESTUDIANTE) NO PUEDE SER TUTOR Y ASISTENTE A LA VEZ
                 }
                 else // es estudiante
                     $_SESSION['type'] = "Student";
-                
+
                 redirect("student/index.php");
             }
         }
@@ -558,6 +644,7 @@ function login()
     }
 }
 
+//function that students use to select the course.
 function student_select_course()
 {
     echo '
@@ -569,7 +656,7 @@ function student_select_course()
                                 <h3 class="mbr-section-title mb-0 mbr-fonts-style display-2"><strong>Tutoring Courses</strong></h3>
                             </div>
                             <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                            Select the course for which you want to request tutoring
+                                Select the course you want to request tutoring for
                             </div>
                             <div id="bootstrap-accordion_17" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">';
     
@@ -641,6 +728,7 @@ function student_select_course()
     close();
 }
 
+//function that selects professor as a student. checks if a professor is available.
 function professor_available()
 {
     if(isset($_POST["course_ready"]))
@@ -669,9 +757,10 @@ function professor_available()
     }
 }
 
+//functions that select professor.
 function student_select_professor()
 {
-    $query = query("SELECT professor_entry_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname FROM lc_professors WHERE course_id = '" . $_SESSION['selected_course'] . "'");
+    $query = query("SELECT professor_entry_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname FROM lc_professors WHERE acc_stat_id = '1' AND course_id = '" . $_SESSION['selected_course'] . "'");
     confirm($query);
     
     echo '
@@ -680,11 +769,11 @@ function student_select_professor()
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                            <strong>Select the Professor.</strong>
+                            <strong>Select the Professor</strong>
                         </h3>
                         <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                        Select the Professor giving the class ('; echo $_SESSION['selected_course']; echo ')
-                    </div>
+                            Select the Professor giving the class ('; echo $_SESSION['selected_course']; echo ')
+                        </div>
                     </div>';
     
     $x = 1;
@@ -694,7 +783,9 @@ function student_select_professor()
         echo '
             <div class="col-sm-6 col-lg-3">
                 <div class="card-wrap">
-
+                    <div class="image-wrap">
+                        <img src="../assets/images/user.jpg"
+                    </div>
                     <div class="content-wrap">
                         <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
                             <strong>' . $row['professor_name'] . ' ' . $row['professor_initial'] . ' ' . $row['professor_first_lastname'] . ' ' . $row['professor_second_lastname'] . '</strong>
@@ -704,20 +795,16 @@ function student_select_professor()
                         </div>
                     </div>
                 </div>
-            </div>
             <form id="form' . $x . '">
                 <input type="hidden" name="professor_ready">
-            </form>';
-        
+            </form>
+            </div>
+        </div>';
         $x++;
     }
-    
-    echo '
-                </div>
-            </div>
-        </section>';
 }
 
+//functions that students use to select tutor.
 function student_select_tutor()
 {
     echo '
@@ -726,11 +813,11 @@ function student_select_tutor()
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                            <strong>Select the tutor.</strong>
+                            <strong>Select the tutor</strong>
                         </h3>
                         <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                        Select the day and hour (if available) - '; echo $_SESSION["selected_course"]; echo '
-                    </div>
+                            Select the day and hour (if available) - '; echo $_SESSION["selected_course"]; echo '
+                        </div>
                     </div>';
     
     if(isset($_POST["professor_ready"]))
@@ -774,7 +861,12 @@ function student_select_tutor()
         $query2 = query("SELECT student_email FROM lc_test_tutors WHERE tutor_id = '" . $row["tutor_id"] . "'");
         confirm($query2);
         $row2 = fetch_array($query2);
+
+        $query3 = query("SELECT tutor_image FROM lc_test_tutors WHERE tutor_id = '" . $row["tutor_id"] . "'");
+        confirm($query3);
+        $row3 = fetch_array($query3);
         $email = $row2["student_email"];
+        $tutorImg = $row3['tutor_image'];
         
         $query2 = query("SELECT student_name, student_initial, student_first_lastname, student_second_lastname FROM lc_test_students WHERE student_email = '" . $email . "'");
         confirm($query2);
@@ -783,8 +875,12 @@ function student_select_tutor()
         echo '
             <div class="col-sm-6 col-lg-3">
                 <div class="card-wrap">
-                    <div class="image-wrap">
-                        <img src="../assets/images/tutors/' . $email . '.jpg">
+                    <div class="image-wrap">';
+                    if ($row3['tutor_image'] != NULL) {
+                        echo '<img src="' . $tutorImg . '">';
+                    }else{
+                        echo '<img src="../assets/images/user.jpg"';
+                    } echo '
                     </div>
                     <div class="content-wrap">
                         <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
@@ -813,7 +909,7 @@ function student_select_tutor()
 
 // Needs Crowd Control.
 // Section Confliction needs simplification (Key: course_id)
-
+//functions that allows student to select appointment time.
 function student_select_time()
 {   
     if(isset($_POST['tutor_ready']))
@@ -906,9 +1002,18 @@ function student_select_time()
             if($week[$x-1] == "NULL")
                 continue;
 
-            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time, course_id FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND course_id = '" . $_SESSION['selected_course'] . "' AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
+            /*echo date('h:i:a', $endTime);*/
+            $currTime = date("h:i:a");
+
+            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time, course_id FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND start_time >= '$currTime' AND course_id = '" . $_SESSION['selected_course'] . "' AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
             confirm($query2);
 
+            /*$timeres = fetch_array($query2);
+            $selectedTime = $timeres['start_time'];
+            $modifiedTime = strtotime("+20 minutes", strtotime($selectedTime));
+
+            echo date('h:i:s', $modifiedTime);
+            echo ' TIME<br><br>';*/
             if(mysqli_num_rows($query2) != 0)
             {
                 $date = conv_month(substr($week[$x-1],5,2)) . " " . conv_date(substr($week[$x-1],8,2)) . ", " . substr($week[$x-1],0,4);
@@ -1002,7 +1107,9 @@ function student_select_time()
         }
         
         if(!$flag)
-            echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
+        echo "<div class = 'alert' style = 'background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;' role='alert'>
+        <span> This tutor has no more sections available to make appointments on this week. Wait until next week and try again! </span>
+        </div>";
 
         echo '
                             <br><br>
@@ -1017,7 +1124,7 @@ function student_select_time()
     else
         redirect("../logout.php");
 }
-
+//confirms the appointment details of student.
 function confirm_app()
 {
     //print_r($_POST);
@@ -1107,6 +1214,7 @@ function confirm_app()
         redirect("../logout.php");
 }
 
+//creates an appointment in the database.
 function create_app()
 {
     if(isset($_POST["confirm_app"]))
@@ -1179,12 +1287,13 @@ function create_app()
 
 //lc_sessions ya no tiene course_id
 
+//views appointment details as a student.
 function student_view_appointment()
 {
     //print_r($_SESSION);
     $c = 0;
     
-    $query = query("SELECT session_id FROM lc_appointments WHERE student_email = '" . $_SESSION["email"] . "'");
+    $query = query("SELECT session_id FROM lc_appointments WHERE app_cancel = '1' AND student_email = '" . $_SESSION["email"] . "'");
     confirm($query);
     
     if(mysqli_num_rows($query) != 0)
@@ -1210,8 +1319,11 @@ function student_view_appointment()
                 $query3 = query("SELECT course_id FROM lc_appointments WHERE session_id = " . $row["session_id"]);
                 confirm($query3);
                 $row4 = fetch_array($query3);
-                
-                $app_info[$c-1] = array('f_name' => $row3["student_name"], 'l_name' => $row3["student_first_lastname"], 'course' => $row4["course_id"], 'date' => $row2["DATE_FORMAT(session_date, '%M %d %Y')"], 's_time' => substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5), 'e_time' => substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5));
+
+                $query4 = query("SELECT app_id FROM lc_appointments WHERE session_id = " . $row["session_id"] ." AND student_email = '". $_SESSION["email"] ."'");
+                confirm($query4);
+                $row5 = fetch_array($query4);
+                $app_info[$c-1] = array('f_name' => $row3["student_name"], 'l_name' => $row3["student_first_lastname"], 'course' => $row4["course_id"], 'cancel' => $row5["app_id"], 'date' => $row2["DATE_FORMAT(session_date, '%M %d %Y')"], 's_time' => substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(start_time, '%h %i %p')"],3,5), 'e_time' => substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],0,2) . ":" . substr($row2["TIME_FORMAT(end_time, '%h %i %p')"],3,5));
             }
         }
         
@@ -1225,6 +1337,11 @@ function student_view_appointment()
             <div class = 'container-sm'>
             <br>
             <h1 class = 'h1 text-center'>Appointments </h1>
+            "; if(isset($_GET['cancelled'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Appointment cancelled successfully.</span>
+            </div>
+            '; }  echo "
             <div class = 'table-responsive'>
                 <table class = 'table table-sm'>
                 <caption> Current registered appointments. Appointments past current date will not be shown.</caption>
@@ -1234,6 +1351,7 @@ function student_view_appointment()
                     <th>Date</th>
                     <th>Start</th>
                     <th>End</th>
+                    <th>Cancel</th>
                   </thead>";
             
             for($i=1; $i <= $c; $i++)
@@ -1241,10 +1359,11 @@ function student_view_appointment()
                 echo "
                       <tbody>
                         <td>" . $app_info[$i-1]["f_name"] . " " . $app_info[$i-1]["l_name"] . "</td>
-                       <td>" . $app_info[$i-1]["course"] . "</td>
+                        <td>" . $app_info[$i-1]["course"] . "</td>
                         <td>" . $app_info[$i-1]["date"] . "</td>
                         <td>" . $app_info[$i-1]["s_time"] . "</td>
                         <td>" . $app_info[$i-1]["e_time"] . "</td>
+                        <td><a href='cancel_appointment.php?id=" . $app_info[$i-1]['cancel'] . "'>Cancel Appointment</a></td>
                       </tbody>";
             }
 
@@ -1263,6 +1382,11 @@ function student_view_appointment()
             <div class = 'container-sm border rounded'>
                  <br>
                  <h1 class = 'h1 text-center'>Appointments </h1>
+                 "; if(isset($_GET['cancelled'])){ echo '
+                    <div class="alert alert-success" role="alert">
+                    <span> Appointment cancelled successfully.</span>
+                </div>
+                '; }  echo "
                  <p class = 'lead text-center'>You don't have any appointments. Would you like to create one?</p>
                  <div class = 'd-flex justify-content-center'>
                      <a class = 'btn btn-primary' href = 'select_course.php'>Create Appointment</a>
@@ -1278,6 +1402,11 @@ function student_view_appointment()
        <div class = 'container-sm border rounded'>
             <br>
             <h1 class = 'h1 text-center'>Appointments </h1>
+            "; if(isset($_GET['cancelled'])){ echo '
+                <div class="alert alert-success" role="alert">
+                <span> Appointment cancelled successfully.</span>
+            </div>
+            '; }  echo "
             <p class = 'lead text-center'>You don't have any appointments. Would you like to create one?</p>
             <div class = 'd-flex justify-content-center'>
                 <a class = 'btn btn-primary' href = 'select_course.php'>Create Appointment</a>
@@ -1289,4 +1418,16 @@ function student_view_appointment()
 
 }
 
+function getTutorOffersAndSchedules() {
+    $query = query("SELECT lc_test_tutors.tutor_id, lc_test_tutors.student_email, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_tutor_offers.course_id, lc_courses.course_name, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, lc_professors.professor_second_lastname, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time
+    FROM lc_test_tutors
+    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
+    INNER JOIN lc_tutor_offers ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
+    INNER JOIN lc_tutor_schedule ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
+    INNER JOIN lc_courses ON lc_courses.course_id = lc_tutor_offers.course_id AND lc_courses.course_id = lc_tutor_schedule.course_id
+    INNER JOIN lc_professors ON lc_professors.professor_entry_id = lc_tutor_offers.professor_entry_id
+    WHERE lc_tutor_offers.visibility = 1 AND lc_tutor_schedule.visibility = 1");
+    confirm($query);
+    return($query);
+}
 ?>

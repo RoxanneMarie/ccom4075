@@ -1,22 +1,26 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_POST['submit'])){
-        $departmentName = $_POST['Department_Name'];
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    echo $query = query('INSERT INTO lc_departments (dept_name)
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Submit===================================================================
+    if(isset($_POST['submit'])){                                //checks if anything has been submitted to the form.
+        $departmentName = $_POST['Department_Name'];            //takes the department name from the form field 'Department_Name'.
+
+    $query = query('INSERT INTO lc_departments (dept_name)
     VALUES("' . $departmentName . '")');
     header('location:departments.php?Added');
     }
+    //=========================End Submit================================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -37,7 +41,7 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
         <main class="container">
             <article>

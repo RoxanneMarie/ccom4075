@@ -1,7 +1,20 @@
 <?php
     require_once("functions.php");
     login();
-    $alert = 0;
+
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {
+        if($_SESSION['type'] == 'Student') {
+            redirect('student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {
+            redirect('tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {
+            redirect('assistant/index.php');
+        }elseif($_SESSION['type'] == 'Admin') {
+            redirect('admin/index.php');
+        }else{
+            redirect('student/index.php');
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -40,15 +53,11 @@
                 <div class="row justify-content-center mt-4">
                     <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
                         <form action="login.php" method="POST" class="mbr-form form-with-styler mx-auto" data-form-title="Form Name">
-                            <!-- <input type="hidden" name="email" data-form-email="true" value="qEQkUZCrQV0jr3m7VxTivJu/7YR7JO7sqhde/qdpvDpts06yWNd/vJUYUsoNSK4Z+UioUOHdxBjPEBJTN4N6mgVq4kn330NZGvXg7oSdLvjTJe+dzIPufSvwIdwj2lg2">
-                            <div class="row">
-                                <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Login Successful!</div>
-                                <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">Oops...! Try Again!</div>
-                            </div> -->
                             <div class="dragArea row">
-                            <?php if($alert){ ?>
-                                <div class = "alert alert-primary" role = "alert"> Invalid Login. Please try again. </div>
-                                <?php } ?>
+                            <?php if(isset($_GET['error'])) {
+                                echo '<div class = "alert" style = "background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;" role="alert"> Invalid Login. Please try again. </div>'; }
+                                if(isset($_GET['deactivated'])) {
+                                    echo "<div class = 'alert' style = 'background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;' role='alert'> Your account is deactivated. Please ask UPRA's Learning Commons for assistance. </div>" ; } ?>
                                 <div class="col-lg-12 col-md-12 col-sm-12 form-group mb-3" data-for="name">
                                     <input type="email" name="email" placeholder="Email" data-form-field="name" class="form-control" value="" id="name-form6-u" required>
                                 </div>

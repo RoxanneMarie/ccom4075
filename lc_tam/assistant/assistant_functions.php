@@ -1,6 +1,18 @@
 <?php 
-
 include('../functions.php');
+
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Assistant.
+        if($_SESSION['type'] == 'Student') {    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') { //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin, redirects.
+            redirect('../admin/index.php');
+        }
+    } 
 
 function student_select_course_assistant()
 {
@@ -13,7 +25,7 @@ function student_select_course_assistant()
                                 <h3 class="mbr-section-title mb-0 mbr-fonts-style display-2"><strong>Tutoring Courses</strong></h3>
                             </div>
                             <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                                Select the course you want to request tutoring for.
+                                Select the course you want to request tutoring for
                             </div>
                             <div id="bootstrap-accordion_17" class="panel-group accordionStyles accordion" role="tablist" aria-multiselectable="true">';
     
@@ -115,30 +127,31 @@ function professor_available_assistant()
 
 function student_select_professor_assistant()
 {
-    $query = query("SELECT professor_entry_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname FROM lc_professors WHERE course_id = '" . $_SESSION['selected_course'] . "'");
+    $query = query("SELECT professor_entry_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname FROM lc_professors WHERE acc_stat_id = '1' AND course_id = '" . $_SESSION['selected_course'] . "'");
     confirm($query);
     
     echo '
-        <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-12">
-                        <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                            <strong>Select the Professor.</strong>
-                        </h3>
-                        <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
-                        Select the Professor giving the class ('; echo $_SESSION['selected_course']; echo ')
-                    </div>
-                    </div>';
-    
-    $x = 1;
+    <section data-bs-version="5.1" class="team1 cid-sO6qmUi7nj" id="team1-1e">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
+                    <strong>Select the Professor</strong>
+                </h3>
+                <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
+                    Select the Professor giving the class ('; echo $_SESSION['selected_course']; echo ')
+                </div>
+            </div>';
+        $x = 1;
     
     while($row = fetch_array($query))
     {
         echo '
             <div class="col-sm-6 col-lg-3">
                 <div class="card-wrap">
-
+                    <div class="image-wrap">
+                        <img src="../assets/images/user.jpg"
+                    </div>
                     <div class="content-wrap">
                         <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
                             <strong>' . $row['professor_name'] . ' ' . $row['professor_initial'] . ' ' . $row['professor_first_lastname'] . ' ' . $row['professor_second_lastname'] . '</strong>
@@ -148,18 +161,13 @@ function student_select_professor_assistant()
                         </div>
                     </div>
                 </div>
-            </div>
             <form id="form' . $x . '">
                 <input type="hidden" name="professor_ready">
-            </form>';
-        
+            </form>
+            </div>
+        </div>';
         $x++;
     }
-    
-    echo '
-                </div>
-            </div>
-        </section>';
 }
 
 function student_select_tutor_assistant()
@@ -170,7 +178,7 @@ function student_select_tutor_assistant()
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2">
-                            <strong>Select the tutor.</strong>
+                            <strong>Select the tutor</strong>
                         </h3>
                         <div class="alert alert-primary" style = "background: #fd8f00;" role="alert">
                         Select the day and hour (if available) - '; echo $_SESSION["selected_course"]; echo '
@@ -218,8 +226,13 @@ function student_select_tutor_assistant()
         $query2 = query("SELECT student_email FROM lc_test_tutors WHERE tutor_id = '" . $row["tutor_id"] . "'");
         confirm($query2);
         $row2 = fetch_array($query2);
+
+        $query3 = query("SELECT tutor_image FROM lc_test_tutors WHERE tutor_id = '" . $row["tutor_id"] . "'");
+        confirm($query3);
+        $row3 = fetch_array($query3);
         $email = $row2["student_email"];
-        
+        $tutorImg = $row3['tutor_image'];
+
         $query2 = query("SELECT student_name, student_initial, student_first_lastname, student_second_lastname FROM lc_test_students WHERE student_email = '" . $email . "'");
         confirm($query2);
         $row2 = fetch_array($query2);
@@ -227,8 +240,12 @@ function student_select_tutor_assistant()
         echo '
             <div class="col-sm-6 col-lg-3">
                 <div class="card-wrap">
-                    <div class="image-wrap">
-                        <img src="../assets/images/tutors/' . $email . '.jpg">
+                    <div class="image-wrap">';
+                        if ($row3['tutor_image'] != NULL) {
+                            echo '<img src="' . $tutorImg . '">';
+                        }else{
+                            echo '<img src="../assets/images/user.jpg"';
+                        } echo '
                     </div>
                     <div class="content-wrap">
                         <h5 class="mbr-section-title card-title mbr-fonts-style align-center m-0 display-5">
@@ -350,7 +367,8 @@ function student_select_time_assistant()
             if($week[$x-1] == "NULL")
                 continue;
 
-            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time, course_id FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND course_id = '" . $_SESSION['selected_course'] . "' AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
+            $currTime = date("h:i:a");
+            $query2 = query("SELECT TIME_FORMAT(start_time, '%h %i %p'), TIME_FORMAT(end_time, '%h %i %p'), start_time, end_time, course_id FROM lc_tutor_schedule WHERE tutor_id = " . $_SESSION['selected_tutor'] . " AND start_time >= '$currTime' AND course_id = '" . $_SESSION['selected_course'] . "' AND DAY = '" . $week_name[$x-1] . "' ORDER BY start_time ASC");
             confirm($query2);
 
             if(mysqli_num_rows($query2) != 0)
@@ -446,8 +464,9 @@ function student_select_time_assistant()
         }
         
         if(!$flag)
-            echo "This tutor has no more sections available to make appointments on this week. Wait until next week and try again!";
-
+            echo "<div class = 'alert' style = 'background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;' role='alert'>
+            <span> This tutor has no more sections available to make appointments on this week. Wait until next week and try again! </span>
+        </div>";
         echo '
                             <br><br>
                             </div>
@@ -624,4 +643,207 @@ function create_app_assistant()
     }
     else
         redirect("../logout.php");
+}
+//=================PDO Connection========================================
+$host     = DB_HOST;
+$db       = DB_NAME;
+$user     = DB_USER;
+$password = DB_PASS;
+
+$dsn = "mysql:host=$host;dbname=$db;charset=UTF8";
+
+try {
+    $conn = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+
+} catch (PDOException $e) {
+     echo $e->getMessage();
+}
+
+
+defined("DB_PDO_HOST") ? null : define("DB_PDO_HOST" , "localhost");
+
+defined("DB_PDO_USER") ? null : define("DB_PDO_USER", "root");
+
+defined("DB_PDO_PASS") ? null : define("DB_PDO_PASS", "");
+
+defined("DB_PDO_NAME") ? null : define("DB_PDO_NAME", "lc_tam");
+
+
+$connection = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
+//=====================End PDO Connection==================================
+
+//=================Session functions=====================================
+function verifyActivityAssistant() {
+    //========================Session timeouts========================================================
+    if( $_SESSION['last_activity'] < time() - $_SESSION['expiration'] ) { //checks if session has expired. if expired, redirect.
+        redirect('../logout.php');
+    } else{ //if we haven't expired:
+        $_SESSION['last_activity'] = time(); //updates last activity to prevent session timeout.
+    }
+    
+    if( $_SESSION['current_date'] != date("Y-m-d")) {
+        redirect('../logout.php');
+    }
+    //=========================end SESSION timeouts=====================================================
+}
+
+function validateRoleAssistant() {
+    //===========================SESSION verification===================================
+    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
+        redirect('../index.php');                               //redirects to normal index.
+    }
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Assistant.
+        if($_SESSION['type'] == 'Student') {    //checks whenever the type is student, redirects.
+            redirect('../student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') { //checks if the type is tutor, redirects.
+            redirect('../tutor/index.php');
+        }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin, redirects.
+            redirect('../admin/index.php');
+        }
+    } 
+    //===========================End SESSION verification===================================
+}
+
+function sessionDataShow() {
+        echo '<pre>';
+        print_r($_SESSION);
+        echo '</pre>';
+}
+//=================End Session functions=================================
+
+//=================Query functions=======================================
+
+function getSelectedStudentAppointments($id) {
+    $currDate = date("'Y-m-d'");
+    $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'student_fullname', 
+    lc_appointments.student_email, CONCAT_WS(' - ', lc_appointments.course_id, lc_courses.course_name) AS 'course_info', CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date 
+    FROM lc_appointments
+    INNER JOIN lc_test_students ON lc_appointments.student_email = lc_test_students.student_email
+    INNER JOIN lc_courses ON lc_appointments.course_id = lc_courses.course_id
+    INNER JOIN lc_semester ON lc_semester.semester_id = lc_appointments.semester_id
+    INNER JOIN lc_sessions ON lc_appointments.session_id = lc_sessions.session_id    
+    WHERE lc_appointments.student_email = '$id' AND lc_sessions.session_date >= $currDate
+    ORDER BY lc_sessions.session_date DESC");
+    confirm($query);
+    return($query);
+}
+
+function getAppointmentInformation($id) {
+    $query = query("SELECT lc_appointments.student_email, CONCAT_WS(' - ', lc_appointments.course_id, lc_courses.course_name) AS 'course_info', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date, CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_appointments.app_id
+    FROM lc_appointments
+    INNER JOIN lc_sessions ON lc_sessions.session_id = lc_appointments.session_id
+    INNER JOIN lc_courses ON lc_courses.course_id = lc_appointments.course_id
+    INNER JOIN lc_semester ON lc_appointments.semester_id = lc_semester.semester_id
+    WHERE lc_appointments.app_id = '$id'");
+    confirm($query);
+    return($query);
+}
+
+function searchCount($search_r) {
+    $query = query("SELECT COUNT(lc_test_students.student_email) As 'counter' FROM lc_test_students
+    WHERE lc_test_students.student_email LIKE '%$search_r%'");
+    confirm($query);
+    return($query);
+}
+
+function getSearchResults($search_r) {
+    $query = query("SELECT CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'Student_name', lc_test_students.student_email
+    FROM lc_test_students
+    WHERE lc_test_students.student_email LIKE '%$search_r%'");
+    confirm($query);
+    return($query);
+}
+
+function getAppointmentRegisteredStudents($id) {
+    $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id,  
+    CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
+    lc_test_students.student_second_lastname) AS 'student_full_name', lc_appointments.course_id, lc_test_students.student_email
+    FROM lc_appointments
+    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_appointments.student_email
+    WHERE lc_appointments.session_id = '$id' AND lc_appointments.app_cancel = '1'");
+    confirm($query);
+    return($query);
+}
+
+function getTutoringSessions() {
+        $currDate = date("'Y-m-d'");
+        $query = query("SELECT lc_sessions.session_id, lc_sessions.tutor_id, lc_test_students.student_email AS 'tutor_email', CONCAT_WS(' ', lc_test_students.student_name, 
+        lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_sessions.start_time,
+        lc_sessions.end_time, lc_sessions.session_date, lc_sessions.capacity, CONCAT_WS(' - ', lc_sessions.course_id, lc_courses.course_name) AS 'course_info', lc_sessions.semester_id, lc_semester.semester_name AS 'semester_info'
+        FROM lc_sessions 
+        INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
+        INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
+        INNER JOIN lc_courses ON lc_sessions.course_id = lc_courses.course_id
+        INNER JOIN lc_semester ON lc_sessions.semester_id = lc_semester.semester_id
+        WHERE lc_sessions.session_date >= $currDate
+        ORDER BY lc_sessions.session_date DESC");
+        confirm($query);
+    return($query);
+}
+
+function getSelectedTutorOffers($id) {
+    $query = query("SELECT * FROM lc_test_tutors
+    WHERE lc_test_tutors.student_email = '$id'");
+    $row = fetch_array($query);
+    $TutID = $row['tutor_id'];
+    $Oquery = query("SELECT lc_test_students.student_id, CONCAT_WS(' ', lc_test_students.student_name,
+    lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_fullname',
+    lc_test_students.student_email, lc_tutor_offers.offer_id, lc_tutor_offers.course_id,
+    CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
+    lc_professors.professor_second_lastname) AS 'professor_fullname'
+    FROM lc_tutor_offers
+    INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
+    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
+    INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id
+    WHERE lc_tutor_offers.tutor_id = '$TutID'");
+    confirm($Oquery);
+    return($Oquery);
+}
+
+function getSelectedTutorSchedules($id) {
+    $query = query("SELECT * FROM lc_test_tutors
+    WHERE lc_test_tutors.student_email = '$id'");
+    $row = fetch_array($query);
+    $TutID = $row['tutor_id'];
+    $Squery = query("SELECT CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_test_students.student_email, lc_tutor_schedule.schedule_id, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time, CONCAT_WS(' - ', lc_tutor_schedule.course_id, lc_courses.course_name) AS 'course_info'
+    FROM lc_tutor_schedule
+    INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
+    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
+    INNER JOIN lc_courses ON lc_tutor_schedule.course_id = lc_courses.course_id
+    WHERE lc_tutor_schedule.tutor_id = '$TutID'");
+    confirm($Squery);
+    return($Squery);
+}
+
+function checkStudentRole($id) {
+    $query = query("SELECT count(student_email) as Student FROM lc_test_students WHERE student_email = '$id'");
+    confirm($query);
+    $confirm = fetch_array($query);
+    if ($confirm['Student'] == '1') {
+        return(true);
+    }else{
+        return(false);
+    }
+}
+
+function checkTutorRole($id) {
+    $query = query("SELECT COUNT(student_email) as Tutor FROM lc_test_tutors WHERE student_email = '$id'");
+    confirm($query);
+    $confirm = fetch_array($query);
+    if ($confirm['Tutor'] == '1') {
+        return(true);
+    }else{
+        return(false);
+    }
+}
+
+function checkAssistantRole($id) {
+    $query = query("SELECT COUNT(student_email) as Assist FROM lc_test_assistants WHERE student_email = '$id'");
+    confirm($query);
+    $confirm = fetch_array($query);
+    if ($confirm['Assist'] == '1') {
+        return(true);
+    }else{
+        return(false);
+    }
 }

@@ -1,16 +1,16 @@
 <?php
-    require_once('assistant_functions.php');
-    require_once('../functions.php');
-    professor_available_assistant();
+    include("assistant_functions.php"); //functions regarding assistant functionality.
+    require_once("../functions.php");   //general website functions.
+    validateRoleAssistant();    //validates the user has an assistant role. Else, redirects to index.
+    verifyActivityAssistant();  //verifies the user session hasn't expired.
+    professor_available_assistant(); //assistant function.
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">

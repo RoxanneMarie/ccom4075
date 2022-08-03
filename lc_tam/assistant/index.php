@@ -1,14 +1,15 @@
 <?php 
-    require_once("../functions.php")
+    include("assistant_functions.php"); //functions regarding assistant functionality.
+    require_once("../functions.php");   //general website functions.
+    validateRoleAssistant();    //validates the user has an assistant role. Else, redirects to index.
+    verifyActivityAssistant();  //verifies the user session hasn't expired.
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -89,7 +90,7 @@
     <body>
 
         <?php
-            top_header_9();
+            select_header($_SESSION['type']);
             echo'
             <br>
             <h4 class = "h3 text-center">Assistant Menu</h4>
@@ -109,17 +110,6 @@
             </div>'; 
             } echo '
            <main class="cards" style="justify-content:center;">
-           <article class="card">
-           <div class="text">
-               <h3>Appointments</h3>
-               <form class="form-inline" action = "student_search.php" method = "post">
-               <input class="form-control mr-sm-2" type="search" name = "student_search" placeholder = "insert student email" aria-label="Search">
-               <button class="btn btn-primary my-2 my-sm-0" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-             </svg></button>
-             </form>
-           </div>
-           </article>
 
                <article class="card">
                <div class="text">

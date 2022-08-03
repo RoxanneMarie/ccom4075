@@ -1,20 +1,25 @@
 <?php 
-    require_once("../functions.php"); 
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
+    //checks if there is an id, if no id, redirects.
     if(isset($_GET['id'])){
         $id = $_GET['id'];
     }else{
         redirect('tutors.php');
     }
+    //=========================End Get ID===============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -44,59 +49,42 @@
     </head>
     <body>
         <?php 
-            top_header_5();
+            select_header($_SESSION['type']);
     echo '
     <main class="mcourses" style="justify-content:center;">
         <article>
         <div class = "container">
             <h3 class = "h3 text-center">Tutor Schedule - '; echo $id; echo'</h3>
-            <a class = "btn btn-primary" href="add_tutor_schedule.php">Add Tutor Schedule</a>
-            '; if(isset($_GET['success'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutor Schedule updated successfully.</span>
-            </div>'; 
-            }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutor Schedule removed successfully.</span>
+            <div class = "container d-flex justify-content-center">
+                <a class = "btn btn-primary" href="add_tutor_schedule.php?id='.$id.'">Add Tutor Schedule</a>
             </div>
-            ';
-            }
-            if(isset($_GET['Added'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutor Schedule added successfully.</span>
-            </div>
-            ';
-            } echo '
                 <div class = "table-responsive">
                 <table class = "table">
             <thead class = "tCourses">
                 <th>Edit</th>
+                <th>Delete</th>
                 <th>Day</th>
                 <th>Start Time</th>
                 <th>End Time</th>
                 <th>Tutor Course</th>
+                <th>Visible</th>
             </thead>';
             if(isset($_GET['id'])){
-            $query = query("SELECT * FROM lc_test_tutors
-            WHERE lc_test_tutors.student_email = '$id'");
-            $row = fetch_array($query);
+            $info = getSelectedTutor($id);
+            $row = fetch_array($info);
             $TutID = $row['tutor_id'];
-            $Squery = query("SELECT CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_test_students.student_email, lc_tutor_schedule.schedule_id, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time, CONCAT_WS(' - ', lc_tutor_schedule.course_id, lc_courses.course_name) AS 'course_info'
-            FROM lc_tutor_schedule
-            INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
-            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
-            INNER JOIN lc_courses ON lc_tutor_schedule.course_id = lc_courses.course_id
-            WHERE lc_tutor_schedule.tutor_id = '$TutID'");
+            $info2 = getSelectedTutorSchedule2($TutID);
             }
-    while ($row2 = fetch_array($Squery)) {
+    while ($row2 = fetch_array($info2)) {
         echo '    
                 <tr>
-                    <td>   <a href="edit_tutor_schedule.php?id='. $row2['schedule_id'] .'">Edit</a></td>
+                    <td>   <a href="edit_tutor_schedule.php?id='. $row2['schedule_id'] .'">Edit</a> </td>
+                    <td>   <a href="delete_tutor_schedule.php?id='. $row2['schedule_id'] .'">Delete</a> </td>
                     <td>'. $row2['day'] .'</td>
                     <td>'. conv_time(substr($row2["start_time"],0,2)) . substr($row2["start_time"],2,3) . ampm(substr($row2["start_time"],0,2)).'</td>
                     <td>'. conv_time(substr($row2["end_time"],0,2)) . substr($row2["end_time"],2,3) . ampm(substr($row2["end_time"],0,2)).'</td>
                     <td>'. $row2['course_info'] .'</td>
+                    <td>'; if ($row2['visibility'] == '1') { echo 'Visible'; } else { echo 'Hidden'; } echo '</td>
                     '; } echo '
                 </tr>
                 </table>

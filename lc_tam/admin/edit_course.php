@@ -1,33 +1,38 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_GET) & !empty($_GET)){
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
+
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
+    if(isset($_GET) & !empty($_GET)){                            //gets course information.
         $id = $_GET['id'];
     } else {
         redirect('courses.php');
     }
-    if(isset($_POST) & !empty($_POST)){
-        //$id = $_POST['id'];
-        $CourseName = $_POST['Course_Name'];
-        $DepartmentID = $_POST['Department_ID'];
-        $courseStatus = $_POST['Course_Status'];
+    //==========================End Get ID==============================================================
+
+    //==========================Submit==================================================================
+    if(isset($_POST) & !empty($_POST)){                         //checks if anything has been submitted.
+        $CourseName = $_POST['Course_Name'];                    //takes the value from the form field 'course_name'.
+        $DepartmentID = $_POST['Department_ID'];                //takes the value from the form field 'department_id'.
+        $courseStatus = $_POST['Course_Status'];                //takes the value from the form field 'course_status'.
         $Uquery = "UPDATE lc_courses 
         SET course_name = '$CourseName', dept_id = '$DepartmentID', course_status = '$courseStatus'
         WHERE course_id = '$id'";
-        print_r($Uquery);
         $res = query($Uquery);
         confirm($Uquery);
         redirect('courses.php?success');
-}
+    }
+    //==========================End Submit==============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -48,27 +53,26 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
             <main class="container d-flex justify-content-center">
                 <article>
                     <div>
                     <h3 class = "h3 d-flex justify-content-center">Edit Course</h3>
             <?php 
-            $query = query("SELECT lc_courses.course_id, lc_courses.course_name, lc_courses.dept_id, lc_courses.tutor_available, lc_departments.dept_id, lc_departments.dept_name, lc_courses.course_status FROM lc_courses INNER JOIN lc_departments ON lc_courses.dept_id = lc_departments.dept_id WHERE course_id = '$id'");
-            confirm($query);
-            $row = fetch_array($query);
+            $info = getSelectedCourse($id);
+            $row = fetch_array($info);
             ?>
             <form action="edit_course.php?id=<?php echo $row['course_id']; ?>" method="POST"><br>
 
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="Course_ID">Course ID:</label>
-                    <input type="Course_ID" class="form-control" id="Course_ID" name = "Course_ID" value = "<?php echo $row['course_id']; ?>" disabled>
+                    <input type="Course_ID" class="form-control" id="Course_ID" name = "Course_ID" maxlength = "8" value = "<?php echo $row['course_id']; ?>" disabled>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="Course_Name">Course Name:</label>
-                    <input type="Course_Name" class="form-control" id="Course_Name" name = "Course_Name" value = "<?php echo $row['course_name']; ?>" required>
+                    <input type="Course_Name" class="form-control" id="Course_Name" name = "Course_Name" maxlength = "100" value = "<?php echo $row['course_name']; ?>" required>
                 </div>
             </div>
 
@@ -76,9 +80,8 @@
                 <label for="Department_ID">Department:</label>
                 <select class="form-control" id="Department_ID" name = "Department_ID">
                 <?php 
-                    $query2 = query("SELECT * FROM lc_departments");
-                    confirm($query2);
-                    while($row2 = fetch_array($query2)) { ?>
+                    $info2 = getDepartments();
+                    while($row2 = fetch_array($info2)) { ?>
                     <option value=<?php echo $row2['dept_id'] ?> <?php if ( $row2['dept_id'] == $row['dept_id']) { echo "selected"; } ?> ><?php echo $row2['dept_name'];  } ?></option>
                     </select>
             </div>
@@ -86,9 +89,8 @@
             <div class="form-group col">
                 <label for="Course_Status">Course Status:</label>
                 <select class="form-control" id="Course_Status" name = "Course_Status" required>
-                <?php $query3 = query("SELECT * FROM lc_account_status");
-                confirm($query3);
-                while($row3 = fetch_array($query3)) { ?>
+                <?php $info3 = getAccStatus();
+                while($row3 = fetch_array($info3)) { ?>
                 <option value= "<?php echo $row3['acc_stat_id'] ?>"<?php if($row['course_status'] == $row3['acc_stat_id'] ) { echo "selected"; } ?> > <?php echo $row3['acc_stat_name'];  } ?></option>
                 </select>
             </div>

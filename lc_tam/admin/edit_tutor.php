@@ -1,17 +1,26 @@
 <?php 
-  require_once("../functions.php");
-    
-    if(isset($_GET['id'])){
-        $id = $_GET['id'];
-    }
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    if(isset($_POST['submit'])){
-        $StudentName = $_POST['Student_Name'];
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
+    if(isset($_GET['id'])){                                    //gets the tutor ID.
+        $id = $_GET['id'];
+    }else{
+        redirect('index.php');
+    }
+    //=========================End get ID================================================================
+
+    //=========================Submit====================================================================
+    if(isset($_POST['submit'])){                                //checks if anything has been submitted.
+        $StudentName = $_POST['Student_Name'];                  //takes from the student name, initial, and lastname form field the values.
         $StudentInitial = $_POST['Student_Initial'];
         $StudentFLN = $_POST['Student_FLN'];
         $StudentSLN = $_POST['Student_SLN'];
-        $TutorType = $_POST['Tutor_Type'];
-        $AccStatus = $_POST['Acc_Status'];
+        $TutorType = $_POST['Tutor_Type'];                      //takes from the form field 'tutor_type' the selected tutor type (journal/work study).
+        $AccStatus = $_POST['Acc_Status'];                      //takes from the form field 'acc_status' the selected account status.
         $Success1 = false;
         $Success2 = false;
 
@@ -29,7 +38,7 @@
                 $location = "../assets/images/tutors/";
                 $filepath = $location.$name;
                 if(move_uploaded_file($tmp_name, $location.$name)){
-                    echo "Uploaded successsfully";
+                    echo "Image uploaded successsfully";
                 }else{
                     echo "failed to upload";
                 }
@@ -51,7 +60,7 @@
         //Checks if query was successful.
         confirm($Uquery);
         if($res == '1') {
-            echo $Success1 = true;
+            $Success1 = true;
         }
         $Uquery2 = "UPDATE lc_test_students
         SET student_name = '$StudentName', 
@@ -63,22 +72,21 @@
         //Checks if query was successful.
         confirm($Uquery2);
         if($res == '1') {
-            echo $Success2 = true;
+            $Success2 = true;
         }
 
         if ($Success1 == '1' & $Success2 == '1') {
             redirect('tutors.php?success');
         }
-}
+    }
+    //==========================End submit===========================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -99,23 +107,13 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
             <h3 class = "h3 text-center">Edit Tutor</h3>
             <main class = "container d-flex justify-content-center">
                 <?php 
-                $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
-                lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_tutors.student_email, 
-                lc_tutor_type.tutor_type_name, lc_tutor_type.tutor_type_id, lc_account_status.acc_stat_name, lc_test_tutors.acc_stat_id,
-                lc_test_tutors.tutor_image
-                FROM lc_test_tutors 
-                INNER JOIN lc_test_students ON lc_test_tutors.student_email = lc_test_students.student_email 
-                INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id 
-                INNER JOIN lc_account_status ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id 
-                WHERE lc_test_tutors.student_email = '$id'");
-                $query = query($query);
-                confirm($query);
-                $row = fetch_array($query);
+                $info = getSelectedTutor2($id);
+                $row = fetch_array($info);
                 ?>
             <form action="edit_tutor.php?id=<?php echo $row['student_email']; ?>" method="POST" enctype="multipart/form-data">     
                     <div class="form-row">
@@ -143,7 +141,7 @@
                     <div class = "form-row">
                         <div class="form-group col">
                             <label for="Student_SLN">Second Last Name:</label>
-                            <input type="Student_SLN" class="form-control" id="Student_SLN" name = "Student_SLN" value = "<?php echo $row['student_second_lastname']; ?>" required>
+                            <input type="Student_SLN" class="form-control" id="Student_SLN" name = "Student_SLN" value = "<?php echo $row['student_second_lastname']; ?>">
                         </div>
                         <div class="form-group col">
                             <label for="Student_Email">Student Email:</label>
@@ -155,9 +153,8 @@
                         <label for="Tutor_Type">Tutor Type:</label>
                         <select class="form-control" id="Tutor_Type" name = "Tutor_Type">
                         <?php 
-                        $query2 = query("SELECT * FROM lc_tutor_type");
-                        confirm($query2);
-                        while($row2 = fetch_array($query2)) { ?>
+                        $info2 = getTutorType();
+                        while($row2 = fetch_array($info2)) { ?>
                         <option value = <?php echo $row2['tutor_type_id']; ?> <?php if ( $row2['tutor_type_id'] == $row['tutor_type_id']) { echo "selected"; } ?> ><?php echo $row2['tutor_type_name'];  } ?></option>
                         </select>
                     </div>
@@ -166,9 +163,8 @@
                         <label for="Acc_Status">Account Status:</label>
                         <select class="form-control" id="Acc_Status" name = "Acc_Status">
                         <?php 
-                        $query3 = query("SELECT * FROM lc_account_status");
-                        confirm($query3);
-                        while($row3 = fetch_array($query3)) { ?>
+                        $info3 = getAccStatus();
+                        while($row3 = fetch_array($info3)) { ?>
                         <option value= "<?php echo $row3['acc_stat_id'] ?>" <?php if ( $row3['acc_stat_id'] == $row['acc_stat_id']) { echo "selected"; } ?> > <?php echo $row3['acc_stat_name'];  } ?></option>
                         </select>
                     </div>

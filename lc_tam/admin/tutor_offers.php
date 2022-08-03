@@ -1,11 +1,17 @@
 <?php 
-    require_once("../functions.php"); 
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    if(isset($_GET['id'])){
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
+    if(isset($_GET['id'])){ //checks if there is an id, if no id, redirects.
         $id = $_GET['id'];
     }else{
         redirect('tutors.php');
     }
+    //=========================End Get ID===============================================================
 ?>
 
 <!DOCTYPE html>
@@ -44,59 +50,36 @@
     </head>
     <body>
         <?php 
-            top_header_5();
+            select_header($_SESSION['type']);
     echo '
     <main class="mcourses" style="justify-content:center;">
         <article>
         <div class = "container">
             <h3 class = "h3 text-center">Tutor Offers - '; echo $id; echo'</h3>
-            <a class = "btn btn-primary" href="add_tutor_offer.php">Add Tutor Offer</a>
-            '; if(isset($_GET['success'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutor Offer updated successfully.</span>
-            </div>'; 
-            }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutor Offer removed successfully.</span>
+            <div class = "container d-flex justify-content-center">
+                <a class = "btn btn-primary" href="add_tutor_offer.php?id='.$id.'">Add Tutor Offer</a>
             </div>
-            ';
-            }
-            if(isset($_GET['Added'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutor Offer added successfully.</span>
-            </div>
-            ';
-            } echo '
                 <div class="table-responsive">
                 <table class = "table">
             <thead class = "tCourses">
                 <th>Edit</th>
+                <th>Delete</th>
                 <th>Course</th>
                 <th>Professor</th>
+                <th>Visible</th>
             </thead>';
-            if(isset($_GET['id'])){
-                $query = query("SELECT * FROM lc_test_tutors
-                WHERE lc_test_tutors.student_email = '$id'");
-                $row = fetch_array($query);
-                $TutID = $row['tutor_id'];
-                $Oquery = query("SELECT lc_test_students.student_id, CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name',
-                lc_test_students.student_email, lc_tutor_offers.offer_id, CONCAT_WS(' - ', lc_tutor_offers.course_id, lc_courses.course_name) As 'course_info', CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, lc_professors.professor_second_lastname) AS 'professor_fullname'
-                FROM lc_tutor_offers
-                INNER JOIN lc_courses ON lc_courses.course_id = lc_tutor_offers.course_id
-                INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
-                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
-                INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id
-                WHERE lc_tutor_offers.tutor_id = '$TutID'");
-            } else {
-                redirect('index.php');
-                }
-    while ($row2 = fetch_array($Oquery)) {
-        echo '    
+                $info = getSelectedTutor($id);
+                $row = fetch_array($info);
+                $TutorID = $row['tutor_id'];
+                $info2 = getSelectedTutorOffer2($TutorID);
+                while ($row2 = fetch_array($info2)) {
+                echo '    
                 <tr>
                     <td> <a href="edit_tutor_offer.php?id='. $row2['offer_id'] .'">Edit</a>
+                    <td> <a href="delete_tutor_offer.php?id='. $row2['offer_id'] .'">Delete</a>
                     <td>'. $row2['course_info'].'</td>
                     <td>'. $row2['professor_fullname'].'</td>
+                    <td>'; if ($row2['visibility'] == '1') { echo 'Visible'; } else { echo 'Hidden'; } echo '</td>
                     </tr>
                     '; } echo '
                 </table>

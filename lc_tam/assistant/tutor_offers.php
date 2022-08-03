@@ -1,20 +1,22 @@
 <?php 
-    require_once("../functions.php"); 
-
+    include("assistant_functions.php"); //functions regarding assistant functionality.
+    require_once("../functions.php");   //general website functions.
+    validateRoleAssistant();    //validates the user has an assistant role. Else, redirects to index.
+    verifyActivityAssistant();  //verifies the user session hasn't expired.
+    //=========================Get ID=============================================================
     if(isset($_GET['id'])){
         $id = $_GET['id'];
     }else{
         redirect('index.php');
     }
+    //=========================End Get ID=========================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -44,7 +46,7 @@
     </head>
     <body>
         <?php 
-            top_header_9();
+            select_header($_SESSION['type']);
     echo '
     <main class="mcourses" style="justify-content:center;">
         <article>
@@ -57,46 +59,13 @@
                 <th>Course</th>
                 <th>Professor</th>
             </thead>';
-            /*
-                $query = query("SELECT * FROM lc_tutor_offers
-                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email 
-                INNER JOIN lc_tutor_type ON lc_test_tutors.tutor_type_id = lc_tutor_type.tutor_type_id 
-                INNER JOIN lc_account_status ON lc_test_tutors.acc_stat_id = lc_account_status.acc_stat_id
-                INNER JOIN lc_tutor_offers ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
-                INNER JOIN lc_professors ON lc_professors.professor_entry_id = lc_tutor_offers.professor_entry_id");
-            */
-            if(isset($_GET['id'])){
-                $query = query("SELECT * FROM lc_test_tutors
-                WHERE lc_test_tutors.student_email = '$id'");
-                $row = fetch_array($query);
-                $TutID = $row['tutor_id'];
-                $Oquery = query("SELECT lc_test_students.student_id, CONCAT_WS(' ', lc_test_students.student_name,
-                lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_fullname',
-                lc_test_students.student_email, lc_tutor_offers.offer_id, lc_tutor_offers.course_id,
-                CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
-                lc_professors.professor_second_lastname) AS 'professor_fullname'
-                FROM lc_tutor_offers
-                INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
-                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
-                INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id
-                WHERE lc_tutor_offers.tutor_id = '$TutID'");
-            } else {
-                $Oquery = query("SELECT lc_test_students.student_id, CONCAT_WS(' ', lc_test_students.student_name,
-                lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_fullname',
-                lc_test_students.student_email, lc_tutor_offers.offer_id, lc_tutor_offers.course_id,
-                CONCAT_WS(' ', lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, 
-                lc_professors.professor_second_lastname) AS 'professor_fullname'
-                FROM lc_tutor_offers
-                INNER JOIN lc_test_tutors ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
-                INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
-                INNER JOIN lc_professors ON lc_tutor_offers.professor_entry_id = lc_professors.professor_entry_id");
-                }
-    while ($row2 = fetch_array($Oquery)) {
+            $info = getSelectedTutorOffers($id);
+            while ($row = fetch_array($info)) {
         echo '    
                 <tr class = "text-center">
-                    <td>'. $row2['student_id'].'</td>
-                    <td>'. $row2['course_id'].'</td>
-                    <td>'. $row2['professor_fullname'].'</td>
+                    <td>'. $row['student_id'].'</td>
+                    <td>'. $row['course_id'].'</td>
+                    <td>'. $row['professor_fullname'].'</td>
                     </tr>
                     '; } echo '
                 </table></div><br><br>

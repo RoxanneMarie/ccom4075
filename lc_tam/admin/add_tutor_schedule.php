@@ -1,28 +1,41 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_POST['submit'])){
-        $tutor = $_POST['tutor'];
-        $day = $_POST['day'];
-        $starttime = $_POST['start'];
-        $endtime = $_POST['end'];
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    $query = query('INSERT INTO lc_tutor_schedule (tutor_id, day, start_time, end_time)
-    VALUES("' . $tutor . '","' . $day . '","' . $starttime . '","' . $endtime . '")');
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================gets ID==================================================================
+    if(isset($_GET['id'])){ //gets tutor selected id.
+        $id = $_GET['id'];
+    }else{ // if there is no id, redirects to tutor.
+        redirect('tutors.php');
+    }
+    //==================================end gets ID======================================================
+
+    //=================================Submit=============================================================
+    if(isset($_POST['submit'])){                                //checks if anything has been submitted.
+        $tutor = $_POST['tutor'];                               //takes what is in the form part named 'tutor' (which is the tutor itself).
+        $day = $_POST['day'];                                   //takes what is in the form part named 'day' (Monday through Friday options).
+        $starttime = $_POST['start'];                           //takes what is in the form part named 'start' (TIME).
+        $endtime = $_POST['end'];                               //takes what is in the form part named 'end' (TIME).
+        $course = $_POST['course'];                             //takes what is in the form part named 'course'.
+
+    $query = query('INSERT INTO lc_tutor_schedule (tutor_id, day, start_time, end_time, course_id)
+    VALUES("' . $tutor . '","' . $day . '","' . $starttime . '","' . $endtime . '" , "' . $course .'")');
     print_r($query);
     if($query) {
-        header('location:tutor_schedule.php?Added');
+        header('location:tutors.php?Schedule_Added');
+        }
     }
-}
+    //======================================End Submit====================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -43,7 +56,7 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
         <main class="container d-flex justify-content-center">
             <article>
@@ -52,25 +65,18 @@
             <form action="add_tutor_schedule.php" method="POST"><br>
 
                     <div class="form-group">
-                        <label for="tutor">Tutor:</label>
-                        <select class="form-control" id="tutor" name = "tutor" required>
-                        <option selected value = "">Select a Tutor.</option>
+                        <label for="tutor_inf">Tutor:</label>
                         <?php 
-                            $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname,
-                            lc_test_students.student_second_lastname, lc_test_students.student_email, lc_test_tutors.tutor_id
-                            FROM lc_test_students
-                            INNER JOIN lc_test_tutors ON lc_test_students.student_email = lc_test_tutors.student_email
-                            WHERE lc_test_tutors.student_email = lc_test_students.student_email");
-                            confirm($query2);
-                            while($row2 = fetch_array($query2)) { ?>
-                            <option value = <?php echo $row2['tutor_id'] ?> ><?php echo $row2['student_id']; ?> - <?php echo $row2['student_name']; ?> <?php echo $row2['student_initial']; ?> <?php echo $row2['student_first_lastname']; ?> <?php echo $row2['student_second_lastname']; ?> <?php echo $row2['student_email']; } ?></option>
-                            </select>
+                            $info = getSelectedTutor($id);
+                            $row = fetch_array($info); ?>
+                            <input class="form-control" id="tutor_inf" name = "tutor_inf"  type = "text" value = "<?php echo $row['tutor_fullname']; ?>" disabled>
+                            <input type="hidden" id="tutor" name="tutor" value = "<?php echo $row['tutor_id'] ?>">
                     </div>
                     <br>
                     <div class="form-group">
                         <label for="day">Day: </label>
                         <select class="form-control" id="day" name = "day" required>
-                        <option selected value = "">Select a Day.</option>
+                        <option selected value = "">Select a Day</option>
                             <option value="Monday">Monday</option>
                             <option value="Tuesday">Tuesday</option>
                             <option value="Wednesday">Wednesday</option>
@@ -87,6 +93,18 @@
                     <div class="form-row">
                         <label for="end">End time:</label>
                         <input id="end" type="time" name="end" required><br><br>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="course">Course: </label>
+                        <select class="form-control" id="course" name = "course" required>
+                        <option selected value = "">Select a Course</option>
+                            <?php
+                            $info2 = getCourses();
+                            while($row2 = fetch_array($info2)) {
+                                ?>
+                        <option value = <?php echo $row2['course_id'] ?> ><?php echo $row2['course_id']?> - <?php echo $row2['course_name'];  } ?></option>
+                        </select>
                     </div>
                     <br>
                     <div class = "container d-flex justify-content-center">

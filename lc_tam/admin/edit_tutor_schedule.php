@@ -1,33 +1,41 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_GET) & !empty($_GET)){
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
+
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
+    if(isset($_GET) & !empty($_GET)){                           //gets the id, if no id, redirects.
         $id = $_GET['id'];
     } else {
-        redirect('tutor_schedule.php');
+        redirect('tutors.php');
     }
-    if(isset($_POST) & !empty($_POST)){
-        $tutor = $_POST['tutor'];
-        $day = $_POST['day'];
-        $starttime = $_POST['start'];
-        $endtime = $_POST['end'];
+    //==========================End Get ID==============================================================
+
+    //==========================Submit==================================================================
+    if(isset($_POST) & !empty($_POST)){                         //checks if anything has been submitted.
+        $tutor = $_POST['tutor'];                               //takes from the form field ' ' the selected value (the tutor).
+        $day = $_POST['day'];                                   //takes from the form field ' ' the selected value (DAY OF THE WEEK).
+        $starttime = $_POST['start'];                           //takes from the form field ' ' the selected value (TIME).
+        $endtime = $_POST['end'];                               //takes from the form field ' ' the selected value (TIME).
+        $course = $_POST['course'];                             //takes from the form field ' ' the selected value (the course).
+        $visibility = $_POST['visibility'];                     //takes from the form field ' ' the selected value (The visilibity status).
         $Uquery = "UPDATE lc_tutor_schedule 
-        SET tutor_id = '$tutor', day = '$day', start_time = '$starttime', end_time = '$endtime'
+        SET tutor_id = '$tutor', day = '$day', start_time = '$starttime', end_time = '$endtime', course_id = '$course', visibility = '$visibility'
         WHERE schedule_id = '$id'";
-        print_r($Uquery);
         $res = query($Uquery);
         confirm($Uquery);
-        redirect('tutor_schedule.php?success');
-}
+        redirect('tutors.php?Schedule_edit');
+    }
+    //=========================End Submit===============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -48,7 +56,7 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
         <main class="container d-flex justify-content-center">
             <article>
@@ -56,17 +64,19 @@
                 <h3 class = "h3 d-flex justify-content-center">Edit Tutor Schedule</h3>
             <form action="edit_tutor_schedule.php?id=<?php echo $id ?>" method="POST"><br>
                 <?php 
-                $query = query("SELECT * FROM lc_tutor_schedule WHERE schedule_id = '$id'");
-                confirm($query);
-                $row = fetch_array($query);
+                $info = getSelectedTutorSchedule($id);
+                $row = fetch_array($info);
+                $info2 = getSelectedTutor($row['tutor_id']);
+
                 $Tquery = query("SELECT * FROM lc_test_tutors 
                 INNER JOIN lc_test_students ON lc_test_tutors.student_email = lc_test_students.student_email 
                 WHERE tutor_id = '$row[tutor_id]'");
                 $Trow = fetch_array($Tquery);
                 ?>
                     <div class="form-group">
-                        <label for="tutor">Tutor:</label>
-                        <input class="form-control" id="tutor" name = "tutor" type = "text" disabled value = "<?php echo $Trow['student_id']; ?> - <?php echo $Trow['student_name']; ?> <?php echo $Trow['student_initial']; ?> <?php echo $Trow['student_first_lastname']; ?> <?php echo $Trow['student_second_lastname']; ?>">
+                        <label for="tutor_inf">Tutor:</label>
+                        <input class="form-control" id="tutor_inf" name = "tutor_inf" type = "text" disabled value = "<?php echo $Trow['student_id']; ?> - <?php echo $Trow['student_name']; ?> <?php echo $Trow['student_initial']; ?> <?php echo $Trow['student_first_lastname']; ?> <?php echo $Trow['student_second_lastname']; ?>">
+                        <input type="hidden" id="tutor" name="tutor" value = "<?php echo $row['tutor_id'] ?>">
                     </div>
                     <br>
                     <div class="form-group">
@@ -90,8 +100,29 @@
                     <label for="end">End time:</label>
                     <input id="end" type="time" name="end" value = <?php echo $row['end_time']; ?> required><br><br>
                 </div>
+
+                <div class="form-group">
+                        <label for="course">Course: </label>
+                        <select class="form-control" id="course" name = "course" required>
+                            <?php 
+                            $info2 = getCourses();
+                            while($row2 = fetch_array($info2)) {    ?>
+                        <option value = "<?php echo $row2['course_id'] ?>" <?php if ($row['course_id'] == $row2['course_id']) { echo "selected"; } ?>><?php echo $row2['course_id']?> - <?php echo $row2['course_name'];  } ?></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="visibility">Visibility: </label>
+                        <select class="form-control" id="visibility" name = "visibility" required>
+                            <option value="0" <?php if ( $row['visibility'] == "0") { echo "selected"; } ?> >Hidden</option>
+                            <option value="1"<?php if ( $row['visibility'] == "1") { echo "selected"; } ?> >Visible</option>
+                        </select>
+                    </div>
+
+                    <br>
+
                 <div class = "container d-flex justify-content-center">
-                <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button>
+                    <button type="submit" name="submit"  class="btn btn-primary display-4 d-flex justify-content-center">Submit</button>
                 </div>
                 <br>
             </form>

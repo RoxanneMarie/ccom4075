@@ -1,11 +1,20 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_GET) & !empty($_GET)){
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
+
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
+    if(isset($_GET) & !empty($_GET)){                               //checks if there is id, if no id, redirects.
         $id = $_GET['id'];
     } else {
         redirect('departments.php');
     }
+    //==========================End get ID===============================================================
+
+    //==========================Submit===================================================================
+    //checks if anything has been submitted, takes those values and inserts into DB.
     if(isset($_POST) & !empty($_POST)){
         $departmentName = $_POST['Department_Name'];
         $query = "UPDATE lc_departments SET dept_name = '$departmentName' WHERE dept_id = '$id'";
@@ -15,17 +24,15 @@
         confirm($query);
        //header('departments.php?success');
         redirect('departments.php?success');
-
-}
+    }
+    //===========================End Submit==============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -46,16 +53,15 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
         <main class = "container">
             <article>
             <div class="container sm">
                 <h3 class = "h3 text-center">Edit Department</h3>
                 <?php 
-                $query = query("SELECT * FROM lc_departments WHERE dept_id = '$id'");
-                confirm($query);
-                $row = fetch_array($query);
+                $info = getSelectedDepartment($id);
+                $row = fetch_array($info);
                 ?>
                 <form action="edit_department.php?id=<?php echo $row['dept_id']; ?>" method="POST"><br>
                     <div class="input-group input-group-lg">

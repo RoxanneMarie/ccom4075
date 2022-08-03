@@ -1,24 +1,26 @@
 <?php 
-    require_once("../functions.php"); 
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    if(isset($_GET['id'])){
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Submit===================================================================
+    if(isset($_GET['id'])){                                     //gets ID.
         $id = $_GET['id'];
-        if(isset($_POST['submit'])){
-            $counter1 = $_POST['count'];
-            $counter2 = 0;
+        if(isset($_POST['submit'])){                            //checks if any values have been submitted.
+            $counter1 = $_POST['count'];                        //takes variable to count how many students are.
+            $counter2 = 0;                                      //second counter.
 
-            for($i = 1; $i <= $counter1; $i++) {
+            for($i = 1; $i <= $counter1; $i++) {                //for every student registered, record to an array to use to submit.
             $_SESSION['appointed_students'][$_POST['student_reg'. $i .'']] = array('attendance_status' => $_POST['attendance_status'. $i. '']);
             }
-            echo "<pre>";
-            print_r($_SESSION['appointed_students']);
-            echo "</pre>";
+
             $appointedStudents = $_SESSION['appointed_students'];
 
-            foreach ($appointedStudents as $appStud => $studName) {
+            foreach ($appointedStudents as $appStud => $studName) { //every student recorded into array gets submitted to the DB.
                 $appStud;
                 $studName;
-                /*echo $appQuery = "SELECT * FROM lc_appointments WHERE session_id = '$id' AND student_email = '$appStud'"; echo '<br><br>';*/
                 $appQuery = query("SELECT * FROM lc_appointments WHERE session_id = '$id' AND student_email = '$appStud'");
                 confirm($appQuery);
                 $appRow = fetch_array($appQuery);
@@ -40,37 +42,24 @@
             }
         }
     }
+    //============================End Submit============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <?php
     unset($_SESSION['appointed_students']);
-
-    $query = query("SELECT * FROM lc_appointments WHERE session_id = $id");
-    confirm($query);
-    while($row = fetch_array($query)) {
-        /*$student = $row['student_email'];
-        $_SESSION['appointed_students']['student_appointed'] = array('student' => $student);
-        echo "<pre>";
-        print_r($_SESSION['appointed_students']);
-        echo "</pre>";*/
-    }
-
-    $query2 = query("SELECT * FROM lc_appointments WHERE session_id = $id");
-    confirm($query2);
-    $row2 = fetch_array($query2);
+    $info = getSelectedAppointmentInfo($id);
+    $row = fetch_array($info); 
     ?>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Appointments of Session #<?php echo $row2['session_id']; ?> - LC:TAM</title>
+      <title>Appointments of Session #<?php echo $row['session_id']; ?> - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
@@ -94,12 +83,12 @@
     </head>
     <body>
         <?php 
-            top_header_5();
-    echo '
+            select_header($_SESSION['type']);
+        ?>
     <main class="container">
         <article>
         <div class="container-sm">
-            <h3 class = "h3 text-center">Attendance of Session #'; echo $row2['session_id']; echo '</h3>
+            <h3 class = "h3 text-center">Attendance of Session #<?php echo $row['session_id']; echo '</h3>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Attendance updated successfully.</span>
@@ -123,42 +112,35 @@
             <tr class="trCourses">
             <td><div class="table-responsive">
                     <select class="form-control" id="attendance_status" name = "attendance_status"  style="width: auto;"  onchange="func_select_all()">
-                    <option selected value = ""> Select a value. </option>';
-                    $query3 = query("SELECT * FROM lc_attendance_status");
-                    confirm($query3);
-                    while($row3 = fetch_array($query3)) { echo '
-                    <option value = "'; echo $row3['att_stat_id']; echo '"> '; echo $row3['att_stat_name']; }  echo'</option>
+                    <option selected value = ""> Select a value </option>';
+                    $info2 = getAttendanceStatus();
+                    while($row2 = fetch_array($info2)) { echo '
+                    <option value = "'; echo $row2['att_stat_id']; echo '"> '; echo $row2['att_stat_name']; }  echo'</option>
                     </select>
                 </div> 
             </td>
             <td>All students.</td>
             <td></td>
             <td></td>';
-            $query4 = query("SELECT CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
-            lc_test_students.student_second_lastname) AS 'student_full_name', lc_test_students.student_id, lc_test_students.student_email
-            FROM lc_appointments
-            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_appointments.student_email
-            WHERE lc_appointments.session_id = '$id'");
-            confirm($query4);
             $counter = 0;
-            while ($row4 = fetch_array($query4)) {
+            $info3 = getAttendanceAppointedStud($id);
+            while ($row3 = fetch_array($info3)) {
             $counter++;
              echo '    
                 <tr class="trCourses">
                     <td><div class="table-responsive">
                             <select class="form-control" id="attendance_status'.$counter.'" name = "attendance_status'.$counter.'"  style="width: auto;" required>
-                            <option selected value = ""> Select a value. </option>';
-                            $query5 = query("SELECT * FROM lc_attendance_status");
-                            confirm($query5);
-                            while($row5 = fetch_array($query5)) { echo '
-                            <option value = "'; echo $row5['att_stat_id']; echo '"> '; echo $row5['att_stat_name']; }  echo'</option>
+                            <option selected value = ""> Select a value </option>';
+                            $info4 = getAttendanceStatus();
+                            while($row4 = fetch_array($info4)) { echo '
+                            <option value = "'; echo $row4['att_stat_id']; echo '"> '; echo $row4['att_stat_name']; }  echo'</option>
                             </select>
                         </div> 
                     </td>
-                    <td>'. $row4['student_full_name'] .'</td>
-                    <td>'. $row4['student_id'] .'</td>
-                    <td>'. $row4['student_email'] .'</td>
-                    <input type="hidden" name="student_reg'.$counter.'" value = "'; echo $row4['student_email']; echo '">
+                    <td>'. $row3['student_full_name'] .'</td>
+                    <td>'. $row3['student_id'] .'</td>
+                    <td>'. $row3['student_email'] .'</td>
+                    <input type="hidden" name="student_reg'.$counter.'" value = "'; echo $row3['student_email']; echo '">
                     </tr>
                    '; } echo '
                 </table>

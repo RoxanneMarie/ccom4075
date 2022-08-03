@@ -1,11 +1,17 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_GET['id'])){
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
+
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Submit===================================================================
+    if(isset($_GET['id'])){                                     //checks if there is an id.
         $id = $_GET['id'];
-    }else{
+    }else{                                                      //if no id is found, redirects to index.
         redirect('index.php');
     }
+    //=========================End Submit===============================================================
 ?>
 
 
@@ -13,27 +19,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Appointments Found - LC:TAM</title>
-      <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
-      <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
-      <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-      <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-grid.min.css">
-      <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-reboot.min.css">
-      <link rel="stylesheet" href="../assets/dropdown/css/style.css">
-      <link rel="stylesheet" href="../assets/socicon/css/styles.css">
-      <link rel="stylesheet" href="../assets/theme/css/style.css">
-      <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-      <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
-      <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
+        <title>Appointments Found - LC:TAM</title>
+        <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
+        <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
+        <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-grid.min.css">
+        <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-reboot.min.css">
+        <link rel="stylesheet" href="../assets/dropdown/css/style.css">
+        <link rel="stylesheet" href="../assets/socicon/css/styles.css">
+        <link rel="stylesheet" href="../assets/theme/css/style.css">
+        <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
+        <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
         <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+        <link  rel="stylesheet" href="../assets/datatables/datatables.css">
+        <link  rel="stylesheet" href="../assets/datatables/datatables.min.css">
     <style>
         /*----------------------- CSS HOME PAGE*/
         .tCourses {
@@ -45,7 +51,7 @@
     </head>
     <body>
         <?php 
-            top_header_9();
+            select_header($_SESSION['type']);
     echo '
     <main class="container">
         <article>
@@ -56,7 +62,8 @@
                 <span> Tutoring session updated successfully.</span>
             </div>'; 
             } echo '
-                <table class="table table-responsive">
+            <div class = "table responsive">
+                <table class="table datatable" id="appointment_result_table">
             <thead class = "tCourses text-center">
                 <th>Student full name</th>
                 <th>Student email</th>
@@ -65,32 +72,39 @@
                 <th>Time Duration</th>
                 <th>Session Date</th>
                 <th>Cancel</th>
-            </thead>';
-    $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'student_fullname', 
-    lc_appointments.student_email, CONCAT_WS(' - ', lc_appointments.course_id, lc_courses.course_name) AS 'course_info', CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date 
-    FROM lc_appointments
-    INNER JOIN lc_test_students ON lc_appointments.student_email = lc_test_students.student_email
-    INNER JOIN lc_courses ON lc_appointments.course_id = lc_courses.course_id
-    INNER JOIN lc_semester ON lc_semester.semester_id = lc_appointments.semester_id
-    INNER JOIN lc_sessions ON lc_appointments.session_id = lc_sessions.session_id    
-    WHERE lc_appointments.student_email = '$id'");
-    confirm($query);
-    while ($row = fetch_array($query)) {
-        echo '
-                <tr class="text-center">
-                    <td>'. $row['student_fullname'] .'</td>
-                    <td>'. $row['student_email'] .'</td>
-                    <td>'. $row['course_info'] .'</td>
-                    <td>'. $row['semester_info'] .'</td>
-                    <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
-                    <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>
-                    <td> <a href="cancel_appointment.php?id='. $row['app_id'] .'">Cancel</td>
-                    </tr>
-                   '; } echo '
+            </thead>
                 </table><br><br>
                 </div>
+                </div>
                 </article>
-            </main>';
+            </main>'; ?>
+            <script src="../assets/datatables/jquery.js"></script>
+            <script src="../assets/datatables/jquery.min.js"></script>
+            <script src="../assets/datatables/datatables.js"></script>
+            <script src="../assets/datatables/datatables.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                $('#appointment_result_table').DataTable({
+                'searching': false,
+                'processing': true,
+		      	'serverSide': true,
+
+		      	'serverMethod': 'post',
+		      	'ajax': {
+		          	'url':'load_app_result.php?id=<?php echo $id; ?>'
+		      	},
+		      	'columns': [
+		         	{ data: 'student_fullname' },
+		         	{ data: 'student_email' },
+		         	{ data: 'course_info' },
+                    { data: 'semester_info' },
+		         	{ data: 'time' },
+                    { data: 'session_date'},
+                    { data: 'link'}
+		      	]
+                });
+                 } );
+            </script> <?php
             bottom_footer();
             credit_mobirise_1();
         ?>

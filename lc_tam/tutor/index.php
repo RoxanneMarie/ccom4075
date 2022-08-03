@@ -1,6 +1,9 @@
 <?php 
     require_once("../functions.php"); 
-    require_once("functions.php") 
+    require_once("functions.php"); 
+    
+    validateRoles();
+    verifyActivity();
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +103,7 @@
 
         <?php
             
-          top_header_6();
+          select_header($_SESSION['type']);
             echo'
             <h2 class="text_title">Tutor Role</h2>
             <div class = "container">
@@ -120,11 +123,6 @@
                </div>
                </article>
 
-               <article class="card">
-               <div class="text">
-                   <h3>Attendance</h3></br>
-                   <a class = "home_button" href = "attendance.php">Take Attendance</a><br><br>
-               </article>
            </main>
            </div>
            ';

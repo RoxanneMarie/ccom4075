@@ -1,7 +1,9 @@
 <?php 
-    require_once('assistant_functions.php');
-    require_once('../functions.php');
-
+    include("assistant_functions.php"); //functions regarding assistant functionality.
+    require_once("../functions.php");   //general website functions.
+    validateRoleAssistant();    //validates the user has an assistant role. Else, redirects to index.
+    verifyActivityAssistant();  //verifies the user session hasn't expired.
+    //======================Get ID=============================================================
     if(isset($_GET['id'])){
         $id = $_GET['id'];
         $checksql = query("SELECT COUNT(student_email) FROM lc_test_students WHERE student_email = '$id'");
@@ -17,4 +19,5 @@
     }else{
         redirect('search.php?id=');
     }
+    //======================End Get ID=========================================================
 ?>

@@ -1,6 +1,9 @@
 <?php 
     require_once("../functions.php"); 
-    require_once("functions.php") 
+    require_once("functions.php"); 
+    
+    validateRoles();
+    verifyActivity();
 ?>
 
 <!DOCTYPE html>
@@ -33,90 +36,59 @@
         .tCourses {
         background: #fd8f00;
         }
-
-        /* btn-warning {
-	color: #fff;
-	background-color: #ff8800;
-	border-color: #ff8800
-}
-.btn-warning:hover {
-	color: #fff;
-	background-color: #e67c02;
-	border-color: #e67c02
-} */
     </style>
 
     </head>
     <body>
         <?php 
-            top_header_6();
+            select_header($_SESSION['type']);
     echo '
     <main class="container">
         <article>
         <div class="container-sm">
             <h3 class = "h3 text-center">My Tutoring Sessions</h3>
-            '; if(isset($_GET['success'])){ echo '
+            '; if(isset($_GET['attendance_recorded'])){ echo '
                 <div class="alert alert-success" role="alert">
-                <span> Tutoring session updated successfully.</span>
+                <span> Session attendance has been recorded successfully.</span>
             </div>'; 
-            }
-             if(isset($_GET['removed'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutoring session removed successfully.</span>
-            </div>
-            ';
-            }
-            if(isset($_GET['Added'])){ echo '
-                <div class="alert alert-success" role="alert">
-                <span> Tutoring session added successfully.</span>
-            </div>
-            ';
             } echo '
                 <div class="table-responsive">
                 <table class="table" style="text-align:center;">
             <thead class = "tCourses">
-                <th>Edit</th>
-                <th>Session ID</th>
-                <th>Time Duration</th>
                 <th>Session Date</th>
+                <th>Time Duration</th>
                 <th>Session Course</th>
                 <th>Session Semester</th>
                 <th>Capacity</th>
                 <th>Appointed Students</th>
-                <th >Take Attendance</th>
+                <th>Attendance</th>
             </thead>';
-            $currEmail = $_SESSION['email'];
-            $currDate = date("'Y-m-d'");
-    $query = query("SELECT lc_sessions.session_id, lc_sessions.tutor_id, lc_test_students.student_email AS 'tutor_email', CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'tutor_name', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date, lc_sessions.capacity, CONCAT_WS(' - ', lc_sessions.course_id, lc_courses.course_name) AS 'course_info', lc_sessions.semester_id, lc_semester.semester_name AS 'semester_info', lc_sessions.session_date
-    FROM lc_sessions 
-    INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
-    INNER JOIN lc_test_students ON lc_test_students.student_email = '$currEmail'
-    INNER JOIN lc_courses ON lc_sessions.course_id = lc_courses.course_id
-    INNER JOIN lc_semester ON lc_sessions.semester_id = lc_semester.semester_id
-    WHERE lc_sessions.session_date >= $currDate
-    ORDER BY lc_sessions.session_date DESC");
-    confirm($query);
-    while ($row = fetch_array($query)) {
+            
+            $info = getTutoringsInfo();
 
-
+    while ($row = fetch_array($info)) {
+        $info3 = getAppStudentsCount($row['session_id']);
+        $RegisteredStudentCount = fetch_array($info3);
+        $info4 = getAttStudentCount($row['session_id']);
+        $AttendanceStudentRegCount = fetch_array($info4);
 
         echo '    
-                <tr class="trCourses">
-                    <td>   <a class="btn btn-outline-warning" href="edit_tutoring_session.php?id='. $row['session_id'] .'"><i class="fa fa-pencil"></i></a>
-                    <td>'. $row['session_id'] .'</td>
-                    <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
-                    <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>
-                    <td>'. $row['course_info'] .'</td>
-                    <td>'. $row['semester_info'] .'</td>
-                    <td>'. $row['capacity'] .'</td>
-                    <td> <a class="btn btn-outline-info" href="tutoring_appointments.php?id='. $row['session_id'] .'"><i class="fa fa-eye"></i></td>
-                    <td> <a class="btn btn-outline-success" href="appointment_attendance.php?id='; echo $row['session_id']; echo '"><i class="fa fa-check"></i></a></td>
-                    </tr>
-                   '; } echo '
-                </table></div><br><br>
-                </div>
-                </article>
-            </main>';
+            <tr class="trCourses">
+                <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>         
+                <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
+                <td>'. $row['course_info'] .'</td>
+                <td>'. $row['semester_info'] .'</td>
+                <td>'. $row['capacity'] .'</td>
+                <td> <a class="btn btn-outline-info" href="tutoring_appointments.php?id='. $row['session_id'] .'"><i class="fa fa-eye"></i></a></td>
+                <td>'; if ($RegisteredStudentCount['students_reg'] != $AttendanceStudentRegCount['students_att']) { echo '<a class="btn btn-outline-success" href="appointment_attendance.php?id='; echo $row['session_id']; echo '"><i class="fa fa-check"></i></a>'; }else{
+                    echo '<span>Registered.</span>';
+                } echo '</td>
+                </tr>
+               '; } echo '
+            </table></div><br><br>
+            </div>
+        </article>
+    </main>';
             bottom_footer();
             credit_mobirise_1();
         ?>

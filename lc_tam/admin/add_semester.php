@@ -1,23 +1,27 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(isset($_POST['submit'])){
-        $SemesterTermName = $_POST['Semester_Term_Name'];
-        $SemesterName = $_POST['Semester_Name'];
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    echo $query = query('INSERT INTO lc_semester (semester_term, semester_name)
-    VALUES("' . $SemesterTermName . '" , "' . $SemesterName . '")');
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=================================Submit=============================================================
+    if(isset($_POST['submit'])){                                //checks whenever something was submitted to the form.
+        $SemesterTermName = $_POST['Semester_Term_Name'];       //takes the value from the form field called 'semester_term_name' (the same term used in PuTTy).
+        $SemesterName = $_POST['Semester_Name'];                //takes the value from the form field called 'semester_name' (should be the official semester name).
+
+    echo $query = query('INSERT INTO lc_semester (semester_term, semester_name, semester_status)
+    VALUES("' . $SemesterTermName . '" , "' . $SemesterName . '" , "' . 2 . '")');
     header('location:semesters.php?Added');
     }
+    //==================================End Submit========================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -38,7 +42,7 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
         <main class="container">
             <article>

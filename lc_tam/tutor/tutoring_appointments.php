@@ -1,5 +1,9 @@
 <?php 
     require_once("../functions.php"); 
+    require_once("functions.php"); 
+
+    validateRoles();
+    verifyActivity();
 
     if(isset($_GET['id'])){
         $id = $_GET['id'];
@@ -46,15 +50,42 @@
     </head>
     <body>
         <?php 
-            top_header_9();
+            select_header($_SESSION['type']);
     echo '
     <main class="container">
         <article>
         <div class="container-sm">
-            <h3 class = "h3 text-center">Tutoring Appointments of Session #'; echo $row['session_id']; echo '</h3><br>
-            <div class = "container d-flex justify-content-center">
-                <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance.</a>
+            <h3 class = "h3 text-center">Tutoring Appointment</h3>';
+
+
+            $info = getTutoringInfo($row['session_id']);
+            $info2= fetch_array($info);
+            $info3 = getAppStudentsCount($row['session_id']);
+            $RegisteredStudentCount = fetch_array($info3);
+            $info4 = getAttStudentCount($row['session_id']);
+            $AttendanceStudentRegCount = fetch_array($info4);
+            echo '
+            <div class="row featurette justify-content-center">
+            <!-- <div class="container text-center">
+                <h1 class="h1 text-center">Credits</h1>
+            </div> -->
+            <div class="col-md-6">
+            <br>
+            <p><b> Course:</b> '.$info2['course_info'].' </p>
+            <p><b> Date:</b> '. conv_month(substr($info2["session_date"],5,2)) . " " . conv_date(substr($info2["session_date"],8,2)) . ", " . substr($info2["session_date"],0,4) .' </p>
+            <p><b> Time:</b> '. conv_time(substr($info2["start_time"],0,2)) . substr($info2["start_time"],2,3) . ampm(substr($info2["start_time"],0,2)).' - '. conv_time(substr($info2["end_time"],0,2)) . substr($info2["end_time"],2,3) . ampm(substr($info2["end_time"],0,2)) .'</p>
             </div>
+                
+            '; 
+            
+            if ($RegisteredStudentCount['students_reg'] != $AttendanceStudentRegCount['students_att']) { echo '
+            <div class = "container d-flex justify-content-center">
+                <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance</a>
+            </div>'; }else{ echo '
+                <div class = "container d-flex justify-content-center">
+                <a class = "btn btn-primary" disabled">REGISTERED</a>
+            </div>'; }
+                '
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Tutoring session updated successfully.</span>
@@ -71,29 +102,28 @@
                 <span> Tutoring session added successfully.</span>
             </div>
             ';
-            } echo '
+            } 
+            echo '
                 <div class="table-responsive">
                 <table class="table">
             <thead class = "tCourses">
-                <th>Appointment ID</th>
-                <th>Session ID</th>
+                <th>Student Number</th>
                 <th>Student Name</th>
-                <th>Course</th>
+                <th>Email</th>
             </thead>';
-            $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id,  
+            $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id,lc_test_students.student_email, lc_test_students.student_id, 
             CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
             lc_test_students.student_second_lastname) AS 'student_full_name', lc_appointments.course_id
             FROM lc_appointments
             INNER JOIN lc_test_students ON lc_test_students.student_email = lc_appointments.student_email
-            WHERE lc_appointments.session_id = '$id'");
+            WHERE lc_appointments.session_id = '$id' AND lc_appointments.app_cancel = '1'");
             confirm($query);
             while ($row = fetch_array($query)) {
         echo '    
                 <tr class="trCourses">
-                    <td>'. $row['app_id'] .'</td>
-                    <td>'. $row['session_id'] .'</td>
+                    <td>'. $row['student_id'] .'</td>
                     <td>'. $row['student_full_name'] .'</td>
-                    <td>'. $row['course_id'] .'</td>
+                    <td>'. $row['student_email'] .'</td>
                     </tr>
                    '; } echo '
                 </table></div><br><br>

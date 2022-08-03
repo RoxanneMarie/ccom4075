@@ -1,9 +1,17 @@
 <?php 
-    require_once("../functions.php"); 
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    if(isset($_GET['id'])){
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
+    if(isset($_GET['id'])){                                     //checks if there is id, if no id, redirects.
         $id = $_GET['id'];
+    }else{
+        redirect('index.php');
     }
+    //========================End Get ID================================================================
 ?>
 
 <!DOCTYPE html>
@@ -46,16 +54,25 @@
     </head>
     <body>
         <?php 
-            top_header_5();
+            select_header($_SESSION['type']);
     echo '
     <main class="container">
         <article>
         <div class="container-sm">
-            <h3 class = "h3 text-center">Tutoring Appointments of Session #'; echo $row['session_id']; echo '</h3>
-            <div class = "container d-flex justify-content-center">
-            <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance.</a>
-            </div>
-            '; if(isset($_GET['success'])){ echo '
+            <h3 class = "h3 text-center">Tutoring Appointments of Session #'; echo $row['session_id']; echo '</h3>';
+            $info3 = getAppStudentsCount($row['session_id']);
+            $RegisteredStudentCount = fetch_array($info3);
+            $info4 = getAttStudentCount($row['session_id']);
+            $AttendanceStudentRegCount = fetch_array($info4);
+            if ($RegisteredStudentCount['students_reg'] != $AttendanceStudentRegCount['students_att']) { echo '
+                <div class = "container d-flex justify-content-center">
+                    <a class = "btn btn-primary" href="appointment_attendance.php?id='; echo $row['session_id']; echo '">Take Attendance</a>
+                </div>'; }else{ echo '
+                    <div class = "container d-flex justify-content-center">
+                    <a class = "btn btn-primary" disabled">REGISTERED</a>
+                </div>'; }
+                
+                if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Tutoring session updated successfully.</span>
             </div>'; 
@@ -78,21 +95,19 @@
                 <th>Appointment ID</th>
                 <th>Session ID</th>
                 <th>Student Name</th>
+                <th>Student Email</th>
+                <th>Student Number</th>
                 <th>Course</th>
             </thead>';
-            $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id,  
-            CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
-            lc_test_students.student_second_lastname) AS 'student_full_name', lc_appointments.course_id
-            FROM lc_appointments
-            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_appointments.student_email
-            WHERE lc_appointments.session_id = '$id'");
-            confirm($query);
-            while ($row = fetch_array($query)) {
+            $info = getAppointmentDetails($id);
+            while ($row = fetch_array($info)) {
         echo '    
                 <tr class="trCourses">
                     <td>'. $row['app_id'] .'</td>
                     <td>'. $row['session_id'] .'</td>
                     <td>'. $row['student_full_name'] .'</td>
+                    <td>'. $row['student_email'] .'</td>
+                    <td>'. $row['student_id'] .'</td>
                     <td>'. $row['course_id'] .'</td>
                     </tr>
                    '; } echo '

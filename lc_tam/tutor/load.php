@@ -1,6 +1,9 @@
 <?php
- require_once("../functions.php"); 
- require_once("functions.php") ;
+    require_once("../functions.php"); 
+    require_once("functions.php"); 
+
+    validateRoles();
+    verifyActivity();
  
 $id = $_SESSION['email'];
   

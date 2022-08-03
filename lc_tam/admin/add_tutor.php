@@ -1,25 +1,30 @@
 <?php 
-  require_once("../functions.php");    
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    if(isset($_POST['submit'])){
-        $Studentemail = $_POST['Student_email'];
-        $TutorType = $_POST['Tutor_Type'];
-        $AccStatus = $_POST['Acc_Status'];
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
 
-        if(isset($_FILES) & !empty($_FILES)){
+    //=========================Tutor submit=============================================================
+    if(isset($_POST['submit'])){                                //checks if anything has been submitted.
+        $Studentemail = $_POST['Student_email'];                //takes what was in the form called 'student_email'.
+        $TutorType = $_POST['Tutor_Type'];                      //takes what was in the form called 'tutor_type'.
+        $AccStatus = $_POST['Acc_Status'];                      //takes what was in the form called 'acc_status'.
+
+        if(isset($_FILES) & !empty($_FILES)){                   //if the user uploaded a file (image in this case), moves it to the assets folder.
             $name = $_FILES['tutor_img']['name'];
             $size = $_FILES['tutor_img']['size'];
             $type = $_FILES['tutor_img']['type'];
             $tmp_name = $_FILES['tutor_img']['tmp_name'];
 
-            $max_size = 1000000;
+            $max_size = 10000000;
             $extension = substr($name, strpos($name, '.') + 1);
 
             if(isset($name) & !empty($name)){
-                if(($extension == "jpg" || $extension == "jpeg" ) && $type == "image/jpeg" && $size <= $max_size){
-                $location = "../assets/images/tutors/";
-                if(move_uploaded_file($tmp_name, $location.$name)){
-                    echo "Uploaded successsfully";
+                if(($extension == "jpg" || $extension == "jpeg" ) && $type == "image/jpeg" && $size <= $max_size){//checks the file type.
+                $location = "../assets/images/tutors/";         //the location previously mentioned.
+                if(move_uploaded_file($tmp_name, $location.$name)){ //moves file if there is no issues.
+                    echo "Image uploaded successsfully.";
                 }else{
                     echo "failed to upload";
                 }
@@ -31,21 +36,20 @@
             }
         }
 
-        echo $query = query('INSERT INTO lc_test_tutors (student_email, tutor_type_id, acc_stat_id, tutor_image ) 
+        $query = query('INSERT INTO lc_test_tutors (student_email, tutor_type_id, acc_stat_id, tutor_image ) 
         VALUES ("' . $Studentemail . '" , "' . $TutorType . '" , "' . $AccStatus . '" , "' . "$location$name" .'")');
     if($query) {
-        header('location:tutors.php?Added');
+        header('location:tutors.php?Added'); //if the query was successful, redirects to tutor notifying a tutor has been added.
+        }
     }
-}
+    //==========================end tutor submit=================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -66,35 +70,23 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
             <h3 class = "h3 text-center">Add Tutor</h3>
             <main class = "container d-flex justify-content-center">
-                <?php 
-                $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
-                lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_students.student_email
-                FROM lc_test_students");
-                $query = query($query);
-                confirm($query);
-                $row = fetch_array($query);
-                ?>
+
             <form action="add_tutor.php" method="POST" enctype="multipart/form-data">     
                     <div class="form-row">
 
                         <div class="form-group col">
                             <label for="Student_ID">Student Email</label>
                             <select class="form-control" id="Student_email" name = "Student_email" required>
-                            <option selected value = "" >Select a Student.</option>
+                            <option selected value = "" >Select a Student</option>
                             <?php 
-                            $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_email, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) As 'student_fullname'
-                            FROM lc_test_students
-                            LEFT JOIN lc_test_assistants ON lc_test_students.student_email = lc_test_assistants.student_email
-                            LEFT JOIN lc_test_tutors ON lc_test_tutors.student_email = lc_test_students.student_email
-                            WHERE lc_test_tutors.student_email IS NULL AND lc_test_assistants.student_email IS NULL");
-                            confirm($query2);
-                            while($row2 = fetch_array($query2)) { ?>
-                            <option value="<?php echo $row2['student_email']; ?>" <?php if(isset($_GET) & !empty($_GET)){ $id = $_GET['id'];
-                            if ($row2['student_email'] ==  $id) { echo "selected"; } } ?> > <?php echo $row2['student_fullname']; ?> ( <?php echo $row2['student_id']; ?> ) - <?php echo $row2['student_email']; } ?></option>
+                            $info = getStudentAvailable();
+                            while($row = fetch_array($info)) { ?>
+                            <option value="<?php echo $row['student_email']; ?>" <?php if(isset($_GET) & !empty($_GET)){ $id = $_GET['id'];
+                            if ($row['student_email'] ==  $id) { echo "selected"; } } ?> > <?php echo $row['student_fullname']; ?> ( <?php echo $row['student_id']; ?> ) - <?php echo $row['student_email']; } ?></option>
                             </select>
                         </div>
                     </div>
@@ -102,11 +94,10 @@
                     <div class="form-group col">
                         <label for="Tutor_Type">Tutor Type:</label>
                         <select class="form-control" id="Tutor_Type" name = "Tutor_Type" required>
-                        <option selected value = "" >Select a tutor type.</option>
+                        <option selected value = "" >Select a tutor type</option>
                         <?php 
-                        $query2 = query("SELECT * FROM lc_tutor_type");
-                        confirm($query2);
-                        while($row2 = fetch_array($query2)) { ?>
+                        $info2 = getTutorType();
+                        while($row2 = fetch_array($info2)) { ?>
                         <option value="<?php echo $row2['tutor_type_id']; ?>"><?php echo $row2['tutor_type_name'];  } ?></option>
                         </select>
                     </div>
@@ -114,11 +105,10 @@
                     <div class="form-group col">
                         <label for="Acc_Status">Account Status:</label>
                         <select class="form-control" id="Acc_Status" name = "Acc_Status" required>
-                        <option selected value = "" >Select an account status.</option>
+                        <option selected value = "" >Select an account status</option>
                         <?php 
-                        $query3 = query("SELECT * FROM lc_account_status");
-                        confirm($query3);
-                        while($row3 = fetch_array($query3)) { ?>
+                        $info3 = getAccStatus();
+                        while($row3 = fetch_array($info3)) { ?>
                         <option value= "<?php echo $row3['acc_stat_id'] ?>" > <?php echo $row3['acc_stat_name'];  } ?></option>
                         </select>
                     </div>
@@ -139,7 +129,6 @@
         <?php
             bottom_footer();
             credit_mobirise_1();
-
         ?>
     </body>
 </html>

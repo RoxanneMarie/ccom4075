@@ -1,14 +1,26 @@
 <?php 
-    require_once("functions.php") 
+    require_once("functions.php");
+    
+    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {
+        if($_SESSION['type'] == 'Student') {
+            redirect('student/index.php');
+        }elseif($_SESSION['type'] == 'Tutor') {
+            redirect('tutor/index.php');
+        }elseif($_SESSION['type'] == 'Assistant') {
+            redirect('assistant/index.php');
+        }elseif($_SESSION['type'] == 'Admin') {
+            redirect('admin/index.php');
+        }else{
+            redirect('student/index.php');
+        }
+    } 
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -38,10 +50,11 @@
                 </div>
                 <div class="card-body bg-white">
                     <h5 class="card-title">Welcome to Learning Commons: Tutoring Appointment Manager.</h5>
-                    <p class="card-text">Part of the Tutor and Mentorship Program.</p>
+                    <p class="card-text">Part of the Tutoring and Mentoring Program.</p>
                     <p class="card-text">Here, you will be able to request tutoring sessions.</p>
                     <div class = "d-flex justify-content-between">
                         <a href="login.php" class="btn btn-primary">Login</a>
+                        <a href="schedules.php" class="btn btn-primary">Tutor Offers & Schedules</a>
                         <a href="about.php" class="btn btn-primary">About us</a>
                     </div>
                 </div>

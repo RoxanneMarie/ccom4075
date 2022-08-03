@@ -1,33 +1,32 @@
 <?php 
-  require_once("../functions.php");
-    
-    if(isset($_GET['id'])){
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
+
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
+    if(isset($_GET['id'])){                                     //gets the assistant's ID.
         $id = $_GET['id'];
     }
+    //==========================End Get ID==============================================================
 
-    if(isset($_POST['submit'])){
-        $StudentName = $_POST['Student_Name'];
-        $StudentInitial = $_POST['Student_Initial'];
+    //==========================Submit==================================================================
+    if(isset($_POST['submit'])){                                //checks if anything has been submitted.
+        $StudentName = $_POST['Student_Name'];                  //Takes the student name, initial and lastnames to edit (if necesary).
+        $StudentInitial = $_POST['Student_Initial'];            
         $StudentFLN = $_POST['Student_FLN'];
         $StudentSLN = $_POST['Student_SLN'];
-        $AccStatus = $_POST['Acc_Status'];
+        $AccStatus = $_POST['Acc_Status'];                      //takes the account status if necesary.
         $Success1 = false;
         $Success2 = false;
-        $Uquery = "UPDATE lc_test_assistants
-        SET acc_stat_id = '$AccStatus'
-        WHERE student_email = '$id'";
-        print_r($Uquery);
+        $Uquery = "UPDATE lc_test_assistants SET acc_stat_id = '$AccStatus' WHERE student_email = '$id'";
         $res = query($Uquery);
         confirm($Uquery);
         if($res == '1') {
             $Success1 = true;
         }
-        $Uquery2 = "UPDATE lc_test_students
-        SET student_name = '$StudentName', 
-        student_initial = '$StudentInitial', student_first_lastname = '$StudentFLN',
-        student_second_lastname = '$StudentSLN'
-        WHERE student_email = '$id'";
-        print_r($Uquery2);
+        $Uquery2 = "UPDATE lc_test_students SET student_name = '$StudentName', student_initial = '$StudentInitial', student_first_lastname = '$StudentFLN', student_second_lastname = '$StudentSLN' WHERE student_email = '$id'";
         $res2 = query($Uquery2);
         //Checks if query was successful.
         confirm($Uquery2);
@@ -38,16 +37,15 @@
         if ($Success1 == '1' & $Success2 == '1') {
             redirect('assistants.php?success');
         }
-}
+    }
+    //==========================End Submit==============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -68,23 +66,15 @@
     </head>
     <body>
         <?php 
-            top_header_5(); 
+            select_header($_SESSION['type']);
             ?>
             <h3 class = "h3 text-center">Edit Assistant</h3>
             <main class = "container d-flex justify-content-center">
             <article>
             <div class="container-sm>">
                 <?php 
-                $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
-                lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_assistants.student_email, 
-                lc_account_status.acc_stat_name, lc_test_assistants.acc_stat_id
-                FROM lc_test_assistants 
-                INNER JOIN lc_test_students ON lc_test_assistants.student_email = lc_test_students.student_email
-                INNER JOIN lc_account_status ON lc_test_assistants.acc_stat_id = lc_account_status.acc_stat_id
-                WHERE lc_test_assistants.student_email = '$id'");
-                $query = query($query);
-                confirm($query);
-                $row = fetch_array($query);
+                $info = getSelectedAssistant($id);
+                $row = fetch_array($info);
                 ?>
             <form action="edit_assistant.php?id=<?php echo $row['student_email']; ?>" method="POST">     
                     <div class="form-row">
@@ -112,7 +102,7 @@
                     <div class = "form-row">
                         <div class="form-group col">
                             <label for="Student_SLN">Second Last Name:</label>
-                            <input type="Student_SLN" class="form-control" id="Student_SLN" name = "Student_SLN" value = "<?php echo $row['student_second_lastname']; ?>" required>
+                            <input type="Student_SLN" class="form-control" id="Student_SLN" name = "Student_SLN" value = "<?php echo $row['student_second_lastname']; ?>">
                         </div>
                         <div class="form-group col">
                             <label for="Student_Email">Student Email:</label>
@@ -124,10 +114,9 @@
                         <label for="Acc_Status">Account Status:</label>
                         <select class="form-control" id="Acc_Status" name = "Acc_Status">
                         <?php 
-                        $query3 = query("SELECT * FROM lc_account_status");
-                        confirm($query3);
-                        while($row3 = fetch_array($query3)) { ?>
-                        <option value= "<?php echo $row3['acc_stat_id'] ?>" <?php if ( $row3['acc_stat_id'] == $row['acc_stat_id']) { echo "selected"; } ?> > <?php echo $row3['acc_stat_name'];  } ?></option>
+                        $info2 = getAccStatus();
+                        while($row2 = fetch_array($info2)) { ?>
+                        <option value= "<?php echo $row2['acc_stat_id'] ?>" <?php if ( $row2['acc_stat_id'] == $row['acc_stat_id']) { echo "selected"; } ?> > <?php echo $row2['acc_stat_name'];  } ?></option>
                         </select>
                     </div>
                     <div class = "container d-flex justify-content-center">
