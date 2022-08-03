@@ -156,10 +156,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <!DOCTYPE html>
   <html>
       <head>
-        <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
         <link rel="shortcut icon" href="assets/images/lc_Icon.png" type="image/x-icon">
         <meta name="description" content="">
