@@ -1,20 +1,9 @@
 <?php 
-    require_once('assistant_functions.php');
-    require_once('../functions.php');
-
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Assistant.
-        if($_SESSION['type'] == 'Student') {    //checks whenever the type is student, redirects.
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Tutor') { //checks if the type is tutor, redirects.
-            redirect('../tutor/index.php');
-        }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin, redirects.
-            redirect('../admin/index.php');
-        }
-    } 
-
+    include("assistant_functions.php"); //functions regarding assistant functionality.
+    require_once("../functions.php");   //general website functions.
+    validateRoleAssistant();    //validates the user has an assistant role. Else, redirects to index.
+    verifyActivityAssistant();  //verifies the user session hasn't expired.
+    //======================Get ID=============================================================
     if(isset($_GET['id'])){
         $id = $_GET['id'];
         $checksql = query("SELECT COUNT(student_email) FROM lc_test_students WHERE student_email = '$id'");
@@ -30,4 +19,5 @@
     }else{
         redirect('search.php?id=');
     }
+    //======================End Get ID=========================================================
 ?>

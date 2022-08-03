@@ -1,46 +1,36 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-        }
-        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-                redirect('../student/index.php');
-            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-                redirect('../tutor/index.php');
-            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-                redirect('../assistant/index.php');
-            }
-        } 
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
     if(isset($_GET) & !empty($_GET)){                           //gets id, if no id, redirects.
         $id = $_GET['id'];
     } else {
         redirect('semesters.php');
     }
+    //=========================end Get ID===============================================================
+
+    //=========================Submit===================================================================
     //if anything has been submitted, takes those values to update into the DB.
     if(isset($_POST) & !empty($_POST)){
         $SemesterTermName = $_POST['Semester_Term_Name'];
         $SemesterName = $_POST['Semester_Name'];
         $query = "UPDATE lc_semester SET semester_term = '$SemesterTermName', semester_name = '$SemesterName' WHERE semester_id = '$id'";
-        //print_r($query);
         $res = query($query);
-        //print_r($query);
         confirm($query);
-       //header('departments.php?success');
         redirect('semesters.php?success');
-
-}
+    }
+    //===========================End Submit=============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -68,9 +58,8 @@
             <div class="container sm">
                 <h3 class = "h3 text-center">Edit Semester</h3>
                 <?php 
-                $query = query("SELECT * FROM lc_semester WHERE semester_id = '$id'");
-                confirm($query);
-                $row = fetch_array($query);
+                $info = getSelectedSemester($id);
+                $row = fetch_array($info);
                 ?>
                 <form action="edit_semester.php?id=<?php echo $row['semester_id']; ?>" method="POST"><br>
 

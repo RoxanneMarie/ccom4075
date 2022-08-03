@@ -1,46 +1,41 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-        }
-        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-                redirect('../student/index.php');
-            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-                redirect('../tutor/index.php');
-            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-                redirect('../assistant/index.php');
-            }
-        } 
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
     if(isset($_GET) & !empty($_GET)){                           //gets the id, if no id, redirects.
         $id = $_GET['id'];
     } else {
         redirect('tutors.php');
     }
+    //==========================End Get ID==============================================================
+
+    //==========================Submit==================================================================
     if(isset($_POST) & !empty($_POST)){                         //checks if anything has been submitted.
         $tutor = $_POST['tutor'];                               //takes from the form field ' ' the selected value (the tutor).
         $day = $_POST['day'];                                   //takes from the form field ' ' the selected value (DAY OF THE WEEK).
         $starttime = $_POST['start'];                           //takes from the form field ' ' the selected value (TIME).
         $endtime = $_POST['end'];                               //takes from the form field ' ' the selected value (TIME).
         $course = $_POST['course'];                             //takes from the form field ' ' the selected value (the course).
+        $visibility = $_POST['visibility'];                     //takes from the form field ' ' the selected value (The visilibity status).
         $Uquery = "UPDATE lc_tutor_schedule 
-        SET tutor_id = '$tutor', day = '$day', start_time = '$starttime', end_time = '$endtime', course_id = '$course'
+        SET tutor_id = '$tutor', day = '$day', start_time = '$starttime', end_time = '$endtime', course_id = '$course', visibility = '$visibility'
         WHERE schedule_id = '$id'";
         $res = query($Uquery);
         confirm($Uquery);
         redirect('tutors.php?Schedule_edit');
-}
+    }
+    //=========================End Submit===============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -69,9 +64,10 @@
                 <h3 class = "h3 d-flex justify-content-center">Edit Tutor Schedule</h3>
             <form action="edit_tutor_schedule.php?id=<?php echo $id ?>" method="POST"><br>
                 <?php 
-                $query = query("SELECT * FROM lc_tutor_schedule WHERE schedule_id = '$id'");
-                confirm($query);
-                $row = fetch_array($query);
+                $info = getSelectedTutorSchedule($id);
+                $row = fetch_array($info);
+                $info2 = getSelectedTutor($row['tutor_id']);
+
                 $Tquery = query("SELECT * FROM lc_test_tutors 
                 INNER JOIN lc_test_students ON lc_test_tutors.student_email = lc_test_students.student_email 
                 WHERE tutor_id = '$row[tutor_id]'");
@@ -109,17 +105,20 @@
                         <label for="course">Course: </label>
                         <select class="form-control" id="course" name = "course" required>
                             <?php 
-                            $query2 = query("SELECT lc_courses.course_id, lc_courses.course_name, lc_departments.dept_id, lc_departments.dept_name, lc_courses.tutor_available, lc_courses.course_status,
-                            lc_account_status.acc_stat_name
-                            FROM lc_courses
-                            INNER JOIN lc_departments ON lc_courses.dept_id = lc_departments.dept_id
-                            INNER JOIN lc_account_status ON lc_courses.course_status = lc_account_status.acc_stat_id
-                            WHERE lc_courses.course_status != '0' AND lc_courses.course_status != '2'");
-                            confirm($query2);
-                            while($row2 = fetch_array($query2)) {    ?>
+                            $info2 = getCourses();
+                            while($row2 = fetch_array($info2)) {    ?>
                         <option value = "<?php echo $row2['course_id'] ?>" <?php if ($row['course_id'] == $row2['course_id']) { echo "selected"; } ?>><?php echo $row2['course_id']?> - <?php echo $row2['course_name'];  } ?></option>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="visibility">Visibility: </label>
+                        <select class="form-control" id="visibility" name = "visibility" required>
+                            <option value="0" <?php if ( $row['visibility'] == "0") { echo "selected"; } ?> >Hidden</option>
+                            <option value="1"<?php if ( $row['visibility'] == "1") { echo "selected"; } ?> >Visible</option>
+                        </select>
+                    </div>
+
                     <br>
 
                 <div class = "container d-flex justify-content-center">

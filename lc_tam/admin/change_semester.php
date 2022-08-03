@@ -1,19 +1,11 @@
 <?php 
-  require_once("../functions.php");    
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-  if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-    redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-            redirect('../tutor/index.php');
-        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-            redirect('../assistant/index.php');
-        }
-    }
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
 
+    //=========================Submit===================================================================
     if(isset($_POST['submit'])){
         $semesterID = $_POST['Semester_ID'];
 
@@ -31,19 +23,18 @@
         $query3 = query("UPDATE lc_semester SET semester_status = '1' WHERE semester_id = '$semesterID'");
         confirm($query3);
 
-    if($query3) {
-        header('location:semesters.php?selected');
+        if($query3) {
+            header('location:semesters.php?selected');
+        }
     }
-}
+    //========================End Submit===================================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -68,21 +59,13 @@
             ?>
             <h3 class = "h3 text-center">Change Semester</h3>
             <main class = "container d-flex justify-content-center">
-                <?php 
-                $query = ("SELECT * FROM lc_semester WHERE lc_semester.semester_status = '1'");
-                $query = query($query);
-                confirm($query);
-                $row = fetch_array($query);
-                ?>
             <form action="change_semester.php" method="POST">     
             <div class="form-group">
                 <label for="Semester_ID">Current Semester:</label>
                 <select class="form-control" id="Semester_ID" name = "Semester_ID">
                 <?php 
-                    $query = query("SELECT lc_semester.semester_id, CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_semester.semester_status
-                    FROM lc_semester");
-                    confirm($query);
-                    while($row = fetch_array($query)) { ?>
+                    $info = getSemesterInfo();
+                    while($row = fetch_array($info)) { ?>
                     <option value=<?php echo $row['semester_id'] ?> <?php if ( $row['semester_status'] == '1') { echo "selected"; } ?> ><?php echo $row['semester_info']; } ?></option>
                     </select>
             </div>

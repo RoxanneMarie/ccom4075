@@ -1,19 +1,11 @@
 <?php 
-    require_once("../functions.php");
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
+    
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
 
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-            redirect('../tutor/index.php');
-        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-            redirect('../assistant/index.php');
-        }
-    } 
-
+    //=========================Submit===================================================================
     if(isset($_POST) & !empty($_POST)){                         //checks if anything has been submitted.
         $prevSql = query("SELECT lc_conditions.max_capacity FROM lc_conditions");   //query that selects previous capacity.
         $prevRes = confirm($prevSql);   
@@ -22,22 +14,18 @@
 
         $capacity = $_POST['Capacity'];                         //receives new capacity.
         $query = "UPDATE lc_conditions SET max_capacity = '$capacity' WHERE max_capacity = '$old_capacity'";
-        //print_r($query);
         $res = query($query);
-        //print_r($query);
         confirm($query);
-       //header('departments.php?success');
         redirect('index.php');
-}
+    }
+    //=========================End Submit===============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -65,9 +53,8 @@
             <div class="container sm">
                 <h3 class = "h3 text-center">Change Capacity</h3>
                 <?php 
-                $query = query("SELECT lc_conditions.max_capacity FROM lc_conditions");
-                confirm($query);
-                $row = fetch_array($query);
+                $info = getTutoringCapacity();
+                $row = fetch_array($info);
                 ?>
                 <form action="change_tutoring_capacity.php" method="POST"><br>
                     <div class="input-group input-group-lg">

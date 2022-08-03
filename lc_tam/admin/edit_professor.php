@@ -1,24 +1,19 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-        }
-        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-                redirect('../student/index.php');
-            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-                redirect('../tutor/index.php');
-            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-                redirect('../assistant/index.php');
-            }
-        } 
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
     if(isset($_GET['id'])){                                     //checks if there is an id, if no id, redirects.
         $id = $_GET['id'];
     }else{
         redirect('professors.php');
     }
+    //=========================end GET ID===============================================================
+
+    //=========================Submit===================================================================
     //checks if anything has been submitted, takes those values from form field and inserts into the DB.
     if(isset($_POST['submit'])){
         $courseID = $_POST['Course_ID'];
@@ -36,19 +31,15 @@
         $res = query($Uquery);
         confirm($Uquery);
         redirect('professors.php?success');
-    /*echo $query = query('UPDATE lc_professors SET course_id = "' . $courseID . '"', professor_name = "' . $professorname . '",
- professor_initial = "' . $professorinitial . '", professor_first_lastname =  "' . $professorflname . '" ,
-      professor_second_lastname =  "' . $professorslname . '" WHERE professor_entry_id = '$id');*/
-}
+    //========================End Submit=================================================================
+    }
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -72,18 +63,17 @@
         <main class="container d-flex justify-content-center">
             <article>
             <div class="container-sm>">
-                <?php $query = query("SELECT * FROM lc_professors WHERE professor_entry_id = '$id'");
-                confirm($query);
-                $row = fetch_array($query); ?>
+                <?php 
+                $info = getSelectedProfessor($id);
+                $row = fetch_array($info); ?>
                 <h3 class = "h3 d-flex justify-content-center">Edit Professor</h3>
                 <form action="edit_professor.php?id=<?php echo $row['professor_entry_id']; ?>" method="POST">
                     <div class="form-group col">
                         <label for="Course_ID">Course ID:</label>
                         <select class="form-control" id = "Course_ID" name = "Course_ID" required>
                             <?php 
-                            $Cquery = query("SELECT * FROM lc_courses");
-                            confirm($Cquery);
-                            while($Crow = fetch_array($Cquery)) { ?>
+                            $info2 = getCourses();
+                            while($Crow = fetch_array($info2)) { ?>
                         <option value="<?php echo $Crow['course_id'] ?>" <?php if ( $Crow['course_id'] == $row['course_id']) { echo "selected"; } ?> ><?php echo $Crow['course_id'] ?> - <?php echo $Crow['course_name'];  } ?></option>
                         </select>
                     </div>
@@ -113,9 +103,9 @@
                         <div class="form-group col">
                             <label for="Acc_Status">Account Status:</label>
                             <select class="form-control" id="Acc_Status" name = "Acc_Status" required>
-                            <?php $query2 = query("SELECT * FROM lc_account_status");
-                            confirm($query2);
-                            while($row2 = fetch_array($query2)) { ?>
+                            <?php 
+                            $info3 = getAccStatus();
+                            while($row2 = fetch_array($info3)) { ?>
                             <option value= "<?php echo $row2['acc_stat_id'] ?>"<?php if($row['acc_stat_id'] == $row2['acc_stat_id'] ) { echo "selected"; } ?> > <?php echo $row2['acc_stat_name'];  } ?></option>
                             </select>
                         </div>

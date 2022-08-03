@@ -1,19 +1,9 @@
 <?php 
     require_once("../functions.php"); 
-    require_once("functions.php");
-
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Tutor.
-        if($_SESSION['type'] == 'Student') {
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Assistant') { //checks if the type is assistant.
-            redirect('../assistant/index.php');
-        }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin.
-            redirect('../admin/index.php');
-        }
-    } 
+    require_once("functions.php"); 
+    
+    validateRoles();
+    verifyActivity();
 ?>
 
 <!DOCTYPE html>
@@ -46,17 +36,6 @@
         .tCourses {
         background: #fd8f00;
         }
-
-        /* btn-warning {
-	color: #fff;
-	background-color: #ff8800;
-	border-color: #ff8800
-}
-.btn-warning:hover {
-	color: #fff;
-	background-color: #e67c02;
-	border-color: #e67c02
-} */
     </style>
 
     </head>
@@ -94,22 +73,22 @@
         $AttendanceStudentRegCount = fetch_array($info4);
 
         echo '    
-                <tr class="trCourses">
-                    <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>         
-                    <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
-                    <td>'. $row['course_info'] .'</td>
-                    <td>'. $row['semester_info'] .'</td>
-                    <td>'. $row['capacity'] .'</td>
-                    <td> <a class="btn btn-outline-info" href="tutoring_appointments.php?id='. $row['session_id'] .'"><i class="fa fa-eye"></i></a></td>
-                    <td>'; if ($RegisteredStudentCount['students_reg'] != $AttendanceStudentRegCount['students_att']) { echo '<a class="btn btn-outline-success" href="appointment_attendance.php?id='; echo $row['session_id']; echo '"><i class="fa fa-check"></i></a>'; }else{
-                        echo '<span>Registered.</span>';
-                    } echo '</td>
-                    </tr>
-                   '; } echo '
-                </table></div><br><br>
-                </div>
-                </article>
-            </main>';
+            <tr class="trCourses">
+                <td>'. conv_month(substr($row["session_date"],5,2)) . " " . conv_date(substr($row["session_date"],8,2)) . ", " . substr($row["session_date"],0,4) .'</td>         
+                <td>'. conv_time(substr($row["start_time"],0,2)) . substr($row["start_time"],2,3) . ampm(substr($row["start_time"],0,2)).' - '. conv_time(substr($row["end_time"],0,2)) . substr($row["end_time"],2,3) . ampm(substr($row["end_time"],0,2)) .'</td>
+                <td>'. $row['course_info'] .'</td>
+                <td>'. $row['semester_info'] .'</td>
+                <td>'. $row['capacity'] .'</td>
+                <td> <a class="btn btn-outline-info" href="tutoring_appointments.php?id='. $row['session_id'] .'"><i class="fa fa-eye"></i></a></td>
+                <td>'; if ($RegisteredStudentCount['students_reg'] != $AttendanceStudentRegCount['students_att']) { echo '<a class="btn btn-outline-success" href="appointment_attendance.php?id='; echo $row['session_id']; echo '"><i class="fa fa-check"></i></a>'; }else{
+                    echo '<span>Registered.</span>';
+                } echo '</td>
+                </tr>
+               '; } echo '
+            </table></div><br><br>
+            </div>
+        </article>
+    </main>';
             bottom_footer();
             credit_mobirise_1();
         ?>

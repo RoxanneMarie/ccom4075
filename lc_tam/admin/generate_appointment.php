@@ -1,20 +1,11 @@
 <?php 
-    require_once('admin_functions.php');
-    require_once('../functions.php');
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-        }
-        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-                redirect('../student/index.php');
-            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-                redirect('../tutor/index.php');
-            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-                redirect('../assistant/index.php');
-            }
-        } 
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
 
+    //=========================Get ID===================================================================
     if(isset($_GET['id'])){                                         //gets ID of the student to generate an appointment as an admin.
         $id = $_GET['id'];
         $checksql = query("SELECT COUNT(student_email) FROM lc_test_students WHERE student_email = '$id'");
@@ -30,4 +21,5 @@
     }else{
         redirect('search.php?id=');
     }
+    //==========================End Get ID===============================================================
 ?>

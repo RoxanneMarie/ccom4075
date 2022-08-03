@@ -1,23 +1,19 @@
 <?php 
-  require_once("../functions.php");
-    
-  if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-    redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-            redirect('../tutor/index.php');
-        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-            redirect('../assistant/index.php');
-        }
-    } 
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
     if(isset($_GET['id'])){                                     //gets the student's ID.
         $id = $_GET['id'];
+    }else{
+        redirect('view_accounts.php');
     }
+    //=========================End Get ID===============================================================
 
+    //=========================Submit===================================================================
     if(isset($_POST['submit'])){                                //checks if anything has been submitted.
         $studentID = $_POST['Student_ID'];                     //takes student number.
         $StudentName = $_POST['Student_Name'];                  //Takes the student name, initial and lastnames to edit (if necesary).
@@ -43,16 +39,15 @@
         if ($Success == '1') {
             redirect('view_accounts.php?success');
         }
-}
+    }
+    //==========================End Submit===============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -80,15 +75,8 @@
             <article>
             <div class="container-sm>">
                 <?php 
-                $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
-                lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_students.student_email, 
-                lc_account_status.acc_stat_name, lc_test_students.acc_stat_id
-                FROM lc_test_students
-                INNER JOIN lc_account_status ON lc_test_students.acc_stat_id = lc_account_status.acc_stat_id
-                WHERE lc_test_students.student_email = '$id'");
-                $query = query($query);
-                confirm($query);
-                $row = fetch_array($query);
+                $info = getSelectedStudent($id);
+                $row = fetch_array($info);
                 ?>
             <form action="edit_student.php?id=<?php echo $row['student_email']; ?>" method="POST">     
                     <div class="form-row">
@@ -128,10 +116,9 @@
                         <label for="Acc_Status">Account Status:</label>
                         <select class="form-control" id="Acc_Status" name = "Acc_Status">
                         <?php 
-                        $query3 = query("SELECT * FROM lc_account_status");
-                        confirm($query3);
-                        while($row3 = fetch_array($query3)) { ?>
-                        <option value= "<?php echo $row3['acc_stat_id'] ?>" <?php if ( $row3['acc_stat_id'] == $row['acc_stat_id']) { echo "selected"; } ?> > <?php echo $row3['acc_stat_name'];  } ?></option>
+                        $info2 = getAccStatus();
+                        while($row2 = fetch_array($info2)) { ?>
+                        <option value= "<?php echo $row2['acc_stat_id'] ?>" <?php if ( $row2['acc_stat_id'] == $row['acc_stat_id']) { echo "selected"; } ?> > <?php echo $row2['acc_stat_name'];  } ?></option>
                         </select>
                     </div>
                     <div class = "container d-flex justify-content-center">

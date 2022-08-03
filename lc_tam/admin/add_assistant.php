@@ -1,38 +1,29 @@
 <?php 
-  require_once("../functions.php");    
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-  if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-    redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-            redirect('../tutor/index.php');
-        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-            redirect('../assistant/index.php');
-        }
-    } 
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
 
+    //=========================Submit===================================================================
     if(isset($_POST['submit'])){                                //checks if something was submitted.
         $Studentemail = $_POST['Student_email'];                //takes the student email to add to the assistant table.
         $AccStatus = $_POST['Acc_Status'];                      //takes the account status (usually 'active').
         $query = query('INSERT INTO lc_test_assistants (student_email, acc_stat_id) 
         VALUES ("' . $Studentemail . '" , "' . $AccStatus . '")');
 
-    if($query) {
-        header('location:assistants.php?Added');
+        if($query) {
+            header('location:assistants.php?Added');
+        }
     }
-}
+    //============================End Submit=============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc-logo1-121x74.png" type="image/x-icon">
       <meta name="description" content="">
@@ -59,14 +50,6 @@
             <main class = "container d-flex justify-content-center">
             <article>
             <div class="container-sm>">
-                <?php 
-                $query = ("SELECT lc_test_students.student_id, lc_test_students.student_name, lc_test_students.student_initial, 
-                lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_test_students.student_email
-                FROM lc_test_students");
-                $query = query($query);
-                confirm($query);
-                $row = fetch_array($query);
-                ?>
             <form action="add_assistant.php" method="POST">     
                     <div class="form-row">
                         <div class="form-group col">
@@ -74,15 +57,10 @@
                             <select class="form-control" id="Student_email" name = "Student_email" required>
                             <option selected value = "">Select a Student</option>
                             <?php 
-                            $query2 = query("SELECT lc_test_students.student_id, lc_test_students.student_email, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) As 'student_fullname'
-                            FROM lc_test_students
-                            LEFT JOIN lc_test_assistants ON lc_test_students.student_email = lc_test_assistants.student_email
-                            LEFT JOIN lc_test_tutors ON lc_test_tutors.student_email = lc_test_students.student_email
-                            WHERE lc_test_tutors.student_email IS NULL AND lc_test_assistants.student_email IS NULL");
-                            confirm($query2);
-                            while($row2 = fetch_array($query2)) { ?>
-                            <option value="<?php echo $row2['student_email']; ?>" <?php if(isset($_GET) & !empty($_GET)){ $id = $_GET['id'];
-                            if ($row2['student_email'] ==  $id) { echo "selected"; } } ?> > <?php echo $row2['student_fullname']; ?> ( <?php echo $row2['student_id']; ?> ) - <?php echo $row2['student_email']; } ?></option>
+                            $info = getStudentAvailable();
+                            while($row = fetch_array($info)) { ?>
+                            <option value="<?php echo $row['student_email']; ?>" <?php if(isset($_GET) & !empty($_GET)){ $id = $_GET['id'];
+                            if ($row['student_email'] ==  $id) { echo "selected"; } } ?> > <?php echo $row['student_fullname']; ?> ( <?php echo $row['student_id']; ?> ) - <?php echo $row['student_email']; } ?></option>
                             </select>
                         </div>
                     </div>
@@ -92,10 +70,9 @@
                         <select class="form-control" id="Acc_Status" name = "Acc_Status" required>
                         <option selected value = "" >Select an account status</option>
                         <?php 
-                        $query3 = query("SELECT * FROM lc_account_status");
-                        confirm($query3);
-                        while($row3 = fetch_array($query3)) { ?>
-                        <option value= "<?php echo $row3['acc_stat_id'] ?>" > <?php echo $row3['acc_stat_name'];  } ?></option>
+                        $info2 = getAccStatus();
+                        while($row2 = fetch_array($info2)) { ?>
+                        <option value= "<?php echo $row2['acc_stat_id'] ?>" > <?php echo $row2['acc_stat_name'];  } ?></option>
                         </select>
                     </div>
                     <div class = "container d-flex justify-content-center">

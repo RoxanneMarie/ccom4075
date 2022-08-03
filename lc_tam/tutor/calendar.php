@@ -1,19 +1,9 @@
 <?php 
     require_once("../functions.php"); 
-    require_once("functions.php");
-
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-      redirect('../index.php');                               //redirects to normal index.
-  }
-  if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Tutor. Proceeds to page.
-      if($_SESSION['type'] == 'Student') {    //checks if the type is student.
-          redirect('../student/index.php');
-      }elseif($_SESSION['type'] == 'Assistant') { //checks if the type is assistant.
-          redirect('../assistant/index.php');
-      }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin.
-          redirect('../admin/index.php');
-      }
-  } 
+    require_once("functions.php"); 
+    
+    validateRoles();
+    verifyActivity();
 ?>
 
 <!DOCTYPE html>

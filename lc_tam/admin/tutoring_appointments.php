@@ -1,25 +1,17 @@
 <?php 
-    require_once('admin_functions.php');
-    require_once("../functions.php"); 
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-        }
-        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-                redirect('../student/index.php');
-            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-                redirect('../tutor/index.php');
-            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-                redirect('../assistant/index.php');
-            }
-        } 
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
 
+    //=========================Get ID===================================================================
     if(isset($_GET['id'])){                                     //checks if there is id, if no id, redirects.
         $id = $_GET['id'];
     }else{
         redirect('index.php');
     }
+    //========================End Get ID================================================================
 ?>
 
 <!DOCTYPE html>
@@ -107,14 +99,8 @@
                 <th>Student Number</th>
                 <th>Course</th>
             </thead>';
-            $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id, lc_test_students.student_id,
-            CONCAT_WS(' ',lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, 
-            lc_test_students.student_second_lastname) AS 'student_full_name', lc_appointments.course_id, lc_test_students.student_email
-            FROM lc_appointments
-            INNER JOIN lc_test_students ON lc_test_students.student_email = lc_appointments.student_email
-            WHERE lc_appointments.session_id = '$id'");
-            confirm($query);
-            while ($row = fetch_array($query)) {
+            $info = getAppointmentDetails($id);
+            while ($row = fetch_array($info)) {
         echo '    
                 <tr class="trCourses">
                     <td>'. $row['app_id'] .'</td>
