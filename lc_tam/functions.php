@@ -332,10 +332,8 @@ function credit_mobirise_1()
         </section>
         <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="../assets/smoothscroll/smooth-scroll.js"></script>
-        <script src="../assets/ytplayer/index.js"></script>
         <script src="../assets/mbr-switch-arrow/mbr-switch-arrow.js"></script>
-        <script src="../assets/dropdown/js/navbar-dropdown.js"></script>
-        <script src="../assets/theme/js/script.js"></script>';
+        <script src="../assets/dropdown/js/navbar-dropdown.js"></script>';
 }
 
 function credit_mobirise_2()
@@ -351,6 +349,19 @@ function credit_mobirise_2()
         <script src="../assets/dropdown/js/navbar-dropdown.js"></script>
         <script src="../assets/theme/js/script.js"></script>
         <script src="../assets/formoid/formoid.min.js"></script>';
+}
+
+function credit_mobirise_3()
+{
+    echo '
+        <section id="hide-footer" style="background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Robot, Helvetica Neue, Arial, sans-serif; color:#aaa; font-size:12px; padding: 0; align-items: center; display: flex;">
+            <a href="https://mobirise.site/u" style="flex: 1 1; height: 3rem; padding-left: 1rem;"></a>
+            <p style="flex: 0 0 auto; margin:0; padding-right:1rem;">Page was <a href="https://mobirise.site/h" style="color:#aaa;">designed with</a> Mobirise</p>
+        </section>
+        <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/smoothscroll/smooth-scroll.js"></script>
+        <script src="assets/mbr-switch-arrow/mbr-switch-arrow.js"></script>
+        <script src="assets/dropdown/js/navbar-dropdown.js"></script>';
 }
 
 /*
@@ -373,6 +384,33 @@ defined("DB_NAME") ? null : define("DB_NAME", "lc_tam");
 
 
 $connection = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
+
+//=================PDO Connection========================================
+$host     = DB_HOST;
+$db       = DB_NAME;
+$user     = DB_USER;
+$password = DB_PASS;
+
+$dsn = "mysql:host=$host;dbname=$db;charset=UTF8";
+
+try {
+    $conn = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+
+} catch (PDOException $e) {
+     echo $e->getMessage();
+}
+
+
+defined("DB_PDO_HOST") ? null : define("DB_PDO_HOST" , "localhost");
+
+defined("DB_PDO_USER") ? null : define("DB_PDO_USER", "root");
+
+defined("DB_PDO_PASS") ? null : define("DB_PDO_PASS", "");
+
+defined("DB_PDO_NAME") ? null : define("DB_PDO_NAME", "lc_tam");
+
+
+/*$connection = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);*/
 
 function escape_string($string)
 {
@@ -535,6 +573,9 @@ function login()
                 $_SESSION['email'] = $email;
                 $_SESSION["current_date"] = date("Y-m-d");
                 $_SESSION["current_day_of_the_week"] = date("l");
+                $_SESSION["logged_in"] = true;  //confirms that the user is logged in.
+                $_SESSION["last_activity"] = time();    //last activity will be the exact time of login. Can be refreshed.
+                $_SESSION["expiration"] = 1*15*60; //expires in 15 min.
                 redirect("admin/index.php");
             }
         }
@@ -556,6 +597,9 @@ function login()
                 $_SESSION['email'] = $email;
                 $_SESSION["current_date"] = date("Y-m-d");
                 $_SESSION["current_day_of_the_week"] = date("l");
+                $_SESSION["logged_in"] = true;  //confirms that the user is logged in.
+                $_SESSION["last_activity"] = time();    //last activity will be the exact time of login. Can be refreshed.
+                $_SESSION["expiration"] = 1*15*60; //expires in 15 min.
                 
                 $query = query("SELECT acc_stat_id FROM lc_test_tutors WHERE student_email = '{$email}'");
                 confirm($query);
@@ -1374,4 +1418,16 @@ function student_view_appointment()
 
 }
 
+function getTutorOffersAndSchedules() {
+    $query = query("SELECT lc_test_tutors.tutor_id, lc_test_tutors.student_email, lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname, lc_tutor_offers.course_id, lc_courses.course_name, lc_professors.professor_name, lc_professors.professor_initial, lc_professors.professor_first_lastname, lc_professors.professor_second_lastname, lc_tutor_schedule.day, lc_tutor_schedule.start_time, lc_tutor_schedule.end_time
+    FROM lc_test_tutors
+    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_tutors.student_email
+    INNER JOIN lc_tutor_offers ON lc_test_tutors.tutor_id = lc_tutor_offers.tutor_id
+    INNER JOIN lc_tutor_schedule ON lc_test_tutors.tutor_id = lc_tutor_schedule.tutor_id
+    INNER JOIN lc_courses ON lc_courses.course_id = lc_tutor_offers.course_id AND lc_courses.course_id = lc_tutor_schedule.course_id
+    INNER JOIN lc_professors ON lc_professors.professor_entry_id = lc_tutor_offers.professor_entry_id
+    WHERE lc_tutor_offers.visibility = 1 AND lc_tutor_schedule.visibility = 1");
+    confirm($query);
+    return($query);
+}
 ?>

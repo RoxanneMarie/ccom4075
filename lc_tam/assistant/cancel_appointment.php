@@ -1,25 +1,18 @@
 <?php 
-    require_once("../functions.php");
+    include("assistant_functions.php"); //functions regarding assistant functionality.
+    require_once("../functions.php");   //general website functions.
+    validateRoleAssistant();    //validates the user has an assistant role. Else, redirects to index.
+    verifyActivityAssistant();  //verifies the user session hasn't expired.
 
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Assistant.
-        if($_SESSION['type'] == 'Student') {    //checks whenever the type is student, redirects.
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Tutor') { //checks if the type is tutor, redirects.
-            redirect('../tutor/index.php');
-        }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin, redirects.
-            redirect('../admin/index.php');
-        }
-    } 
-
+    //===========================Get ID===================================================
     if(isset($_GET['id'])){
         $id = $_GET['id'];
     }else{
         redirect('index.php');
     }
+    //==========================Get ID====================================================
 
+    //==========================Submits===================================================
     if(isset($_POST) & !empty($_POST)){
       $appointment = $_POST['app_id'];
       $squery = query("SELECT * FROM lc_appointments WHERE app_id = '$appointment'");
@@ -30,19 +23,16 @@
       confirm($query);
       $uquery = query("UPDATE lc_sessions SET capacity = capacity - 1 session_id = '$sessionID'");
       confirm($uquery);
-
       redirect('index.php?cancelled');
-
+      //========================End Submit===============================================
 }
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -70,14 +60,8 @@
       <body>
           <?php 
           select_header($_SESSION['type']);
-          $query = query("SELECT lc_appointments.student_email, CONCAT_WS(' - ', lc_appointments.course_id, lc_courses.course_name) AS 'course_info', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date, CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_appointments.app_id
-          FROM lc_appointments
-          INNER JOIN lc_sessions ON lc_sessions.session_id = lc_appointments.session_id
-          INNER JOIN lc_courses ON lc_courses.course_id = lc_appointments.course_id
-          INNER JOIN lc_semester ON lc_appointments.semester_id = lc_semester.semester_id
-          WHERE lc_appointments.app_id = '$id'");
-          confirm($query);
-          $row = fetch_array($query);
+          $info = getAppointmentInformation($id);
+          $row = fetch_array($info);
             echo '
             
             <main class="container">

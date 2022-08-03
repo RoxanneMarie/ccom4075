@@ -1,23 +1,19 @@
 <?php 
-    require_once("../functions.php");
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-        }
-        if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-            if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-                redirect('../student/index.php');
-            }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-                redirect('../tutor/index.php');
-            }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-                redirect('../assistant/index.php');
-            }
-        } 
-    
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+    //=========================Get ID===================================================================
     if(isset($_GET['id'])){                                     //gets ID of the tutoring sessionthat wants to be edited.
         $id = $_GET['id'];
+    }else{
+        redirect('tutoring_sessions.php');
     }
+    //=========================End Get ID===============================================================
 
+    //==========================Submit==================================================================
     if(isset($_POST['submit'])){                                //checks if anything has been submitted.
         $date = $_POST['appdate'];                              //takes the value from form field 'appdate' (the sessions date).
         $start = $_POST['start'];                               //takes the value from form field 'start' (TIME).
@@ -27,23 +23,18 @@
         end_time = '$end', 
         session_date = '$date'
         WHERE session_id = '$id'";
-
         $res = query($Uquery);
-//$sessionid = mysqli_insert_id(DB_HOST,DB_USER,DB_PASS,DB_NAME); 
-
-//$query = query('INSERT INTO lc_tutorings (ID_Tutor,')
-redirect('tutoring_sessions.php?success');
-}
+        redirect('tutoring_sessions.php?success');
+    }
+    //==========================End Submit==============================================================
 
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -72,13 +63,8 @@ redirect('tutoring_sessions.php?success');
                     <h3 class = "h3 d-flex justify-content-center">Edit Tutoring Session</h3>
             <form action="edit_tutoring_session.php?id=<?php echo $id ?>" method="POST"><br>
             <?php 
-            $query = query("SELECT * FROM lc_sessions
-            INNER JOIN lc_test_tutors ON lc_sessions.tutor_id = lc_test_tutors.tutor_id
-            INNER JOIN lc_test_students ON lc_test_tutors.student_email = lc_test_students.student_email
-            WHERE lc_sessions.session_id = '$id'");
-            confirm($query);
-            $row = fetch_array($query);
-            
+            $info = getSelectedTutoringSession($id);
+            $row = fetch_array($info);
             ?>
             <div class="form-group">
                 <label for="tutor">Tutor:</label>

@@ -1,14 +1,9 @@
 <?php 
+    include('student_functions.php');
     require_once("../functions.php");
 
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-      redirect('../index.php');                               //redirects to normal index.
-  }
-  if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is admin.
-      if($_SESSION['type'] == 'Admin') {
-          redirect('../admin/index.php');
-      }
-  }
+    validateRoles();  //checks appropiate roles are accesing the page.
+    verifyActivity(); //verifies user has been active.
 
     if(isset($_GET['id'])){
         $id = $_GET['id'];
@@ -36,15 +31,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
 
-      <title>Cancel Appointment for Student - LC:TAM</title>
+      <title>Cancel Appointment - LC:TAM</title>
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons2/mobirise2.css">
       <link rel="stylesheet" href="../assets/web/assets/mobirise-icons/mobirise-icons.css">
       <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">

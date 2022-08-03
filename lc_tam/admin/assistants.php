@@ -1,27 +1,16 @@
 <?php 
-    require_once("../functions.php");
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-            redirect('../tutor/index.php');
-        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-            redirect('../assistant/index.php');
-        }
-    } 
+    validateRole(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -38,7 +27,10 @@
       <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
       <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
       <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css">
-        <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+      <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+      <link  rel="stylesheet" href="../assets/datatables/datatables.css">
+      <link  rel="stylesheet" href="../assets/datatables/datatables.min.css">
+      <link rel="stylesheet" href="../assets/datatables/responsive.dataTables.min.css">
     <style>
         /*----------------------- CSS HOME PAGE*/
 
@@ -57,7 +49,9 @@
         <article>
         <div class = "container">
             <h3 class = "h3 text-center">Assistants</h3>
-            <a class = "btn btn-primary" href="add_assistant.php">Add Assistant</a>
+            <div class = "container d-flex justify-content-center">
+                <a class = "btn btn-primary" href="add_assistant.php">Add Assistant</a>
+            </div>
             '; if(isset($_GET['success'])){ echo '
                 <div class="alert alert-success" role="alert">
                 <span> Assistant updated successfully.</span>
@@ -75,34 +69,46 @@
             </div>
             ';
             } echo '
-            <div class = "table-responsive">
-                <table class = "table">
+            <div class = "container">
+                <table class = "table datatable" id="assistant_table">
             <thead class = "tCourses">
-                <th>Edit</th>
                 <th>Student Num</th>
                 <th>Assistant full name</th>
                 <th>Email</th>
                 <th>Status</th>
-            </thead>';
-    $query = query("SELECT CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, 
-    lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'assistant_fullname', lc_test_assistants.student_email, lc_test_students.student_id, lc_account_status.acc_stat_name, lc_test_assistants.acc_stat_id 
-    FROM lc_test_assistants 
-    INNER JOIN lc_test_students ON lc_test_students.student_email = lc_test_assistants.student_email 
-    INNER JOIN lc_account_status ON lc_test_assistants.acc_stat_id = lc_account_status.acc_stat_id");
-    while ($row = fetch_array($query)) {
-        echo '    
-                <tr>
-                    <td>   <a href="edit_assistant.php?id='. $row['student_email'] .'">Edit</a>
-                    <td>'. $row['student_id'].'</td>
-                    <td>'. $row['assistant_fullname'] .'</td>
-                    <td>'. $row['student_email'] .'</td>
-                    <td>'. $row['acc_stat_name'] .'</td>
-                    </tr>
-                    '; } echo '
+                <th>Edit</th>
+            </thead>
                 </table><br><br></div>
                 </div>
                 </article>
-            </main>';
+            </main>'; ?>
+            <script src="../assets/datatables/jquery.js"></script>
+            <script src="../assets/datatables/jquery.min.js"></script>
+            <script src="../assets/datatables/datatables.js"></script>
+            <script src="../assets/datatables/datatables.min.js"></script>
+            <script src="../assets/datatables/dataTables.responsive.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                $('#assistant_table').DataTable({
+                'searching': true,
+                'processing': true,
+		      	'serverSide': true,
+                'responsive': true,
+
+		      	'serverMethod': 'post',
+		      	'ajax': {
+		          	'url':'load_assistants.php'
+		      	},
+		      	'columns': [
+                    { data: 'student_id' },
+		         	{ data: 'assistant_fullname' },
+		         	{ data: 'student_email' },
+                    { data: 'acc_stat_name' },
+                    { data: 'link'},
+		      	]
+                });
+                 } );
+            </script> <?php
             bottom_footer();
             credit_mobirise_1();
         ?>

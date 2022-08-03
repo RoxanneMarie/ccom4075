@@ -1,24 +1,16 @@
 <?php 
-    require_once("../functions.php");
-
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Assistant.
-        if($_SESSION['type'] == 'Student') {    //checks whenever the type is student, redirects.
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Tutor') { //checks if the type is tutor, redirects.
-            redirect('../tutor/index.php');
-        }elseif($_SESSION['type'] == 'Admin') { //checks if the type is admin, redirects.
-            redirect('../admin/index.php');
-        }
-    } 
-
+    include("assistant_functions.php"); //functions regarding assistant functionality.
+    require_once("../functions.php");   //general website functions.
+    validateRoleAssistant();    //validates the user has an assistant role. Else, redirects to index.
+    verifyActivityAssistant();  //verifies the user session hasn't expired.
+    
+    //===================Get ID===================================================
     if(isset($_GET['id'])){
         $id = $_GET['id'];
     }else{
         redirect('index.php');
     }
+    //===================End Get ID===============================================
 ?>
 
 
@@ -26,10 +18,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -80,19 +70,9 @@
                 <th>Session Date</th>
                 <th>Cancel</th>
             </thead>';
-        $currDate = date("'Y-m-d'");
-    $query = query("SELECT lc_appointments.app_id, lc_appointments.session_id, CONCAT_WS(' ', lc_test_students.student_name, lc_test_students.student_initial, lc_test_students.student_first_lastname, lc_test_students.student_second_lastname) AS 'student_fullname', 
-    lc_appointments.student_email, CONCAT_WS(' - ', lc_appointments.course_id, lc_courses.course_name) AS 'course_info', CONCAT_WS(' - ', lc_semester.semester_term, lc_semester.semester_name) AS 'semester_info', lc_sessions.start_time, lc_sessions.end_time, lc_sessions.session_date 
-    FROM lc_appointments
-    INNER JOIN lc_test_students ON lc_appointments.student_email = lc_test_students.student_email
-    INNER JOIN lc_courses ON lc_appointments.course_id = lc_courses.course_id
-    INNER JOIN lc_semester ON lc_semester.semester_id = lc_appointments.semester_id
-    INNER JOIN lc_sessions ON lc_appointments.session_id = lc_sessions.session_id    
-    WHERE lc_appointments.student_email = '$id' AND lc_sessions.session_date >= $currDate
-    ORDER BY lc_sessions.session_date DESC");
-    confirm($query);
-    while ($row = fetch_array($query)) {
-        echo '
+            $info = getSelectedStudentAppointments($id);
+            while ($row = fetch_array($info)) {
+            echo '
                 <tr class="text-center">
                     <td>'. $row['student_fullname'] .'</td>
                     <td>'. $row['student_email'] .'</td>

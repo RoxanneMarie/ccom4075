@@ -1,19 +1,11 @@
 <?php 
-    require_once("../functions.php");
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
 
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-            redirect('../tutor/index.php');
-        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-            redirect('../assistant/index.php');
-        }
-    } 
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
 
+    //=========================Submit===================================================================
     if(isset($_POST['submit'])){                                //checks if anything has been submitted.
         $courseID = $_POST['Course_ID'];                        //takes the submitted course ID from the form field 'course_ID'.
         $professorname = $_POST['professor_name'];              //takes the professor's name from the professor_name form field.
@@ -22,21 +14,20 @@
         $professorslname = $_POST['professor_slname'];
         $accStatId = $_POST['Acc_Status'];                      //takes the submitted Account status from the form field 'acc_status'.
 
-    echo $query = query('INSERT INTO lc_professors ( course_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname, acc_stat_id)
-    VALUES("' . $courseID . '","' . $professorname . '" , "' . $professorinitial . '" , "' . $professorflname . '" , "' . $professorslname . '" , "' . $accStatId . '")');
-    if($query) {
-        header('location:professors.php?Added');
-    }
+        echo $query = query('INSERT INTO lc_professors ( course_id, professor_name, professor_initial, professor_first_lastname, professor_second_lastname, acc_stat_id)
+        VALUES("' . $courseID . '","' . $professorname . '" , "' . $professorinitial . '" , "' . $professorflname . '" , "' . $professorslname . '" , "' . $accStatId . '")');
+        if($query) {
+            header('location:professors.php?Added');
+        }
+    //===========================End Submit==============================================================
 }
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -70,10 +61,9 @@
                         <label for="Course_ID">Course ID:</label>
                         <select class="form-control" id = "Course_ID" name = "Course_ID" required>
                             <option selected value = "">Select a Course</option>
-                            <?php 
-                            $query = query("SELECT * FROM lc_courses WHERE course_status != '0' AND course_status != '2'");
-                            confirm($query);
-                            while($row = fetch_array($query)) {
+                            <?php
+                            $info = getCourses();
+                            while($row = fetch_array($info)) {
                                 ?>
                         <option value="<?php echo $row['course_id'] ?>"><?php echo $row['course_id'] ?> - <?php echo $row['course_name'];  } ?></option>
                         </select>
@@ -106,9 +96,8 @@
                         <select class="form-control" id="Acc_Status" name = "Acc_Status" required>
                         <option selected value = "" >Select an account status</option>
                         <?php 
-                        $query2 = query("SELECT * FROM lc_account_status");
-                        confirm($query2);
-                        while($row2 = fetch_array($query2)) { ?>
+                        $info2 = getAccStatus();
+                        while($row2 = fetch_array($info2)) { ?>
                         <option value= "<?php echo $row2['acc_stat_id'] ?>" > <?php echo $row2['acc_stat_name'];  } ?></option>
                         </select>
                     </div>

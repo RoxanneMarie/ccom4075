@@ -1,27 +1,24 @@
 <?php 
-    require_once("../functions.php");
-    
-    if(!isset($_SESSION['type']) & empty($_SESSION['type'])) {  //checks if no session type exists, which means no logged in user.
-        redirect('../index.php');                               //redirects to normal index.
-    }
-    if(isset($_SESSION['type']) & !empty($_SESSION['type'])) {  //checks if the type is Admin.
-        if($_SESSION['type'] == 'Student') {                    //checks whenever the type is student, redirects.
-            redirect('../student/index.php');
-        }elseif($_SESSION['type'] == 'Tutor') {                 //checks if the type is tutor, redirects.
-            redirect('../tutor/index.php');
-        }elseif($_SESSION['type'] == 'Assistant') {             //checks if the type is assistant, redirects.
-            redirect('../assistant/index.php');
-        }
-    } 
+    include("admin_functions.php"); //All query data is obtained here.
+    require_once("../functions.php"); //Website functions.
+
+    validateRoleAdmin(); //validates a role is active and is the appropiate role for the page.
+    verifyActivity(); //validates the user has been active for X amount of time.
+
+
+    //=========================Debugging================================================================
+    //debugging purposes, ignore.
+    /*echo '<pre>';
+    print_r($_SESSION);
+    echo '</pre>';*/
+    //=========================End Debugging============================================================
 ?>
 
 <!DOCTYPE html>
 <html>
     <head>
-      <!-- Site made with Mobirise Website Builder v5.5.0, https://mobirise.com -->
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="generator" content="Mobirise v5.5.0, mobirise.com">
       <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
       <link rel="shortcut icon" href="../assets/images/lc_Icon.png" type="image/x-icon">
       <meta name="description" content="">
@@ -124,18 +121,6 @@
             } echo '
            <main class="cards" style="justify-content:center;">
 
-            <article class="card">
-                <div class="text">
-                    <h3>Search</h3>
-                    <form class="form-inline" action = "student_search.php" method = "post">
-                        <input class="form-control mr-sm-2" type="search" name = "student_search" placeholder = "insert student email" aria-label="Search">
-                        <button class="btn btn-primary my-2 my-sm-0" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                        </svg></button>
-                    </form>
-                </div>
-            </article>
-
                <article class="card">
                <div class="text">
                    <h3>View Menu</h3>
@@ -170,30 +155,14 @@
                </div>
                </article>
 
-               '; /*<article class="card">
-               <div class="text">
-                   <h3>Professor</h3>
-               </div>
-               </article>
-
-               <article class="card">
-               <div class="text">
-                   <h3>Tutoring Session</h3>
-               </div>
-               </article>
-
-                <article class="card">
-               <div class="text">
-                   <h3>Semester</h3>
-               </div>
-               </article>
-
+               ';/*
                <article class="card">
                <div class="text">
                    <h3>Reports</h3>
                    <a class = "home_button" href = "#">Reports</a><br><br>
                </div>
-               </article> */ echo '
+               </article> */ 
+               echo '
 
            </main>
            <br>
